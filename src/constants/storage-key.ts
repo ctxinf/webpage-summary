@@ -13,14 +13,14 @@ export const WHITELIST = "local:site-filter-whitelist";
 export const BLACKLIST = "local:site-filter-blacklist";
 export const SITE_CUSTOMIZATION = "local:site-customization-list";
 
+/*===========Within Pages(used as localStorage)==================*/
+export const EXPAND_CHAT_INPUT_BOX = "local:expand-chat-input-box";
+
+
 /*===========User Settings==================*/
 
 export const SPOKEN_LANG_KEY = "local:summary-lang";
 export const ENABLE_CHAT_INPUT_BOX = "local:enable-chat-input-box";
-/**@deprecated */
-export const EXPAND_CHAT_INPUT_BOX = "local:expand-chat-input-box";
-/**@deprecated */
-export const ENABLE_USER_CHAT_DEFAULT = "local:enable-user-chat-default";
 
 /*===========Context Menu==================*/
 export const ENABLE_CONTEXT_MENU_ITEM_SUMMARIZE_THIS_PAGE = 'local:enable-context-menu-summarize-this-page'
@@ -42,7 +42,3 @@ export const ENABLE_AUTO_BEGIN_CHAT_FOR_ADD_SELECTION_TO_CHAT = "local:enable-au
 /*===========Display==================*/
 export const ENABLE_TOKAN_USAGE_VIEW = "local:enable-tokan-usage-view";
 export const ENABLE_CREATE_NEW_PANEL_BUTTON = "local:enable-create-new-panel-button";
-
-
-/**@deprecated */
-export const CHATGPT_ACCESS_TOKEN = "local:chatgpt-web-access_token";

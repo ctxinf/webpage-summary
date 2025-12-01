@@ -1,12 +1,11 @@
 <script setup lang="ts">
 import Input from '@/src/components/ui/input/Input.vue';
 import Switch from '@/src/components/ui/switch/Switch.vue';
-import { useEnableAutoBeginSummary, useEnableAutoBeginSummaryByActionOrContextTrigger, useEnableCreateNewPanelButton, useEnableFloatingBall, useEnablePopupClickTrigger, useEnableSummaryWindowDefault, useEnableTokenUsageView, useEnableUserChatDefault, useSummaryInputExceedBehaviour, useSummaryLanguage, useUserCustomStyle, useEnableChatInputBox, useEnableAutoBeginChatForAddSelectionToChat, useEnableContextMenuSummarizeThisPage, useEnableContextMenuItemAddSelectionToChat } from '@/src/composables/general-config';
-import { DefaultConfig } from '@/src/constants/default-config';
-import DefaultSettingValue from '../components/DefaultSettingValue.vue';
-import { t } from '@/src/utils/extension';
-import { useTitle } from '@vueuse/core';
 import { useOptionTitle } from '@/src/composables/extension';
+import { useEnableAutoBeginChatForAddSelectionToChat, useEnableAutoBeginSummary, useEnableAutoBeginSummaryByActionOrContextTrigger, useEnableChatInputBox, useEnableContextMenuItemAddSelectionToChat, useEnableContextMenuSummarizeThisPage, useEnableCreateNewPanelButton, useEnableFloatingBall, useEnablePopupClickTrigger, useEnableSummaryWindowDefault, useEnableTokenUsageView, useSummaryLanguage } from '@/src/composables/general-config';
+import { DefaultConfig } from '@/src/constants/default-config';
+import { t } from '@/src/utils/extension';
+import DefaultSettingValue from '../components/DefaultSettingValue.vue';
 
 const { summaryLanguage } = useSummaryLanguage()
 const { enableAutoBeginSummary } = useEnableAutoBeginSummary()

@@ -5,7 +5,6 @@ export const DefaultConfig = {
   SUMMARY_LANG: browser.i18n.getUILanguage(),
   USER_CUSTOM_STYLE: '',
   ENABLE_TOKAN_USAGE_VIEW: true,
-  ENABLE_USER_CHAT_DEFAULT: false,
   ENABLE_AUTO_BEGIN_SUMMARY: false,
   ENABLE_SUMMARY_WINDOW_DEFAULT: false,
   ENABLE_FLOATING_BALL: true,

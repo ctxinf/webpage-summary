@@ -1,5 +1,5 @@
 import { storage } from "#imports";
-import { SPOKEN_LANG_KEY as SUMMARY_LANG_KEY, USER_CUSTOM_STYLE_KEY, ENABLE_TOKAN_USAGE_VIEW, ENABLE_USER_CHAT_DEFAULT, ENABLE_AUTO_BEGIN_SUMMARY, ENABLE_SUMMARY_WINDOW_DEFAULT, SUMMARY_INPUT_EXCEED_BEHAVIOUR, POPUP_CLICK_TRIGGER as ENABLE_POPUP_CLICK_TRIGGER, ENABLE_FLOATING_BALL, ENABLE_AUTO_BEGIN_SUMMARY_BY_ACTION_OR_CONTEXT_TRIGGER, ENABLE_CREATE_NEW_PANEL_BUTTON, ENABLE_CHAT_INPUT_BOX, ENABLE_CONTEXT_MENU_ITEM_SUMMARIZE_THIS_PAGE, ENABLE_CONTEXT_MENU_ITEM_ADD_SELECTION_TO_CHAT, ENABLE_AUTO_BEGIN_CHAT_FOR_ADD_SELECTION_TO_CHAT } from "../constants/storage-key";
+import { SPOKEN_LANG_KEY as SUMMARY_LANG_KEY, USER_CUSTOM_STYLE_KEY, ENABLE_TOKAN_USAGE_VIEW, ENABLE_AUTO_BEGIN_SUMMARY, ENABLE_SUMMARY_WINDOW_DEFAULT, SUMMARY_INPUT_EXCEED_BEHAVIOUR, POPUP_CLICK_TRIGGER as ENABLE_POPUP_CLICK_TRIGGER, ENABLE_FLOATING_BALL, ENABLE_AUTO_BEGIN_SUMMARY_BY_ACTION_OR_CONTEXT_TRIGGER, ENABLE_CREATE_NEW_PANEL_BUTTON, ENABLE_CHAT_INPUT_BOX, ENABLE_CONTEXT_MENU_ITEM_SUMMARIZE_THIS_PAGE, ENABLE_CONTEXT_MENU_ITEM_ADD_SELECTION_TO_CHAT, ENABLE_AUTO_BEGIN_CHAT_FOR_ADD_SELECTION_TO_CHAT } from "../constants/storage-key";
 import useWxtStorage from "./useWxtStorage";
 import { DefaultConfig } from "../constants/default-config";
 import { InputContentLengthExceededStrategy } from "../types/summary";
@@ -13,7 +13,6 @@ async function getAllExtConfigs() {
     { key: SUMMARY_LANG_KEY, fallback: DefaultConfig.SUMMARY_LANG },
     { key: USER_CUSTOM_STYLE_KEY, fallback: DefaultConfig.USER_CUSTOM_STYLE },
     { key: ENABLE_TOKAN_USAGE_VIEW, fallback: DefaultConfig.ENABLE_TOKAN_USAGE_VIEW },
-    { key: ENABLE_USER_CHAT_DEFAULT, fallback: DefaultConfig.ENABLE_USER_CHAT_DEFAULT },
     { key: ENABLE_AUTO_BEGIN_SUMMARY, fallback: DefaultConfig.ENABLE_AUTO_BEGIN_SUMMARY },
     { key: ENABLE_SUMMARY_WINDOW_DEFAULT, fallback: DefaultConfig.ENABLE_SUMMARY_WINDOW_DEFAULT },
     { key: SUMMARY_INPUT_EXCEED_BEHAVIOUR, fallback: DefaultConfig.SUMMARY_INPUT_EXCEED_BEHAVIOUR },
@@ -27,7 +26,6 @@ async function getAllExtConfigs() {
     summaryLanguage: result[0].value as string ?? DefaultConfig.SUMMARY_LANG,  //.getItems(...) has bugs: setting fallback has no effect
     userCustomStyle: result[1].value as string ?? DefaultConfig.USER_CUSTOM_STYLE,
     enableTokanUsageView: result[2].value as boolean ?? DefaultConfig.ENABLE_TOKAN_USAGE_VIEW,
-    enableUserChatDefault: result[3].value as boolean ?? DefaultConfig.ENABLE_USER_CHAT_DEFAULT,
     enableAutoBeginSummary: result[4].value as boolean ?? DefaultConfig.ENABLE_AUTO_BEGIN_SUMMARY,
     enableSummaryWindowDefault: result[5].value as boolean ?? DefaultConfig.ENABLE_SUMMARY_WINDOW_DEFAULT,
     summaryInputExceedBehaviour: result[6].value as string ?? DefaultConfig.SUMMARY_INPUT_EXCEED_BEHAVIOUR,
@@ -73,14 +71,7 @@ export function useEnableTokenUsageView() {
   return { enableTokenUsageView, ...other }
 }
 
-/**
- * @deprecated no use anymore
- * Reactive enable user chat default config.
- */
-export function useEnableUserChatDefault() {
-  const { state: enableUserChatDefault, ...other } = useWxtStorage(ENABLE_USER_CHAT_DEFAULT, DefaultConfig.ENABLE_USER_CHAT_DEFAULT)
-  return { enableUserChatDefault, ...other }
-}
+
 
 /**
  * Reactive enable auto begin summary config.
