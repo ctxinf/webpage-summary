@@ -58,7 +58,6 @@ export default defineConfig({
           "webRequest",
           "webRequestBlocking",
           "*://*.kimi.com/*",
-          "*://chatgpt.com/*",
         ]
         : [
           "storage",

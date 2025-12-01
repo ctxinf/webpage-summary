@@ -44,7 +44,6 @@ export default defineBackground(() => {
    */
   const extensionId = browser.runtime.id; // Get the current extension's ID
   const domains = [
-    { domain: "chatgpt.com", id: 100 },
     { domain: "www.kimi.com", id: 101 },
   ];
 
