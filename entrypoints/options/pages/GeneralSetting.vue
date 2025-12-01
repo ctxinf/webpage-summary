@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import Input from '@/src/components/ui/input/Input.vue';
 import Switch from '@/src/components/ui/switch/Switch.vue';
-import { useEnableAutoBeginSummary, useEnableAutoBeginSummaryByActionOrContextTrigger, useEnableCreateNewPanelButton, useEnableFloatingBall, useEnablePopupClickTrigger, useEnableSummaryWindowDefault, useEnableTokenUsageView, useEnableUserChatDefault, useSummaryInputExceedBehaviour, useSummaryLanguage, useUserCustomStyle, useEnableChatInputBox } from '@/src/composables/general-config';
+import { useEnableAutoBeginSummary, useEnableAutoBeginSummaryByActionOrContextTrigger, useEnableCreateNewPanelButton, useEnableFloatingBall, useEnablePopupClickTrigger, useEnableSummaryWindowDefault, useEnableTokenUsageView, useEnableUserChatDefault, useSummaryInputExceedBehaviour, useSummaryLanguage, useUserCustomStyle, useEnableChatInputBox, useEnableAutoBeginChatForAddSelectionToChat, useEnableContextMenuSummarizeThisPage, useEnableContextMenuItemAddSelectionToChat } from '@/src/composables/general-config';
 import { DefaultConfig } from '@/src/constants/default-config';
 import DefaultSettingValue from '../components/DefaultSettingValue.vue';
 import { t } from '@/src/utils/extension';
@@ -18,6 +18,9 @@ const { enableTokenUsageView } = useEnableTokenUsageView()
 const { enableAutoBeginSummaryByActionOrContextTrigger } = useEnableAutoBeginSummaryByActionOrContextTrigger()
 const { enbaleCreateNewPanelButton } = useEnableCreateNewPanelButton()
 const { enableChatInputBox } = useEnableChatInputBox()
+const { enableAutoBeginChatForAddSelectionToChat } = useEnableAutoBeginChatForAddSelectionToChat()
+const { enableContextMenuItemSummarizeThisPage } = useEnableContextMenuSummarizeThisPage()
+const { enableContextMenuItemAddSelectionToChat } = useEnableContextMenuItemAddSelectionToChat()
 
 useOptionTitle(t('General'))
 </script>
@@ -57,9 +60,21 @@ useOptionTitle(t('General'))
       </div>
     </div>
 
+
+    <div class="line">
+      <div>
+        <div class="title">{{ t('Enable_chat_input_box') }}</div>
+        <div class="description">enable chat input box in the summary panel</div>
+      </div>
+      <div class="setting">
+        <Switch v-model:checked="enableChatInputBox" />
+        <DefaultSettingValue :value="DefaultConfig.ENABLE_CHAT_INPUT_BOX" />
+      </div>
+    </div>
+
     <!-- Interaction -->
     <h2 class="font-bold text-2xl border-b ">
-      {{ t('Interaction') }}
+      {{ t('Interaction_Open_Panel_Mode') }}
     </h2>
     <div class="line">
       <div>
@@ -72,6 +87,41 @@ useOptionTitle(t('General'))
       </div>
     </div>
 
+
+    <div class="line">
+      <div>
+        <div class="title">{{ t('Enable_popup_click_trigger') }}</div>
+        <div class="description"> change action (extension icon in the left-top of browser) clicked behaviour to opening
+          the
+          summary panel</div>
+        <div class="description"> by default, it will open a popup panel</div>
+      </div>
+      <div class="setting">
+        <Switch v-model:checked="enablePopupClickTrigger" />
+        <DefaultSettingValue :value="DefaultConfig.ENABLE_POPUP_CLICK_TRIGGER" />
+      </div>
+    </div>
+
+
+    <div class="line">
+      <div>
+        <div class="title">{{ t('Auto_open_summary_panel_on_new_tab') }}</div>
+        <div class="description">always open summary panel when you openning a new page</div>
+        <blockquote class="border-l-4 border-l-orange-500 pl-2 bg-neutral-400/20 italic">warning: this might cause you
+          inconvenience </blockquote>
+      </div>
+      <div class="setting">
+        <Switch v-model:checked="enableSummaryWindowDefault" />
+        <DefaultSettingValue :value="DefaultConfig.ENABLE_SUMMARY_WINDOW_DEFAULT" />
+      </div>
+    </div>
+
+
+
+
+    <h2 class="font-bold text-2xl border-b ">
+      {{ t('Interaction_Trigger_Summary_Mode') }}
+    </h2>
 
     <div class="line">
       <div>
@@ -97,48 +147,19 @@ useOptionTitle(t('General'))
 
     <div class="line">
       <div>
-        <div class="title">{{ t('Auto_open_summary_panel_on_new_tab') }}</div>
-        <div class="description">always open summary panel when you openning a new page</div>
-        <blockquote class="border-l-4 border-l-orange-500 pl-2 bg-neutral-400/20 italic">warning: this might cause you
-          inconvenience </blockquote>
+        <div class="title">{{ t('Auto_begin_chat_for_add_selection_to_chat') }}</div>
+        <div class="description">{{ t('Auto_begin_chat_for_add_selection_to_chat_DESC') }}</div>
       </div>
       <div class="setting">
-        <Switch v-model:checked="enableSummaryWindowDefault" />
-        <DefaultSettingValue :value="DefaultConfig.ENABLE_SUMMARY_WINDOW_DEFAULT" />
+        <Switch v-model:checked="enableAutoBeginChatForAddSelectionToChat" />
+        <DefaultSettingValue :value="DefaultConfig.ENABLE_AUTO_BEGIN_CHAT_FOR_ADD_SELECTION_TO_CHAT" />
       </div>
     </div>
 
 
-
-
-
-    <div class="line">
-      <div>
-        <div class="title">{{ t('Enable_popup_click_trigger') }}</div>
-        <div class="description"> change action (extension icon in the left-top of browser) clicked behaviour to opening
-          the
-          summary panel</div>
-        <div class="description"> by default, it will open a popup panel</div>
-      </div>
-      <div class="setting">
-        <Switch v-model:checked="enablePopupClickTrigger" />
-        <DefaultSettingValue :value="DefaultConfig.ENABLE_POPUP_CLICK_TRIGGER" />
-      </div>
-    </div>
-
-
-    <!-- <div class="line">
-      <div>
-        <div class="title">{{ t('Always_expand_the_chat_box') }}</div>
-        <div class="description">chat box(for user to ask llm after summary with summary context) in
-          the bottom of the summary panel</div>
-      </div>
-      <div class="setting">
-        <Switch v-model:checked="enableUserChatDefault" />
-        <DefaultSettingValue :value="DefaultConfig.ENABLE_USER_CHAT_DEFAULT" />
-      </div>
-    </div> -->
-
+    <h2 class="font-bold text-2xl border-b ">
+      {{ t('Interaction_Display') }}
+    </h2>
     <div class="line">
       <div>
         <div class="title">{{ t('Enbale_token_usage_view') }}</div>
@@ -160,16 +181,35 @@ useOptionTitle(t('General'))
       </div>
     </div>
 
+    <h2 class="font-bold text-2xl border-b ">
+      {{ t('Context_Menu') }}
+    </h2>
+
     <div class="line">
       <div>
-        <div class="title">{{ t('Enable_chat_input_box') }}</div>
-        <div class="description">enable chat input box in the summary panel</div>
+        <div class="title">{{ t('Enable_context_menu_item_summarize_this_page') }}</div>
+        <div class="description">{{ t('Enable_context_menu_item_summarize_this_page_DESC') }}</div>
       </div>
       <div class="setting">
-        <Switch v-model:checked="enableChatInputBox" />
-        <DefaultSettingValue :value="DefaultConfig.ENABLE_CHAT_INPUT_BOX" />
+        <Switch v-model:checked="enableContextMenuItemSummarizeThisPage" />
+        <DefaultSettingValue :value="DefaultConfig.ENABLE_CONTEXT_MENU_ITEM_SUMMARIZE_THIS_PAGE" />
       </div>
     </div>
+
+    <div class="line">
+      <div>
+        <div class="title">{{ t('Enable_context_menu_item_add_selection_to_chat') }}</div>
+        <div class="description">{{ t('Enable_context_menu_item_add_selection_to_chat_DESC') }}</div>
+      </div>
+      <div class="setting">
+        <Switch v-model:checked="enableContextMenuItemAddSelectionToChat" />
+        <DefaultSettingValue :value="DefaultConfig.ENABLE_CONTEXT_MENU_ITEM_ADD_SELECTION_TO_CHAT" />
+      </div>
+    </div>
+
+    <!-- <h2 class="font-bold text-2xl border-b ">
+      {{ t('Interaction_Other') }}
+    </h2> -->
 
 
   </div>
