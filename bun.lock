@@ -28,7 +28,7 @@
         "js-tiktoken": "^1.0.19",
         "lucide-vue-next": "^0.475.0",
         "markdown-it": "^14.1.0",
-        "moonshot-web-ai-provider": "^0.4.2",
+        "moonshot-web-ai-provider": "^0.5.0",
         "mustache": "^4.2.0",
         "ollama-ai-provider": "^1.2.0",
         "radash": "^12.1.0",
@@ -48,7 +48,7 @@
         "autoprefixer": "^10.4.20",
         "postcss": "^8.5.1",
         "tailwindcss": "^3.4.17",
-        "typescript": "^5.6.3",
+        "typescript": "5.6.3",
         "vue-tsc": "^2.1.10",
         "wxt": "^0.20.11",
       },
@@ -751,7 +751,7 @@
 
     "mlly": ["mlly@1.7.4", "", { "dependencies": { "acorn": "^8.14.0", "pathe": "^2.0.1", "pkg-types": "^1.3.0", "ufo": "^1.5.4" } }, "sha512-qmdSIPC4bDJXgZTCR7XosJiNKySV7O215tsPtDN9iEO/7q/76b/ijtgRu/+epFXSJhijtTCCGp3DWS549P3xKw=="],
 
-    "moonshot-web-ai-provider": ["moonshot-web-ai-provider@0.4.2", "", { "dependencies": { "@ai-sdk/provider": "1.0.7", "@wxt-dev/storage": "^1.1.1" } }, "sha512-8QIeIAz/Qzyckz7NodEd6ZTpOLGDxu9/cg0/sbAvHqhgRaI9VWfIp/70r/9eExFyfS5Q9uXHDuA3J6QJ95G3OA=="],
+    "moonshot-web-ai-provider": ["moonshot-web-ai-provider@0.5.0", "https://registry.npmmirror.com/moonshot-web-ai-provider/-/moonshot-web-ai-provider-0.5.0.tgz", { "dependencies": { "@ai-sdk/provider": "1.0.7", "@wxt-dev/storage": "^1.1.1" } }, "sha512-PBiiI8GssyoH5jJjRY3q+XBGemEpYhw7HfD8NwRM4md5Hcm1g6im2tjantlbocd/ffiMvcJOjEjfkHmWnxHvnA=="],
 
     "ms": ["ms@2.1.3", "", {}, "sha512-6FlzubTLZG3J2a/NVCAleEhjzq5oxgHyaCU9yYXvcLsvoVaHJq/s5xXI6/XXP6tz7R9xAOtHnSO/tXtF3WRTlA=="],
 

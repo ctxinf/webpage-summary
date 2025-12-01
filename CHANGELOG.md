@@ -1,4 +1,10 @@
 # Changelog
+## [0.6.1] - 2025-12-01
+1. optimize the descriptions and ordering of the general settings.
+2. feature: add configuration options to enable/disable context menu items.
+3. feature: add a configuration option to allowing “Add to Selection” to send directly.
+4. update moonshot-web-ai-provider version, kimi chats are now deleted after the summary completes.
+
 ## [0.6.0] - 2025-09-14
 1. switch size unit from `rem` to `--webpage-summary-panel-srem`, avoid some sites' html root font-size setting to affect the style of shadow root.
 2. feature: add `currentSelection` prompt template variable.

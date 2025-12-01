@@ -66,7 +66,7 @@
     "message": "摘要自動觸發"
   },
   "Context_Menu": {
-    "message": "右鍵選單"
+    "message": "右鍵選單 (設定延遲生效)"
   },
   "Auto_begin_chat_for_add_selection_to_chat": {
     "message": "右鍵選單添加選中文本到聊天框後自動開始聊天"

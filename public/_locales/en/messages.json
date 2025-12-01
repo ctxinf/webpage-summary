@@ -66,7 +66,7 @@
     "message": "Trigger Summary Mode"
   },
   "Context_Menu": {
-    "message": "Context Menu"
+    "message": "Context Menu (Configuration takes effect with delay)"
   },
   "Auto_begin_chat_for_add_selection_to_chat": {
     "message": "Auto begin chat for add selection to chat"

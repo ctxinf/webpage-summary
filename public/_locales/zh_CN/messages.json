@@ -66,7 +66,7 @@
     "message": "总结自动触发"
   },
   "Context_Menu": {
-    "message": "右键菜单"
+    "message": "右键菜单 (配置延迟生效)"
   },
   "Auto_begin_chat_for_add_selection_to_chat": {
     "message": "右键菜单添加选中文本到聊天框后自动开始聊天"
