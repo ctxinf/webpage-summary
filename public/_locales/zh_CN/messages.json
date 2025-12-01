@@ -84,7 +84,7 @@
     "message": "启用悬浮球"
   },
   "Auto_begin_summary": {
-    "message": "面板打开后, 自动马上开始总结"
+    "message": "面板打开后, 直接开始总结"
   },
   "Auto_open_summary_panel_on_new_tab": {
     "message": "打开新页面时, 自动打开总结面板"
@@ -96,7 +96,7 @@
     "message": "开启聊天输入框 (总结之后进行后续对话)"
   },
   "Auto_begin_summary_by_action_or_context_trigger": {
-    "message": "设置点击扩展图标时直接打开总结面板的情况下, 面板打开后, 自动马上开始总结"
+    "message": "通过扩展图标或右键菜单打开总结面板时, 直接开始总结"
   },
   "Auto_begin_summary_by_action_or_context_trigger_DESC": {
     "message": "使用点击action(扩展小图标)或者点击右键菜单触发总结时(除了悬浮球和自动打开以外的所有的方式), 在总结面板打开时自动开始总结"
@@ -109,6 +109,18 @@
   },
   "Enbale_create_new_panel_button": {
     "message": "显示新建面板按钮"
+  },
+  "Enable_context_menu_item_summarize_this_page": {
+    "message": "总结此页"
+  },
+  "Enable_context_menu_item_summarize_this_page_DESC": {
+    "message": "在右键菜单中启用“总结此页”选项"
+  },
+  "Enable_context_menu_item_add_selection_to_chat": {
+    "message": "添加选中内容到聊天框"
+  },
+  "Enable_context_menu_item_add_selection_to_chat_DESC": {
+    "message": "在右键菜单中启用“添加选中文本到聊天框”选项"
   },
   "Extract_method": {
     "message": "提取方法"
@@ -280,17 +292,5 @@
   },
   "Site_Custom_New_Rule": {
     "message": "新规则"
-  },
-  "Enable_context_menu_item_summarize_this_page": {
-    "message": "启用右键菜单项: 总结此页"
-  },
-  "Enable_context_menu_item_summarize_this_page_DESC": {
-    "message": "在右键菜单中启用“总结此页”选项"
-  },
-  "Enable_context_menu_item_add_selection_to_chat": {
-    "message": "启用右键菜单项: 添加选中文本到聊天框"
-  },
-  "Enable_context_menu_item_add_selection_to_chat_DESC": {
-    "message": "在右键菜单中启用“添加选中文本到聊天框”选项"
   }
 }

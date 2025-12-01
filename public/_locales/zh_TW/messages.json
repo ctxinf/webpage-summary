@@ -84,7 +84,7 @@
     "message": "啟用懸浮球"
   },
   "Auto_begin_summary": {
-    "message": "面板開啟後，自動馬上開始摘要"
+    "message": "面板開啟後，直接開始摘要"
   },
   "Auto_open_summary_panel_on_new_tab": {
     "message": "開啟新頁面時，自動開啟摘要面板"
@@ -96,7 +96,7 @@
     "message": "開啟聊天輸入框 (摘要之後進行後續對話)"
   },
   "Auto_begin_summary_by_action_or_context_trigger": {
-    "message": "設定點擊擴充圖示時直接開啟摘要面板的情況下，面板開啟後，自動馬上開始摘要"
+    "message": "透過擴充圖示或右鍵選單開啟摘要面板時，直接開始摘要"
   },
   "Auto_begin_summary_by_action_or_context_trigger_DESC": {
     "message": "使用點擊 action (擴充小圖示) 或是點擊右鍵選單觸發摘要時 (除了懸浮球和自動開啟以外的所有的方式)，在摘要面板開啟時自動開始摘要"
@@ -109,6 +109,18 @@
   },
   "Enbale_create_new_panel_button": {
     "message": "顯示新建面板按鈕"
+  },
+  "Enable_context_menu_item_summarize_this_page": {
+    "message": "摘要此頁"
+  },
+  "Enable_context_menu_item_summarize_this_page_DESC": {
+    "message": "在右鍵選單中啟用「摘要此頁」選項"
+  },
+  "Enable_context_menu_item_add_selection_to_chat": {
+    "message": "添加選取內容到聊天框"
+  },
+  "Enable_context_menu_item_add_selection_to_chat_DESC": {
+    "message": "在右鍵選單中啟用「添加選取文字到聊天框」選項"
   },
   "Extract_method": {
     "message": "提取方法"
@@ -280,17 +292,5 @@
   },
   "Site_Custom_New_Rule": {
     "message": "新規則"
-  },
-  "Enable_context_menu_item_summarize_this_page": {
-    "message": "啟用右鍵選單項: 摘要此頁面"
-  },
-  "Enable_context_menu_item_summarize_this_page_DESC": {
-    "message": "在右鍵選單中啟用「摘要此頁面」選項"
-  },
-  "Enable_context_menu_item_add_selection_to_chat": {
-    "message": "啟用右鍵選單項: 添加選中文本到聊天框"
-  },
-  "Enable_context_menu_item_add_selection_to_chat_DESC": {
-    "message": "在右鍵選單中啟用「添加選中文本到聊天框」選項"
   }
 }

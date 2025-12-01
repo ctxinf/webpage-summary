@@ -110,6 +110,18 @@
   "Enbale_create_new_panel_button": {
     "message": "Enbale create new panel button"
   },
+  "Enable_context_menu_item_summarize_this_page": {
+    "message": "summarize this page"
+  },
+  "Enable_context_menu_item_summarize_this_page_DESC": {
+    "message": "Enable the 'summarize this page' option in the context menu"
+  },
+  "Enable_context_menu_item_add_selection_to_chat": {
+    "message": "add selection to chat"
+  },
+  "Enable_context_menu_item_add_selection_to_chat_DESC": {
+    "message": "Enable the 'add selection to chat' option in the context menu"
+  },
   "Extract_method": {
     "message": "Extract method"
   },
@@ -280,17 +292,5 @@
   },
   "Site_Custom_New_Rule": {
     "message": "New Rule"
-  },
-  "Enable_context_menu_item_summarize_this_page": {
-    "message": "Enable context menu item: summarize this page"
-  },
-  "Enable_context_menu_item_summarize_this_page_DESC": {
-    "message": "Enable the 'summarize this page' option in the context menu"
-  },
-  "Enable_context_menu_item_add_selection_to_chat": {
-    "message": "Enable context menu item: add selection to chat"
-  },
-  "Enable_context_menu_item_add_selection_to_chat_DESC": {
-    "message": "Enable the 'add selection to chat' option in the context menu"
   }
 }
