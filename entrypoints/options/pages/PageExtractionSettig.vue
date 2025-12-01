@@ -7,7 +7,9 @@ import { t } from "@/src/utils/extension";
 import { CircleCheckBigIcon } from "lucide-vue-next";
 import { RouterLink } from "vue-router";
 import DefaultSettingValue from "../components/DefaultSettingValue.vue";
+import { useOptionTitle } from "@/src/composables/extension";
 const { summaryInputExceedBehaviour } = useSummaryInputExceedBehaviour();
+useOptionTitle(t("Extract_method"))
 </script>
 <template>
   <h1 class="text-2xl mb-2">{{ t("Page_Extraction") }}</h1>
@@ -25,10 +27,7 @@ const { summaryInputExceedBehaviour } = useSummaryInputExceedBehaviour();
       <br />
 
       Or you can
-      <RouterLink
-        to="/site-customization"
-        class="text-green-600 underline font-bold"
-        >customize
+      <RouterLink to="/site-customization" class="text-green-600 underline font-bold">customize
       </RouterLink>
       special site using selectors
 
@@ -72,10 +71,7 @@ const { summaryInputExceedBehaviour } = useSummaryInputExceedBehaviour();
             </TabsTrigger>
 
             <TabsTrigger value="cut-preserve-middle" class="border">
-              <img
-                src="../../../assets/svg/cut-preserve-middle-intro.svg"
-                class=""
-              />
+              <img src="../../../assets/svg/cut-preserve-middle-intro.svg" class="" />
             </TabsTrigger>
 
             <TabsTrigger value="nothing" class="border"> Nothing </TabsTrigger>
@@ -86,8 +82,7 @@ const { summaryInputExceedBehaviour } = useSummaryInputExceedBehaviour();
           <CircleCheckBigIcon class="text-green-500" />
 
           <div
-            class="border rounded p-1 w-48 hover:cursor-pointer active:outline-1 select-none shadow font-mono font-bold"
-          >
+            class="border rounded p-1 w-48 hover:cursor-pointer active:outline-1 select-none shadow font-mono font-bold">
             {{
               contentLengthExceededStrategys[summaryInputExceedBehaviour]?.name
             }}

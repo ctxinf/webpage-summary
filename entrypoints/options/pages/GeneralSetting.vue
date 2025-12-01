@@ -5,6 +5,8 @@ import { useEnableAutoBeginSummary, useEnableAutoBeginSummaryByActionOrContextTr
 import { DefaultConfig } from '@/src/constants/default-config';
 import DefaultSettingValue from '../components/DefaultSettingValue.vue';
 import { t } from '@/src/utils/extension';
+import { useTitle } from '@vueuse/core';
+import { useOptionTitle } from '@/src/composables/extension';
 
 const { summaryLanguage } = useSummaryLanguage()
 const { enableAutoBeginSummary } = useEnableAutoBeginSummary()
@@ -17,6 +19,7 @@ const { enableAutoBeginSummaryByActionOrContextTrigger } = useEnableAutoBeginSum
 const { enbaleCreateNewPanelButton } = useEnableCreateNewPanelButton()
 const { enableChatInputBox } = useEnableChatInputBox()
 
+useOptionTitle(t('General'))
 </script>
 <template>
   <h1 class="text-2xl mb-4">{{ t('General') }} {{ t('Setting') }}</h1>

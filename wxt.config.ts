@@ -2,6 +2,7 @@ import { defineConfig } from "wxt";
 import autoprefixer from "autoprefixer";
 import tailwind from "tailwindcss";
 import { fileURLToPath, URL } from "node:url";
+import { Plugin } from "postcss";
 // See https://wxt.dev/api/config.html
 // console.log(`fileURLToPath(new URL('./', import.meta.url))`,fileURLToPath(new URL('./', import.meta.url)))
 export default defineConfig({
@@ -30,7 +31,8 @@ export default defineConfig({
     },
     css: {
       postcss: {
-        plugins: [tailwind(), autoprefixer()],
+        plugins: [
+          tailwind() as Plugin, autoprefixer()],
       },
     },
   }),

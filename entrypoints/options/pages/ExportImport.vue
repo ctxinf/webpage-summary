@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { Button } from '@/src/components/ui/button';
 import { toast } from '@/src/components/ui/toast';
-import { useExtInfo } from '@/src/composables/extension';
+import { useExtInfo, useOptionTitle } from '@/src/composables/extension';
 import { MODEL_CONFIG_KEY } from '@/src/constants/storage-key';
 import { ModelConfigItem } from '@/src/types/config/model';
 import { t } from '@/src/utils/extension';
@@ -9,7 +9,7 @@ import { sleep } from 'radash';
 import { ref, useTemplateRef } from 'vue';
 import { browser } from 'wxt/browser';
 import { z } from 'zod';
-
+useOptionTitle(t('Export_Import'))
 const compatibilityVersion = 20250224
 type ExportDataStructure = {
   name: 'webpage-summary',  //fixed string

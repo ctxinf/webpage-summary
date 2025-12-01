@@ -1,14 +1,13 @@
 <script lang="ts" setup>
 import { RouterView } from 'vue-router';
 import Toaster from '@/src/components/ui/toast/Toaster.vue'
-import { useTitle } from '@vueuse/core';
-useTitle('Options')
+import { useOptionTitle } from '@/src/composables/extension';
+useOptionTitle()
 </script>
 
 <template>
-  <RouterView/>
+  <RouterView />
   <Toaster />
 </template>
 
-<style scoped>
-</style>
+<style scoped></style>
