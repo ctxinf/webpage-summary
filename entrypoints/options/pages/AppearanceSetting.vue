@@ -1,11 +1,13 @@
 <script setup lang="ts">
 import { Button } from "@/src/components/ui/button";
 import { toast } from "@/src/components/ui/toast";
+import { useOptionTitle } from "@/src/composables/extension";
 import { useUserCustomStyle } from "@/src/composables/general-config";
 import { filterValidCssVariableText } from "@/src/utils/document";
 import { t } from "@/src/utils/extension";
 import { ref } from "vue";
 
+useOptionTitle(t('Appearance'))
 const { userCustomStyle, then } = useUserCustomStyle();
 const editValue = ref<string>("");
 
@@ -41,7 +43,8 @@ function submit() {
     <div class="title">{{ t("Custom_css_variables") }}</div>
     <div class="description">{{ t("Custom_css_variables_DESC") }}</div>
 
-    <div class="grid grid-cols-[auto,1fr] p-2 rounded-2xl w-fit my-2 space-y-2 items-baseline bg-gradient-to-r from-lime-100 to-blue-200">
+    <div
+      class="grid grid-cols-[auto,1fr] p-2 rounded-2xl w-fit my-2 space-y-2 items-baseline bg-gradient-to-r from-lime-100 to-blue-200">
       <h2 class="col-span-2 border-b">Reference</h2>
       <template v-for="variable in references" :key="variable.key">
         <span class="font-mono">{{ variable.key }} </span>
@@ -49,7 +52,8 @@ function submit() {
       </template>
     </div>
 
-    <textarea v-model="editValue" class="border h-64 px-2 w-full resize font-mono" :placeholder="t('Custom_css_variables_INPUT_PLACEHOLDER')" />
+    <textarea v-model="editValue" class="border h-64 px-2 w-full resize font-mono"
+      :placeholder="t('Custom_css_variables_INPUT_PLACEHOLDER')" />
     <br />
     <Button @click="submit">{{ t("Submit") }}</Button>
   </div>

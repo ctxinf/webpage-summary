@@ -2,7 +2,7 @@
   "name": "webpage-summary-ext",
   "description": "(open source) webpage summary with AI, customization of llm-provider/prompt-template, no worries abound privacy",
   "private": false,
-  "version": "0.6.0",
+  "version": "0.6.1",
   "type": "module",
   "scripts": {
     "dev": "wxt",
@@ -44,7 +44,7 @@
     "js-tiktoken": "^1.0.19",
     "lucide-vue-next": "^0.475.0",
     "markdown-it": "^14.1.0",
-    "moonshot-web-ai-provider": "^0.4.2",
+    "moonshot-web-ai-provider": "^0.5.0",
     "mustache": "^4.2.0",
     "ollama-ai-provider": "^1.2.0",
     "radash": "^12.1.0",
@@ -66,7 +66,7 @@
     "tailwindcss": "^3.4.17",
     "typescript": "5.6.3",
     "vue-tsc": "^2.1.10",
-    "wxt": "^0.20.8"
+    "wxt": "^0.20.11"
   },
   "packageManager": "pnpm@9.14.2+sha512.6e2baf77d06b9362294152c851c4f278ede37ab1eba3a55fda317a4a17b209f4dbb973fb250a77abc463a341fcb1f17f17cfa24091c4eb319cda0d9b84278387"
 }

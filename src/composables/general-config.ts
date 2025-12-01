@@ -1,5 +1,5 @@
 import { storage } from "#imports";
-import { SPOKEN_LANG_KEY as SUMMARY_LANG_KEY, USER_CUSTOM_STYLE_KEY, ENABLE_TOKAN_USAGE_VIEW, ENABLE_USER_CHAT_DEFAULT, ENABLE_AUTO_BEGIN_SUMMARY, ENABLE_SUMMARY_WINDOW_DEFAULT, SUMMARY_INPUT_EXCEED_BEHAVIOUR, POPUP_CLICK_TRIGGER as ENABLE_POPUP_CLICK_TRIGGER, ENABLE_FLOATING_BALL, ENABLE_AUTO_BEGIN_SUMMARY_BY_ACTION_OR_CONTEXT_TRIGGER, ENABLE_CREATE_NEW_PANEL_BUTTON, ENABLE_CHAT_INPUT_BOX } from "../constants/storage-key";
+import { SPOKEN_LANG_KEY as SUMMARY_LANG_KEY, USER_CUSTOM_STYLE_KEY, ENABLE_TOKAN_USAGE_VIEW, ENABLE_AUTO_BEGIN_SUMMARY, ENABLE_SUMMARY_WINDOW_DEFAULT, SUMMARY_INPUT_EXCEED_BEHAVIOUR, POPUP_CLICK_TRIGGER as ENABLE_POPUP_CLICK_TRIGGER, ENABLE_FLOATING_BALL, ENABLE_AUTO_BEGIN_SUMMARY_BY_ACTION_OR_CONTEXT_TRIGGER, ENABLE_CREATE_NEW_PANEL_BUTTON, ENABLE_CHAT_INPUT_BOX, ENABLE_CONTEXT_MENU_ITEM_SUMMARIZE_THIS_PAGE, ENABLE_CONTEXT_MENU_ITEM_ADD_SELECTION_TO_CHAT, ENABLE_AUTO_BEGIN_CHAT_FOR_ADD_SELECTION_TO_CHAT } from "../constants/storage-key";
 import useWxtStorage from "./useWxtStorage";
 import { DefaultConfig } from "../constants/default-config";
 import { InputContentLengthExceededStrategy } from "../types/summary";
@@ -13,12 +13,12 @@ async function getAllExtConfigs() {
     { key: SUMMARY_LANG_KEY, fallback: DefaultConfig.SUMMARY_LANG },
     { key: USER_CUSTOM_STYLE_KEY, fallback: DefaultConfig.USER_CUSTOM_STYLE },
     { key: ENABLE_TOKAN_USAGE_VIEW, fallback: DefaultConfig.ENABLE_TOKAN_USAGE_VIEW },
-    { key: ENABLE_USER_CHAT_DEFAULT, fallback: DefaultConfig.ENABLE_USER_CHAT_DEFAULT },
     { key: ENABLE_AUTO_BEGIN_SUMMARY, fallback: DefaultConfig.ENABLE_AUTO_BEGIN_SUMMARY },
     { key: ENABLE_SUMMARY_WINDOW_DEFAULT, fallback: DefaultConfig.ENABLE_SUMMARY_WINDOW_DEFAULT },
     { key: SUMMARY_INPUT_EXCEED_BEHAVIOUR, fallback: DefaultConfig.SUMMARY_INPUT_EXCEED_BEHAVIOUR },
     { key: ENABLE_AUTO_BEGIN_SUMMARY_BY_ACTION_OR_CONTEXT_TRIGGER, fallback: DefaultConfig.ENABLE_AUTO_BEGIN_SUMMARY_BY_ACTION_OR_CONTEXT_TRIGGER },
     { key: ENABLE_CHAT_INPUT_BOX, fallback: DefaultConfig.ENABLE_CHAT_INPUT_BOX },
+    { key: ENABLE_AUTO_BEGIN_CHAT_FOR_ADD_SELECTION_TO_CHAT, fallback: DefaultConfig.ENABLE_AUTO_BEGIN_CHAT_FOR_ADD_SELECTION_TO_CHAT },
 
   ]);
 
@@ -26,12 +26,12 @@ async function getAllExtConfigs() {
     summaryLanguage: result[0].value as string ?? DefaultConfig.SUMMARY_LANG,  //.getItems(...) has bugs: setting fallback has no effect
     userCustomStyle: result[1].value as string ?? DefaultConfig.USER_CUSTOM_STYLE,
     enableTokanUsageView: result[2].value as boolean ?? DefaultConfig.ENABLE_TOKAN_USAGE_VIEW,
-    enableUserChatDefault: result[3].value as boolean ?? DefaultConfig.ENABLE_USER_CHAT_DEFAULT,
     enableAutoBeginSummary: result[4].value as boolean ?? DefaultConfig.ENABLE_AUTO_BEGIN_SUMMARY,
     enableSummaryWindowDefault: result[5].value as boolean ?? DefaultConfig.ENABLE_SUMMARY_WINDOW_DEFAULT,
     summaryInputExceedBehaviour: result[6].value as string ?? DefaultConfig.SUMMARY_INPUT_EXCEED_BEHAVIOUR,
     enableAutoBeginSummaryByActionOrContextTrigger: result[7].value as boolean ?? DefaultConfig.ENABLE_AUTO_BEGIN_SUMMARY_BY_ACTION_OR_CONTEXT_TRIGGER,
     enableChatInputBox: result[8].value as boolean ?? DefaultConfig.ENABLE_CHAT_INPUT_BOX,
+    enableAutoBeginChatForAddSelectionToChat: result[9].value as boolean ?? DefaultConfig.ENABLE_AUTO_BEGIN_CHAT_FOR_ADD_SELECTION_TO_CHAT,
   }
 }
 export function useGeneralConfig() {
@@ -71,14 +71,7 @@ export function useEnableTokenUsageView() {
   return { enableTokenUsageView, ...other }
 }
 
-/**
- * @deprecated no use anymore
- * Reactive enable user chat default config.
- */
-export function useEnableUserChatDefault() {
-  const { state: enableUserChatDefault, ...other } = useWxtStorage(ENABLE_USER_CHAT_DEFAULT, DefaultConfig.ENABLE_USER_CHAT_DEFAULT)
-  return { enableUserChatDefault, ...other }
-}
+
 
 /**
  * Reactive enable auto begin summary config.
@@ -168,4 +161,37 @@ export function useEnableChatInputBox() {
 
 export async function getEnableChatInputBox() {
   return await storage.getItem(ENABLE_CHAT_INPUT_BOX, { fallback: DefaultConfig.ENABLE_CHAT_INPUT_BOX })
+}
+
+
+/**
+ * Reactive enable context menu item summarize this page config.
+ */
+export function useEnableContextMenuSummarizeThisPage() {
+  const { state: enableContextMenuItemSummarizeThisPage, ...other } = useWxtStorage(ENABLE_CONTEXT_MENU_ITEM_SUMMARIZE_THIS_PAGE, DefaultConfig.ENABLE_CONTEXT_MENU_ITEM_SUMMARIZE_THIS_PAGE)
+  return { enableContextMenuItemSummarizeThisPage, ...other }
+}
+
+export async function getEnableContextMenuSummarizeThisPage() {
+  return await storage.getItem(ENABLE_CONTEXT_MENU_ITEM_SUMMARIZE_THIS_PAGE, { fallback: DefaultConfig.ENABLE_CONTEXT_MENU_ITEM_SUMMARIZE_THIS_PAGE })
+}
+
+/**
+ * Reactive enable context menu item add selection to chat config.
+ */
+export function useEnableContextMenuItemAddSelectionToChat() {
+  const { state: enableContextMenuItemAddSelectionToChat, ...other } = useWxtStorage(ENABLE_CONTEXT_MENU_ITEM_ADD_SELECTION_TO_CHAT, DefaultConfig.ENABLE_CONTEXT_MENU_ITEM_ADD_SELECTION_TO_CHAT)
+  return { enableContextMenuItemAddSelectionToChat, ...other }
+}
+
+export async function getEnableContextMenuItemAddSelectionToChat() {
+  return await storage.getItem(ENABLE_CONTEXT_MENU_ITEM_ADD_SELECTION_TO_CHAT, { fallback: DefaultConfig.ENABLE_CONTEXT_MENU_ITEM_ADD_SELECTION_TO_CHAT })
+}
+
+export function useEnableAutoBeginChatForAddSelectionToChat() {
+  const { state: enableAutoBeginChatForAddSelectionToChat, ...other } = useWxtStorage(ENABLE_AUTO_BEGIN_CHAT_FOR_ADD_SELECTION_TO_CHAT, DefaultConfig.ENABLE_AUTO_BEGIN_CHAT_FOR_ADD_SELECTION_TO_CHAT)
+  return { enableAutoBeginChatForAddSelectionToChat, ...other }
+}
+export async function getEnableAutoBeginChatForAddSelectionToChat() {
+  return await storage.getItem(ENABLE_AUTO_BEGIN_CHAT_FOR_ADD_SELECTION_TO_CHAT, { fallback: DefaultConfig.ENABLE_AUTO_BEGIN_CHAT_FOR_ADD_SELECTION_TO_CHAT })
 }

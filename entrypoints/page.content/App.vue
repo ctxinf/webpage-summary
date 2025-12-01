@@ -6,6 +6,7 @@ import HoverCard from "@/src/components/custom-ui/HoverCard.vue";
 import Summary from "@/src/components/summary/Summary.vue";
 import Toaster from "@/src/components/ui/toast/Toaster.vue";
 import {
+  getEnableAutoBeginChatForAddSelectionToChat,
   getEnableAutoBeginSummaryByActionOrContextTrigger,
   getEnableSummaryWindowDefault,
   useEnableFloatingBall,
@@ -121,13 +122,30 @@ onMessage("addContentToChatDialog", (msg) => {
   }
   if (!content) return;
   tryEnableOrShow(); //open panel
+  const exec = (async () => {
+    if (!summaryRef.value) {
+      return
+    }
+    const ifAutoBegin = await getEnableAutoBeginChatForAddSelectionToChat();
+    for await (const panel of summaryRef.value) {
+      if (!panel) continue;
+      if (ifAutoBegin) {
+        await panel.submitUserInput(content, () => { })
+      } else {
+        await panel.addContentToChatDialog(content)
+      }
+    }
+  })
+
+
   if (summaryRef.value) {
-    summaryRef.value.forEach((item) => item?.addContentToChatDialog(content));
+    //when panel is already open
+    exec();
   } else {
-    //maybe the summary page not prepared when initailly
+    //when panel is not already open and is in opening process
     watchOnce(summaryRef, () => {
-      sleep(500).then(() => {
-        summaryRef.value?.forEach((item) => item?.addContentToChatDialog(content));
+      sleep(100).then(() => {
+        exec()
       });
     });
   }
@@ -138,36 +156,21 @@ onMessage("addContentToChatDialog", (msg) => {
   <div ref="container" class="relative z-[99999] user-setting-style">
     <Toaster />
 
-    <Summary
-      v-if="isOpenSummaryPanel"
-      v-for="{ id } in panelList"
-      :key="id"
-      v-show="isShow"
-      ref="summaryRef"
-      @minimize-panel="toggleShowWrap"
-      @create-new-panel="createNewPanel"
-      :close-or-hide="id === 0 ? 'hide' : 'close'"
-      @close-panel="closePanel(id)"
-      @vue:mounted="(node) => movePanelAfterMounted(node, id)"
-      class="h-fit top-[--webpage-summary-panel-top] bottom-[--webpage-summary-panel-bottom] left-[--webpage-summary-panel-left] right-[--webpage-summary-panel-right] scale-[--webpage-summary-calc-scale] origin-top-right"
-    />
+    <Summary v-if="isOpenSummaryPanel" v-for="{ id } in panelList" :key="id" v-show="isShow" ref="summaryRef"
+      @minimize-panel="toggleShowWrap" @create-new-panel="createNewPanel" :close-or-hide="id === 0 ? 'hide' : 'close'"
+      @close-panel="closePanel(id)" @vue:mounted="(node) => movePanelAfterMounted(node, id)"
+      class="h-fit top-[--webpage-summary-panel-top] bottom-[--webpage-summary-panel-bottom] left-[--webpage-summary-panel-left] right-[--webpage-summary-panel-right] scale-[--webpage-summary-calc-scale] origin-top-right" />
 
-    <RightFloatingBallContainer
-      v-if="enableFloatingBall"
-      class="scale-[--webpage-summary-calc-scale] origin-top-right"
-      :init-closed-btn-hidden="false"
-      :storage-key="'page'"
-    >
+    <RightFloatingBallContainer v-if="enableFloatingBall" class="scale-[--webpage-summary-calc-scale] origin-top-right"
+      :init-closed-btn-hidden="false" :storage-key="'page'">
       <HoverCard position="left" alignment="middle">
-        <div
-          @click="tryEnableOrShow"
-          :class="{ 'animate-bounce duration-500': isFloatingBallPulseAnim }"
-          class="w-fit h-fit p-1 aspect-square rounded-full border-[1px] border-purple-700"
-        >
+        <div @click="tryEnableOrShow" :class="{ 'animate-bounce duration-500': isFloatingBallPulseAnim }"
+          class="w-fit h-fit p-1 aspect-square rounded-full border-[1px] border-purple-700">
           <img :src="icon" class="w-6 h-6 rounded select-none" draggable="false" />
         </div>
         <template #custom-content>
-          <div class="absolute right-12 top-0 rounded p-1 text-nowrap bg-neutral-700 text-white">open summary panel</div>
+          <div class="absolute right-12 top-0 rounded p-1 text-nowrap bg-neutral-700 text-white">open summary panel
+          </div>
         </template>
       </HoverCard>
     </RightFloatingBallContainer>

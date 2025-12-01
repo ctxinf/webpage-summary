@@ -1,4 +1,5 @@
 import { onMessage, sendMessage } from "@/messaging";
+import { getEnableContextMenuItemAddSelectionToChat, getEnableContextMenuSummarizeThisPage } from "@/src/composables/general-config";
 import { activePageAndInvokeSummary, t } from "@/src/utils/extension";
 import { browser } from "wxt/browser";
 
@@ -28,13 +29,31 @@ export function registerControlMessages() {
 
 
 export async function addContextMenus() {
+  const enableSummaizeThisPage = await getEnableContextMenuSummarizeThisPage();
+  const enableAddSelectionToChat = await getEnableContextMenuItemAddSelectionToChat();
+
   await browser.contextMenus.removeAll()
-  // summrize trigger
-  browser.contextMenus.create({
-    id: "summarize-this-page",
-    title: t('summarize_this_page') + '',
-    contexts: import.meta.env.FIREFOX ? ["page", "page_action"] : ["page", "action"]  // add btn to page context menu
-  });
+
+  if (enableSummaizeThisPage) {
+    console.debug('[contextMenu]add summarize-this-page')
+    // summrize trigger
+    browser.contextMenus.create({
+      id: "summarize-this-page",
+      title: t('summarize_this_page') + '',
+      contexts: import.meta.env.FIREFOX ? ["page", "page_action"] : ["page", "action"]  // add btn to page context menu
+    });
+  }
+
+  if (enableAddSelectionToChat) {
+    console.debug('[contextMenu]add add-to-chat')
+    //add selection to chat
+    browser.contextMenus.create({
+      id: "add-to-chat",
+      title: t('add_selection_to_chat'),
+      contexts: ["selection"]
+    });
+  }
+
 
   // open-setting
   browser.contextMenus.create({
@@ -43,12 +62,7 @@ export async function addContextMenus() {
     contexts: import.meta.env.FIREFOX ? ["page_action"] : ["action"] // add btn to page context menu
   });
 
-  //add selection to chat
-  browser.contextMenus.create({
-    id: "add-to-chat",
-    title: t('add_selection_to_chat') + '📝',
-    contexts: ["selection"]
-  });
+
 
   //event handler for context memu click
   browser.contextMenus.onClicked.addListener(async (info, tab) => {

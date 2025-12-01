@@ -13,3 +13,15 @@ export function useExtInfo() {
 		iconUrl
 	}
 }
+
+export function useOptionTitle(title?: string) {
+	const { name } = useExtInfo();
+	return useTitle(title, {
+		titleTemplate(title) {
+			if (!title) {
+				return name;
+			}
+			return `${title}-${name}`;
+		},
+	})
+}

@@ -1,45 +1,28 @@
 <template>
   <template v-if="true">
     <DraggableContainer
-      class="border w-[var(--webpage-summary-panel-width)] bg-[--webpage-summary-panel-background] rounded-t-xl rounded-b-xl shadow-2xl"
-    >
+      class="border w-[var(--webpage-summary-panel-width)] bg-[--webpage-summary-panel-background] rounded-t-xl rounded-b-xl shadow-2xl">
       <template #header>
-        <SummaryHeader v-model:current-model="currentModel" v-model:current-prompt="currentPrompt" class="rounded-t-xl" :token-usage="tokenUsage">
+        <SummaryHeader v-model:current-model="currentModel" v-model:current-prompt="currentPrompt" class="rounded-t-xl"
+          :token-usage="tokenUsage">
           <template #before-icon-buttons>
-            <Button
-              v-if="closeOrHide === 'close'"
-              @click="$emit('closePanel')"
-              variant="github"
-              size="sm-icon"
-              title="close this panel"
-              class="p-0 text-foreground/80"
-            >
+            <Button v-if="closeOrHide === 'close'" @click="$emit('closePanel')" variant="github" size="sm-icon"
+              title="close this panel" class="p-0 text-foreground/80">
               <XIcon />
             </Button>
           </template>
           <template #left-buttons>
-            <StatusButton :status="status" @view-failed-reason="viewFailedReason" @refresh="refreshSummary" @stop="stop" />
+            <StatusButton :status="status" @view-failed-reason="viewFailedReason" @refresh="refreshSummary"
+              @stop="stop" />
           </template>
           <template #right-buttons>
-            <Button
-              v-if="closeOrHide === 'hide' && enbaleCreateNewPanelButton"
-              @click="$emit('createNewPanel')"
-              variant="github"
-              size="sm-icon"
-              title="create new panel"
-              class="p-0 text-foreground/50"
-            >
+            <Button v-if="closeOrHide === 'hide' && enbaleCreateNewPanelButton" @click="$emit('createNewPanel')"
+              variant="github" size="sm-icon" title="create new panel" class="p-0 text-foreground/50">
               <CopyPlusIcon />
             </Button>
             <!-- minimize button -->
-            <Button
-              v-if="closeOrHide === 'hide'"
-              @click="$emit('minimizePanel')"
-              variant="github"
-              size="sm-icon"
-              title="minimize"
-              class="p-0 text-foreground/50"
-            >
+            <Button v-if="closeOrHide === 'hide'" @click="$emit('minimizePanel')" variant="github" size="sm-icon"
+              title="minimize" class="p-0 text-foreground/50">
               <Minimize2Icon />
             </Button>
           </template>
@@ -47,28 +30,18 @@
       </template>
 
       <template #default>
-        <SummaryDialog
-          class="mt-[-1px] min-h-16 overflow-y-auto max-h-[--webpage-summary-panel-dialog-max-height]"
-          style="overflow-anchor: auto"
-          ref="summaryDialog"
-        >
+        <SummaryDialog class="mt-[-1px] min-h-16 overflow-y-auto max-h-[--webpage-summary-panel-dialog-max-height]"
+          style="overflow-anchor: auto" ref="summaryDialog">
           <template #top-right-buttons>
             <!-- length view&manage -->
-            <InputInspect
-              v-if="webpageContent && currentModel && textContentTrimmer"
-              :content-trimmer="textContentTrimmer"
-              :webpag-content="webpageContent"
+            <InputInspect v-if="webpageContent && currentModel && textContentTrimmer"
+              :content-trimmer="textContentTrimmer" :webpag-content="webpageContent"
               :max-content-length="currentModel?.maxContentLength"
-              :key="currentModel.name + '_' + webpageContent.articleUrl"
-              class="ml-2"
-            />
+              :key="currentModel.name + '_' + webpageContent.articleUrl" class="ml-2" />
 
             <!-- token usage -->
-            <div
-              v-if="enableTokenUsageView && tokenUsage.inputToken"
-              class="flex items-center gap-1 border rounded p-1 bg-gray-200"
-              title="Token Usage"
-            >
+            <div v-if="enableTokenUsageView && tokenUsage.inputToken"
+              class="flex items-center gap-1 border rounded p-1 bg-gray-200" title="Token Usage">
               <TokenUsageItem :usage="tokenUsage" />
             </div>
 
@@ -76,14 +49,9 @@
             <!-- grow for pushing 👆 to left -->
 
             <!-- reset/clear button -->
-            <Button
-              variant="github"
-              size="sm-icon"
-              v-if="uiMessages.filter((m) => !m.hide).length > 0 && status !== 'running'"
-              title="Clear all"
-              class=""
-              @click="resetMessages"
-            >
+            <Button variant="github" size="sm-icon"
+              v-if="uiMessages.filter((m) => !m.hide).length > 0 && status !== 'running'" title="Clear all" class=""
+              @click="resetMessages">
               <img :src="clearAll" />
             </Button>
           </template>
@@ -100,38 +68,24 @@
         <div class="w-full h-fit relative">
           <div class="absolute top-[0.25em] right-0 flex flex-row gap-1">
             <!-- enable ChaptInputBox  buttons -->
-            <Button
-              v-show="!expandChatInputBox && enableChatInputBox"
-              @click="() => (expandChatInputBox = !expandChatInputBox)"
-              variant="github"
-              size="icon"
-              class="p-1 rounded-none text-neutral-400 text-primary/50"
-              title="continue chat"
-            >
+            <Button v-show="!expandChatInputBox && enableChatInputBox"
+              @click="() => (expandChatInputBox = !expandChatInputBox)" variant="github" size="icon"
+              class="p-1 rounded-none text-neutral-400 text-primary/50" title="continue chat">
               <MessageCirclePlusIcon />
             </Button>
           </div>
 
           <div class="absolute bottom-[-1em] left-[50%] flex flex-row gap-1">
             <!-- hide  buttons -->
-            <Button
-              v-show="expandChatInputBox && enableChatInputBox"
-              @click="() => (expandChatInputBox = !expandChatInputBox)"
-              variant="github"
-              size="icon"
-              class="h-4 rounded-none text-gray-500"
-            >
+            <Button v-show="expandChatInputBox && enableChatInputBox"
+              @click="() => (expandChatInputBox = !expandChatInputBox)" variant="github" size="icon"
+              class="h-4 rounded-none text-gray-500">
               <ChevronUpIcon />
             </Button>
           </div>
 
-          <ChatInputBox
-            v-show="expandChatInputBox && enableChatInputBox"
-            @submit="submitUserInput"
-            ref="chatInputBox"
-            :disabled="status !== 'ready'"
-            class="rounded-b-xl border-t"
-          />
+          <ChatInputBox v-show="expandChatInputBox && enableChatInputBox" @submit="submitUserInput" ref="chatInputBox"
+            :disabled="status !== 'ready'" class="rounded-b-xl border-t" />
         </div>
       </template>
     </DraggableContainer>
@@ -204,6 +158,7 @@ const event = new EventEmitter();
 defineExpose({
   status: () => status.value,
   refreshSummary,
+  submitUserInput,
   addContentToChatDialog,
   on: (name: string, fn: Parameters<typeof event.on>[1]) => event.on(name, fn),
 });
@@ -242,7 +197,7 @@ async function viewFailedReason() {
   toast({ title: "ERROR", description: error.value, variant: "destructive" });
 }
 
-onMounted(() => {});
+onMounted(() => { });
 </script>
 
 <style scoped></style>

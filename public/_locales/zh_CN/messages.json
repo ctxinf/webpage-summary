@@ -59,23 +59,44 @@
   "Interaction": {
     "message": "交互"
   },
+  "Interaction_Open_Panel_Mode": {
+    "message": "面板打开方式"
+  },
+  "Interaction_Trigger_Summary_Mode": {
+    "message": "总结自动触发"
+  },
+  "Context_Menu": {
+    "message": "右键菜单 (配置延迟生效)"
+  },
+  "Auto_begin_chat_for_add_selection_to_chat": {
+    "message": "右键菜单添加选中文本到聊天框后自动开始聊天"
+  },
+  "Auto_begin_chat_for_add_selection_to_chat_DESC": {
+    "message": "通过右键菜单将选中文本添加到聊天框后，自动开始聊天"
+  },
+  "Interaction_Display": {
+    "message": "显示"
+  },
+  "Interaction_Other": {
+    "message": "其它"
+  },
   "Enable_floating_ball": {
     "message": "启用悬浮球"
   },
   "Auto_begin_summary": {
-    "message": "面板打开时自动开始总结"
+    "message": "面板打开后, 直接开始总结"
   },
   "Auto_open_summary_panel_on_new_tab": {
     "message": "打开新页面时, 自动打开总结面板"
   },
   "Enable_popup_click_trigger": {
-    "message": "点击action时, 打开总结面板"
+    "message": "点击扩展图标时, 直接打开总结面板"
   },
   "Enable_chat_input_box": {
-    "message": "开启 chat box(支持总结之后进行后续对话)"
+    "message": "开启聊天输入框 (总结之后进行后续对话)"
   },
   "Auto_begin_summary_by_action_or_context_trigger": {
-    "message": "使用action或者右键菜单触发总结, 面板打开时自动开始总结"
+    "message": "通过扩展图标或右键菜单打开总结面板时, 直接开始总结"
   },
   "Auto_begin_summary_by_action_or_context_trigger_DESC": {
     "message": "使用点击action(扩展小图标)或者点击右键菜单触发总结时(除了悬浮球和自动打开以外的所有的方式), 在总结面板打开时自动开始总结"
@@ -84,10 +105,22 @@
     "message": "总是展开聊天输入框"
   },
   "Enbale_token_usage_view": {
-    "message": "显示tokenUsage"
+    "message": "显示 Token Usage"
   },
   "Enbale_create_new_panel_button": {
-    "message": "显示创建新面板按钮"
+    "message": "显示新建面板按钮"
+  },
+  "Enable_context_menu_item_summarize_this_page": {
+    "message": "总结此页"
+  },
+  "Enable_context_menu_item_summarize_this_page_DESC": {
+    "message": "在右键菜单中启用“总结此页”选项"
+  },
+  "Enable_context_menu_item_add_selection_to_chat": {
+    "message": "添加选中内容到聊天框"
+  },
+  "Enable_context_menu_item_add_selection_to_chat_DESC": {
+    "message": "在右键菜单中启用“添加选中文本到聊天框”选项"
   },
   "Extract_method": {
     "message": "提取方法"

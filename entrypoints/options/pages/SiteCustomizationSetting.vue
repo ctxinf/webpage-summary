@@ -18,6 +18,7 @@ import Switch from "@/src/components/ui/switch/Switch.vue";
 import { ChevronDown, Plus, Minus } from "lucide-vue-next";
 import { toast } from "@/src/components/ui/toast";
 import HoverTextBadget from "@/src/components/common/HoverTextBadget.vue";
+import { useOptionTitle } from "@/src/composables/extension";
 
 const whitelist = ref<WhiteList>(DefaultConfig.WHITELIST);
 const blacklist = ref<BlackList>(DefaultConfig.BLACKLIST);
@@ -25,6 +26,7 @@ const siteCustomization = ref<SiteCumstomizationItem[]>(
   DefaultConfig.SITE_CUSTOMIZATION
 );
 
+useOptionTitle(t('Site_Customization'))
 onMounted(async () => {
   whitelist.value =
     (await storage.getItem(WHITELIST)) || DefaultConfig.WHITELIST;
@@ -116,8 +118,7 @@ const examples = [
       </h1>
 
       <div
-        class="grid grid-cols-[auto,1fr] p-2 rounded-2xl my-2 space-y-2 items-baseline bg-gradient-to-r from-lime-100 to-blue-200"
-      >
+        class="grid grid-cols-[auto,1fr] p-2 rounded-2xl my-2 space-y-2 items-baseline bg-gradient-to-r from-lime-100 to-blue-200">
         <h2 class="col-span-2 border-b">
           {{ t("Site_Custom_Patterns_Example") }}
         </h2>
@@ -134,11 +135,7 @@ const examples = [
         <details open class="details-card">
           <summary class="summary-style">
             <div class="flex items-center gap-3">
-              <Switch
-                :checked="whitelist.enable"
-                @update:checked="updateWhitelistEnable"
-                @click.stop
-              />
+              <Switch :checked="whitelist.enable" @update:checked="updateWhitelistEnable" @click.stop />
               <span class="font-semibold">{{ t("Whitelist") }}</span>
             </div>
             <ChevronDown class="summary-chevron" />
@@ -154,12 +151,8 @@ const examples = [
               }})
             </label>
 
-            <textarea
-              v-model="whitelistPatterns"
-              rows="10"
-              class="textarea-style"
-              :placeholder="'e.g. \nwww.reddit.com\nwww.reddit.com/r/**/comments/**\n*.news.com\n**.quora.com'"
-            ></textarea>
+            <textarea v-model="whitelistPatterns" rows="10" class="textarea-style"
+              :placeholder="'e.g. \nwww.reddit.com\nwww.reddit.com/r/**/comments/**\n*.news.com\n**.quora.com'"></textarea>
           </div>
         </details>
 
@@ -167,11 +160,7 @@ const examples = [
         <details open class="details-card">
           <summary class="summary-style">
             <div class="flex items-center gap-3">
-              <Switch
-                :checked="blacklist.enable"
-                @update:checked="updateBlacklistEnable"
-                @click.stop
-              />
+              <Switch :checked="blacklist.enable" @update:checked="updateBlacklistEnable" @click.stop />
               <span class="font-semibold">{{ t("Blacklist") }}</span>
             </div>
             <ChevronDown class="summary-chevron" />
@@ -181,17 +170,11 @@ const examples = [
               {{ t("Site_Custom_Blacklist_Description") }}
             </label>
 
-            <label class="block text-sm font-medium text-gray-600 mb-2"
-              >{{ t("Site_Custom_Patterns") }} ({{
-                t("Site_Custom_one_per_line")
-              }})</label
-            >
-            <textarea
-              v-model="blacklistPatterns"
-              rows="10"
-              class="textarea-style"
-              :placeholder="'e.g. \n www.bing.com\n*.visa.com\n**.google.com'"
-            ></textarea>
+            <label class="block text-sm font-medium text-gray-600 mb-2">{{ t("Site_Custom_Patterns") }} ({{
+              t("Site_Custom_one_per_line")
+            }})</label>
+            <textarea v-model="blacklistPatterns" rows="10" class="textarea-style"
+              :placeholder="'e.g. \n www.bing.com\n*.visa.com\n**.google.com'"></textarea>
           </div>
         </details>
       </div>
@@ -202,11 +185,7 @@ const examples = [
           <!-- //TODO:所有的summary改为h2 markdown二级标题样式 -->
           <h2 class="font-semibold flex items-center gap-1">
             {{ t("Site_Customization") }}
-            <HoverTextBadget
-              class="text-nowrap"
-              :title="'?'"
-              :description="t('Site_Custom_Description')"
-            />
+            <HoverTextBadget class="text-nowrap" :title="'?'" :description="t('Site_Custom_Description')" />
           </h2>
 
           <div class="flex items-center gap-2">
@@ -222,25 +201,15 @@ const examples = [
             <details class="details-card-inner">
               <summary class="summary-style-inner">
                 <div class="flex items-center gap-3 flex-1 min-w-0">
-                  <Switch
-                    :checked="item.enable"
-                    @update:checked="item.enable = $event"
-                    @click.stop
-                  />
-                  <p
-                    class="font-medium truncate"
-                    :class="{ 'text-gray-400': !item.pattern }"
-                  >
+                  <Switch :checked="item.enable" @update:checked="item.enable = $event" @click.stop />
+                  <p class="font-medium truncate" :class="{ 'text-gray-400': !item.pattern }">
                     <!-- TODO: 改为标题3 -->
 
                     {{ item.pattern || t("Site_Custom_New_Rule") }}
                   </p>
                 </div>
                 <div class="flex items-center gap-2">
-                  <button
-                    @click.prevent="removeSiteCustomization(index)"
-                    class="remove-button"
-                  >
+                  <button @click.prevent="removeSiteCustomization(index)" class="remove-button">
                     <Minus class="w-4 h-4" />
                   </button>
                   <ChevronDown class="summary-chevron" />
@@ -252,25 +221,15 @@ const examples = [
                     {{ t("Site_Custom_Match_Pattern") }}
                   </label>
 
-                  <input
-                    type="text"
-                    v-model="item.pattern"
-                    class="input-style"
-                    placeholder="e.g. www.reddit.com"
-                  />
+                  <input type="text" v-model="item.pattern" class="input-style" placeholder="e.g. www.reddit.com" />
                 </div>
                 <div>
-                  <label class="block text-sm font-medium text-gray-600 mb-2"
-                    >{{ t("Site_Custom_Selectors") }} ({{
-                      t("Site_Custom_one_per_line")
-                    }})
+                  <label class="block text-sm font-medium text-gray-600 mb-2">{{ t("Site_Custom_Selectors") }} ({{
+                    t("Site_Custom_one_per_line")
+                  }})
                   </label>
-                  <textarea
-                    v-model="siteCustomizationSelectors(item).value"
-                    rows="5"
-                    class="textarea-style"
-                    :placeholder="'e.g. \n.text-neutral-content\n#comment-tree'"
-                  ></textarea>
+                  <textarea v-model="siteCustomizationSelectors(item).value" rows="5" class="textarea-style"
+                    :placeholder="'e.g. \n.text-neutral-content\n#comment-tree'"></textarea>
                 </div>
               </div>
             </details>
@@ -308,7 +267,7 @@ const examples = [
   @apply w-5 h-5 text-gray-500 transition-transform duration-200;
 }
 
-details[open] > summary .summary-chevron {
+details[open]>summary .summary-chevron {
   @apply rotate-180;
 }
 

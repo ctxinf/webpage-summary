@@ -59,23 +59,44 @@
   "Interaction": {
     "message": "互動"
   },
+  "Interaction_Open_Panel_Mode": {
+    "message": "面板開啟方式"
+  },
+  "Interaction_Trigger_Summary_Mode": {
+    "message": "摘要自動觸發"
+  },
+  "Context_Menu": {
+    "message": "右鍵選單 (設定延遲生效)"
+  },
+  "Auto_begin_chat_for_add_selection_to_chat": {
+    "message": "右鍵選單添加選中文本到聊天框後自動開始聊天"
+  },
+  "Auto_begin_chat_for_add_selection_to_chat_DESC": {
+    "message": "透過右鍵選單將選中文本添加到聊天框後，自動開始聊天"
+  },
+  "Interaction_Display": {
+    "message": "顯示"
+  },
+  "Interaction_Other": {
+    "message": "其它"
+  },
   "Enable_floating_ball": {
     "message": "啟用懸浮球"
   },
   "Auto_begin_summary": {
-    "message": "面板開啟時自動開始摘要"
+    "message": "面板開啟後，直接開始摘要"
   },
   "Auto_open_summary_panel_on_new_tab": {
     "message": "開啟新頁面時，自動開啟摘要面板"
   },
   "Enable_popup_click_trigger": {
-    "message": "點擊 action 時，開啟摘要面板"
+    "message": "點擊擴充圖示時，直接開啟摘要面板"
   },
   "Enable_chat_input_box": {
-    "message": "開啟聊天視窗（支援在總結之後進行後續對話）"
+    "message": "開啟聊天輸入框 (摘要之後進行後續對話)"
   },
   "Auto_begin_summary_by_action_or_context_trigger": {
-    "message": "使用 action 或是右鍵選單觸發摘要，面板開啟時自動開始摘要"
+    "message": "透過擴充圖示或右鍵選單開啟摘要面板時，直接開始摘要"
   },
   "Auto_begin_summary_by_action_or_context_trigger_DESC": {
     "message": "使用點擊 action (擴充小圖示) 或是點擊右鍵選單觸發摘要時 (除了懸浮球和自動開啟以外的所有的方式)，在摘要面板開啟時自動開始摘要"
@@ -84,10 +105,22 @@
     "message": "總是展開聊天輸入框"
   },
   "Enbale_token_usage_view": {
-    "message": "顯示 tokenUsage"
+    "message": "顯示 Token Usage"
   },
   "Enbale_create_new_panel_button": {
-    "message": "顯示創建新面板按鈕"
+    "message": "顯示新建面板按鈕"
+  },
+  "Enable_context_menu_item_summarize_this_page": {
+    "message": "摘要此頁"
+  },
+  "Enable_context_menu_item_summarize_this_page_DESC": {
+    "message": "在右鍵選單中啟用「摘要此頁」選項"
+  },
+  "Enable_context_menu_item_add_selection_to_chat": {
+    "message": "添加選取內容到聊天框"
+  },
+  "Enable_context_menu_item_add_selection_to_chat_DESC": {
+    "message": "在右鍵選單中啟用「添加選取文字到聊天框」選項"
   },
   "Extract_method": {
     "message": "提取方法"

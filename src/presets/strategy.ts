@@ -21,7 +21,7 @@ export const contentLengthExceededStrategys: Record<InputContentLengthExceededSt
 
   },
   "cut-preserve-middle": {
-    name: 'cut-preserve-end',
+    name: 'cut-preserve-middle',
     desc: 'Split the content into 3 parts, with the middle part of maximum length beging preserved, front and end sides are equally divided.',
     exec: (length: number, maxLength: number) => {
       const maxHalf = Math.floor(maxLength / 2);
