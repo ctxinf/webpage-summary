@@ -74,6 +74,15 @@ function siteCustomizationSelectors(item: SiteCumstomizationItem) {
   });
 }
 
+function shadowRootSelectorsComputed(item: SiteCumstomizationItem) {
+  return computed({
+    get: () => (item.shadowRootSelectors || []).join("\n"),
+    set: (value) => {
+      item.shadowRootSelectors = value.split("\n").filter((p) => p.trim() !== "");
+    },
+  });
+}
+
 function updateWhitelistEnable(value: boolean) {
   whitelist.value.enable = value;
   if (value) {
@@ -224,12 +233,30 @@ const examples = [
                   <input type="text" v-model="item.pattern" class="input-style" placeholder="e.g. www.reddit.com" />
                 </div>
                 <div>
-                  <label class="block text-sm font-medium text-gray-600 mb-2">{{ t("Site_Custom_Selectors") }} ({{
-                    t("Site_Custom_one_per_line")
-                  }})
+                  <!-- 单选开关: 是否使用 shadowRoot 获取内容 -->
+                  <div class="flex items-center gap-2 mb-2">
+                    <Switch :checked="item.useShadowRoot ?? false" @update:checked="item.useShadowRoot = $event" @click.stop />
+                    <label class="text-sm font-medium text-gray-600">{{ t("Site_Custom_Use_ShadowRoot") }}</label>
+                  </div>
+
+                  <label class="block text-sm font-medium text-gray-600 mb-2">
+                    {{ item.useShadowRoot ? t("Site_Custom_Host_Selectors") : t("Site_Custom_Selectors") }}
+                    ({{ t("Site_Custom_one_per_line") }})
                   </label>
                   <textarea v-model="siteCustomizationSelectors(item).value" rows="5" class="textarea-style"
-                    :placeholder="'e.g. \n.text-neutral-content\n#comment-tree'"></textarea>
+                    :placeholder="item.useShadowRoot ? 'e.g. \n#app > div\n.shadow-host-element' : 'e.g. \n.text-neutral-content\n#comment-tree'"></textarea>
+
+                  <!-- 如果开关打开，则使用 textarea 支持输入 shadowRoot 内部选择器 -->
+                  <div v-if="item.useShadowRoot" class="mt-2">
+                    <label class="block text-sm font-medium text-gray-600 mb-2">
+                      {{ t("Site_Custom_ShadowRoot_Selectors") }} ({{ t("Site_Custom_one_per_line") }})
+                    </label>
+                    <textarea v-model="shadowRootSelectorsComputed(item).value" rows="5" class="textarea-style"
+                      :placeholder="'e.g. \n#content\n.article-body'"></textarea>
+                    <p class="text-xs text-gray-500 mt-1">
+                      {{ t("Site_Custom_ShadowRoot_Tip") }}
+                    </p>
+                  </div>
                 </div>
               </div>
             </details>

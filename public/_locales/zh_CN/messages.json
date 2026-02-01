@@ -292,5 +292,17 @@
   },
   "Site_Custom_New_Rule": {
     "message": "新规则"
+  },
+  "Site_Custom_Use_ShadowRoot": {
+    "message": "使用 Shadow DOM"
+  },
+  "Site_Custom_Host_Selectors": {
+    "message": "Shadow DOM 宿主选择器"
+  },
+  "Site_Custom_ShadowRoot_Selectors": {
+    "message": "Shadow Root 内部选择器"
+  },
+  "Site_Custom_ShadowRoot_Tip": {
+    "message": "例如: document.querySelector('宿主选择器').shadowRoot.querySelector('内部选择器')"
   }
 }

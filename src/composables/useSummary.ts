@@ -145,7 +145,10 @@ export function useSummary() {
         )
       )
       if (matchOne) {
-        webpageContent.value = textsBySelectors(matchOne.selectors)
+        webpageContent.value = textsBySelectors(matchOne.selectors, {
+          useShadowRoot: matchOne.useShadowRoot,
+          shadowRootSelectors: matchOne.shadowRootSelectors,
+        })
         // console.debug('match selectors', webpageContent.value.textContent?.length, toRaw(webpageContent.value));
       } else {
         webpageContent.value = simpleParseRead()
