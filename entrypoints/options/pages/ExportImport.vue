@@ -119,7 +119,7 @@ async function exportConfig() {
   /* delete apiKey field */
   if (items && !isExportWithApiKeys.value) {
     const key = MODEL_CONFIG_KEY.replace('local:', '')
-    items[key] = (items[key] as ModelConfigItem[]).map(item => {
+    items[key] = (items[key] as ModelConfigItem[])?.map(item => {
       const { apiKey, ...other } = item
       return { ...other }
     })

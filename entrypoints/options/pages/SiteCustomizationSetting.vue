@@ -225,19 +225,22 @@ const examples = [
                 </div>
               </summary>
               <div class="p-4 pt-2 grid grid-cols-1 gap-4">
-                <div>
-                  <label class="block text-sm font-medium text-gray-600 mb-2">
-                    {{ t("Site_Custom_Match_Pattern") }}
-                  </label>
-
-                  <input type="text" v-model="item.pattern" class="input-style" placeholder="e.g. www.reddit.com" />
+                <div class="flex items-end gap-4">
+                  <div class="flex-1">
+                    <label class="block text-sm font-medium text-gray-600 mb-2">
+                      {{ t("Site_Custom_Match_Pattern") }}
+                    </label>
+                    <input type="text" v-model="item.pattern" class="input-style" placeholder="minimatch pattern, e.g. www.reddit.com, *.reddit.com" />
+                  </div>
+                  <div class="mb-2">
+                    <!-- 单选开关: 是否使用 shadowRoot 获取内容 -->
+                    <div class="flex items-center gap-2">
+                      <Switch :checked="item.useShadowRoot ?? false" @update:checked="item.useShadowRoot = $event" @click.stop />
+                      <label class="text-sm font-medium text-gray-600">{{ t("Site_Custom_Use_ShadowRoot") }}</label>
+                    </div>
+                  </div>
                 </div>
                 <div>
-                  <!-- 单选开关: 是否使用 shadowRoot 获取内容 -->
-                  <div class="flex items-center gap-2 mb-2">
-                    <Switch :checked="item.useShadowRoot ?? false" @update:checked="item.useShadowRoot = $event" @click.stop />
-                    <label class="text-sm font-medium text-gray-600">{{ t("Site_Custom_Use_ShadowRoot") }}</label>
-                  </div>
 
                   <label class="block text-sm font-medium text-gray-600 mb-2">
                     {{ item.useShadowRoot ? t("Site_Custom_Host_Selectors") : t("Site_Custom_Selectors") }}

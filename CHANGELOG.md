@@ -1,4 +1,8 @@
 # Changelog
+## [0.6.2] - 2026-02-01
+feature: shadowRoot support for selectors in site customization setting. @linkecoding
+
+
 ## [0.6.1] - 2025-12-01
 1. optimize the descriptions and ordering of the general settings.
 2. feature: add configuration options to enable/disable context menu items.

@@ -9,7 +9,7 @@
 
 ## directory structure
 ```
-packages/ext/
+
 ├── app.config.ts     #runtime contfig(version, ...)
 ├── components.json   #shadcn-vue config
 ├── connect-messaging.ts   #wrapper for .connect message api 
@@ -38,6 +38,6 @@ packages/ext/
 
 ## dev locally
 ```sh
-cd packages/ext
-pnpm install
-pnpm run dev
+cp web-ext.config.ts.exmaple web-ext.config.ts
+bun install
+bun run dev
