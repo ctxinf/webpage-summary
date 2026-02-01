@@ -34,30 +34,83 @@ export function simpleParseRead() {
 
 /**
  * get page content from selectors
- * @param selectors - CSS选择器字符串数组
+ * @param selectors - CSS选择器字符串数组（普通模式下直接搜索，Shadow DOM 模式下作为宿主元素选择器）
+ * @param options - 可选配置
+ * @param options.useShadowRoot - 是否在 Shadow DOM 中搜索
+ * @param options.shadowRootSelectors - 在 shadowRoot 内部搜索的选择器
  * @returns 所有去重文本用句号连接的字符串
+ * 
+ * @example
+ * // 普通模式：直接在 document 中搜索
+ * textsBySelectors(['.article-content', '#main-text'])
+ * 
+ * @example
+ * // Shadow DOM 模式：先找宿主元素，再在其 shadowRoot 中搜索
+ * // 等效于: document.querySelector('#app > div').shadowRoot.querySelector('#content')
+ * textsBySelectors(['#app > div'], { useShadowRoot: true, shadowRootSelectors: ['#content'] })
  */
-export function textsBySelectors(selectors: string[]) {
+export function textsBySelectors(
+  selectors: string[],
+  options?: {
+    useShadowRoot?: boolean;
+    shadowRootSelectors?: string[];
+  }
+) {
   if (!selectors.length) return '';
 
   const processedElements = new Set<Element>();
   const uniqueTexts: string[] = [];
 
-  for (const selector of selectors) {
-    try {
-      const elements = document.querySelectorAll(selector);
+  // Shadow DOM 模式：selectors 作为宿主选择器，shadowRootSelectors 在 shadowRoot 内搜索
+  if (options?.useShadowRoot && options?.shadowRootSelectors?.length) {
+    for (const hostSelector of selectors) {
+      try {
+        const hostElements = document.querySelectorAll(hostSelector);
 
-      elements.forEach(el => {
-        if (!processedElements.has(el)) {
-          processedElements.add(el);
-          const text = el.textContent?.trim();
-          if (text && text.length > 0) {
-            uniqueTexts.push(text);
+        hostElements.forEach(host => {
+          if (host.shadowRoot) {
+            // 在该宿主的 shadowRoot 中搜索 shadowRootSelectors
+            for (const shadowSelector of options.shadowRootSelectors!) {
+              try {
+                const elements = host.shadowRoot.querySelectorAll(shadowSelector);
+
+                elements.forEach(el => {
+                  if (!processedElements.has(el)) {
+                    processedElements.add(el);
+                    const text = el.textContent?.trim();
+                    if (text && text.length > 0) {
+                      uniqueTexts.push(text);
+                    }
+                  }
+                });
+              } catch (error) {
+                console.warn(`Invalid shadow root selector: ${shadowSelector}`);
+              }
+            }
           }
-        }
-      });
-    } catch (error) {
-      console.warn(`Invalid selector: ${selector}`);
+        });
+      } catch (error) {
+        console.warn(`Invalid host selector: ${hostSelector}`);
+      }
+    }
+  } else {
+    // 普通模式：直接在 document 中搜索 selectors
+    for (const selector of selectors) {
+      try {
+        const elements = document.querySelectorAll(selector);
+
+        elements.forEach(el => {
+          if (!processedElements.has(el)) {
+            processedElements.add(el);
+            const text = el.textContent?.trim();
+            if (text && text.length > 0) {
+              uniqueTexts.push(text);
+            }
+          }
+        });
+      } catch (error) {
+        console.warn(`Invalid selector: ${selector}`);
+      }
     }
   }
 

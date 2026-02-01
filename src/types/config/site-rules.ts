@@ -25,4 +25,6 @@ export type SiteCumstomizationItem = {
   enable: boolean,
   pattern: string,
   selectors: string[],
+  useShadowRoot?: boolean,
+  shadowRootSelectors?: string[],
 }

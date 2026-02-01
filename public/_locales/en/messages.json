@@ -292,5 +292,17 @@
   },
   "Site_Custom_New_Rule": {
     "message": "New Rule"
+  },
+  "Site_Custom_Use_ShadowRoot": {
+    "message": "Use Shadow DOM"
+  },
+  "Site_Custom_Host_Selectors": {
+    "message": "Shadow DOM Host Selectors"
+  },
+  "Site_Custom_ShadowRoot_Selectors": {
+    "message": "Selectors inside Shadow Root"
+  },
+  "Site_Custom_ShadowRoot_Tip": {
+    "message": "e.g. document.querySelector('host selector').shadowRoot.querySelector('shadow selector')"
   }
 }
