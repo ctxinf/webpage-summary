@@ -1,6 +1,6 @@
 import { browser } from "wxt/browser";
 import type { BlackList, SiteCumstomizationItem, WhiteList } from "../types/config/site-rules";
-import { InputContentLengthExceededStrategy } from "../types/summary";
+import { InputContentLengthExceededStrategy, PageTextExtractMethod } from "../types/summary";
 export const DefaultConfig = {
   SUMMARY_LANG: browser.i18n.getUILanguage(),
   USER_CUSTOM_STYLE: '',
@@ -10,6 +10,7 @@ export const DefaultConfig = {
   ENABLE_FLOATING_BALL: true,
   ENABLE_POPUP_CLICK_TRIGGER: false,
   SUMMARY_INPUT_EXCEED_BEHAVIOUR: 'cut-preserve-front' as InputContentLengthExceededStrategy,
+  PAGE_TEXT_EXTRACT_METHOD: 'readability' as PageTextExtractMethod,
   ENABLE_AUTO_BEGIN_SUMMARY_BY_ACTION_OR_CONTEXT_TRIGGER: true,
   ENABLE_CREATE_NEW_PANEL_BUTTON: true,
   ENABLE_CHAT_INPUT_BOX: true,

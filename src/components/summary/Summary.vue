@@ -33,11 +33,20 @@
         <SummaryDialog class="mt-[-1px] min-h-16 overflow-y-auto max-h-[--webpage-summary-panel-dialog-max-height]"
           style="overflow-anchor: auto" ref="summaryDialog">
           <template #top-right-buttons>
+            <div class="flex items-center gap-1 rounded-md border bg-background/80 p-1" :title="t('Extract_method')">
+              <Button v-for="option in extractMethodOptions" :key="option.value" variant="ghost" size="sm"
+                class="h-7 px-2 text-xs"
+                :class="pageTextExtractMethod === option.value ? 'bg-secondary text-foreground shadow-sm' : 'text-muted-foreground'"
+                @click="pageTextExtractMethod = option.value">
+                {{ option.label }}
+              </Button>
+            </div>
+
             <!-- length view&manage -->
             <InputInspect v-if="webpageContent && currentModel && textContentTrimmer"
               :content-trimmer="textContentTrimmer" :webpag-content="webpageContent"
               :max-content-length="currentModel?.maxContentLength"
-              :key="currentModel.name + '_' + webpageContent.articleUrl" class="ml-2" />
+              class="ml-2" />
 
             <!-- token usage -->
             <div v-if="enableTokenUsageView && tokenUsage.inputToken"
@@ -99,7 +108,9 @@ import { useEnableChatInputBox, useEnableCreateNewPanelButton, useEnableTokenUsa
 import { useSummary } from "@/src/composables/useSummary";
 import useWxtStorage from "@/src/composables/useWxtStorage";
 import { EXPAND_CHAT_INPUT_BOX } from "@/src/constants/storage-key";
+import type { PageTextExtractMethod } from "@/src/types/summary";
 import { scrollToId } from "@/src/utils/document";
+import { t } from "@/src/utils/extension";
 import EventEmitter from "eventemitter3";
 import { ChevronUpIcon, CopyPlusIcon, MessageCirclePlusIcon, Minimize2Icon, XIcon } from "lucide-vue-next";
 import { onMounted, provide, ref, useTemplateRef } from "vue";
@@ -134,6 +145,7 @@ const {
   refreshSummary,
   onPrepareDone,
   onChunk,
+  pageTextExtractMethod,
   textContentTrimmer,
   tokenUsage,
   copyMessages,
@@ -148,6 +160,10 @@ const { state: expandChatInputBox } = useWxtStorage(EXPAND_CHAT_INPUT_BOX, false
 // const{state:expandChatInputBox}=
 const summaryDialog = useTemplateRef<InstanceType<typeof SummaryDialog>>("summaryDialog");
 const chatInputBox = useTemplateRef<InstanceType<typeof ChatInputBox>>("chatInputBox");
+const extractMethodOptions: { value: PageTextExtractMethod; label: string }[] = [
+  { value: "readability", label: t("Extract_method_readability") },
+  { value: "dom-heuristic", label: t("Extract_method_dom_heuristic") },
+];
 
 /*provide funcs to SummaryDialog.vue */
 provide("copy-func", copyMessages);
