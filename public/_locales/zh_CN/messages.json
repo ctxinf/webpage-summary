@@ -125,6 +125,18 @@
   "Extract_method": {
     "message": "提取方法"
   },
+  "Extract_method_readability": {
+    "message": "@mozilla/readability"
+  },
+  "Extract_method_readability_DESC": {
+    "message": "Mozilla 的文章提取器，适合作为博客和常规文章页面的默认方案。"
+  },
+  "Extract_method_dom_heuristic": {
+    "message": "DOM 启发式"
+  },
+  "Extract_method_dom_heuristic_DESC": {
+    "message": "基于语义容器和文本密度评分提取正文，通常能保留 Readability 容易漏掉的文档提示块和说明。"
+  },
   "Length_exceeding_behaviour": {
     "message": "超出长度限制时的行为"
   },

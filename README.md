@@ -80,6 +80,13 @@
 
 or download from [Github Releases](https://github.com/slow-groovin/webpage-summary/releases) and manually install
 
+### Load Modified Extension In Firefox
+
+1. Install dependencies with `pnpm install`.
+2. For local development with auto rebuild, run `pnpm dev:firefox`.
+3. For a manual temporary load, run `pnpm build:firefox`, open `about:debugging#/runtime/this-firefox`, click `Load Temporary Add-on...`, and select `.output/firefox-mv2/manifest.json`.
+4. Firefox temporary add-ons are cleared after the browser restarts, so reload the same manifest after each restart.
+
 ## 3. Usage
 
 ### 3.1. Quick Start

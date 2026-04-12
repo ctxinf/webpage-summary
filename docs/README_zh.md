@@ -77,6 +77,13 @@
 
 或者手动下载安装 [Github Relases](https://github.com/slow-groovin/webpage-summary/releases)
 
+### 在 Firefox 中加载你修改后的扩展
+
+1. 先执行 `pnpm install` 安装依赖。
+2. 如果希望本地开发并自动重建，执行 `pnpm dev:firefox`。
+3. 如果想手动临时加载，执行 `pnpm build:firefox`，然后打开 `about:debugging#/runtime/this-firefox`，点击 `Load Temporary Add-on...`，选择 `.output/firefox-mv2/manifest.json`。
+4. Firefox 的临时扩展会在浏览器重启后失效，重启后需要重新选择一次同一个 manifest。
+
 ## 3. Usage
 ### 3.1. Quick Start
 

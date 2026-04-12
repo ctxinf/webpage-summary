@@ -125,6 +125,18 @@
   "Extract_method": {
     "message": "Extract method"
   },
+  "Extract_method_readability": {
+    "message": "@mozilla/readability"
+  },
+  "Extract_method_readability_DESC": {
+    "message": "Mozilla's article extractor. Best as the default for classic blog or article layouts."
+  },
+  "Extract_method_dom_heuristic": {
+    "message": "DOM heuristic"
+  },
+  "Extract_method_dom_heuristic_DESC": {
+    "message": "Score semantic containers by text density and keep visible notes or callouts that readability sometimes drops."
+  },
   "Length_exceeding_behaviour": {
     "message": "Length exceeding behaviour"
   },

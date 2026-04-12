@@ -1,8 +1,8 @@
 import { storage } from "#imports";
-import { SPOKEN_LANG_KEY as SUMMARY_LANG_KEY, USER_CUSTOM_STYLE_KEY, ENABLE_TOKAN_USAGE_VIEW, ENABLE_AUTO_BEGIN_SUMMARY, ENABLE_SUMMARY_WINDOW_DEFAULT, SUMMARY_INPUT_EXCEED_BEHAVIOUR, POPUP_CLICK_TRIGGER as ENABLE_POPUP_CLICK_TRIGGER, ENABLE_FLOATING_BALL, ENABLE_AUTO_BEGIN_SUMMARY_BY_ACTION_OR_CONTEXT_TRIGGER, ENABLE_CREATE_NEW_PANEL_BUTTON, ENABLE_CHAT_INPUT_BOX, ENABLE_CONTEXT_MENU_ITEM_SUMMARIZE_THIS_PAGE, ENABLE_CONTEXT_MENU_ITEM_ADD_SELECTION_TO_CHAT, ENABLE_AUTO_BEGIN_CHAT_FOR_ADD_SELECTION_TO_CHAT } from "../constants/storage-key";
+import { SPOKEN_LANG_KEY as SUMMARY_LANG_KEY, USER_CUSTOM_STYLE_KEY, ENABLE_TOKAN_USAGE_VIEW, ENABLE_AUTO_BEGIN_SUMMARY, ENABLE_SUMMARY_WINDOW_DEFAULT, SUMMARY_INPUT_EXCEED_BEHAVIOUR, PAGE_TEXT_EXTRACT_METHOD, POPUP_CLICK_TRIGGER as ENABLE_POPUP_CLICK_TRIGGER, ENABLE_FLOATING_BALL, ENABLE_AUTO_BEGIN_SUMMARY_BY_ACTION_OR_CONTEXT_TRIGGER, ENABLE_CREATE_NEW_PANEL_BUTTON, ENABLE_CHAT_INPUT_BOX, ENABLE_CONTEXT_MENU_ITEM_SUMMARIZE_THIS_PAGE, ENABLE_CONTEXT_MENU_ITEM_ADD_SELECTION_TO_CHAT, ENABLE_AUTO_BEGIN_CHAT_FOR_ADD_SELECTION_TO_CHAT } from "../constants/storage-key";
 import useWxtStorage from "./useWxtStorage";
 import { DefaultConfig } from "../constants/default-config";
-import { InputContentLengthExceededStrategy } from "../types/summary";
+import { InputContentLengthExceededStrategy, PageTextExtractMethod } from "../types/summary";
 
 /**
  * get all general configs value
@@ -127,6 +127,18 @@ export function useSummaryInputExceedBehaviour() {
 
 export async function getSummaryInputExceedBehaviour() {
   return await storage.getItem<InputContentLengthExceededStrategy>(SUMMARY_INPUT_EXCEED_BEHAVIOUR, { fallback: DefaultConfig.SUMMARY_INPUT_EXCEED_BEHAVIOUR })
+}
+
+/**
+ * Reactive page text extract method config.
+ */
+export function usePageTextExtractMethod() {
+  const { state: pageTextExtractMethod, ...other } = useWxtStorage<PageTextExtractMethod>(PAGE_TEXT_EXTRACT_METHOD, DefaultConfig.PAGE_TEXT_EXTRACT_METHOD)
+  return { pageTextExtractMethod, ...other }
+}
+
+export async function getPageTextExtractMethod() {
+  return await storage.getItem<PageTextExtractMethod>(PAGE_TEXT_EXTRACT_METHOD, { fallback: DefaultConfig.PAGE_TEXT_EXTRACT_METHOD })
 }
 
 /**

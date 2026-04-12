@@ -1,5 +1,6 @@
 /*===========Configurations==================*/
 export const SUMMARY_INPUT_EXCEED_BEHAVIOUR = "local:summary-input-exceed-behaviour";
+export const PAGE_TEXT_EXTRACT_METHOD = "local:page-text-extract-method";
 export const MODEL_CONFIG_KEY = "local:model-configs";
 export const PROMPT_CONFIG_KEY = "local:prompt-configs";
 

@@ -1,14 +1,30 @@
 <script setup lang="ts">
-import Select from "@/src/components/custom-ui/select/Select.vue";
+import { useOptionTitle } from "@/src/composables/extension";
+import { usePageTextExtractMethod, useSummaryInputExceedBehaviour } from "@/src/composables/general-config";
+import { RadioGroup, RadioGroupItem } from "@/src/components/ui/radio-group";
 import { Tabs, TabsList, TabsTrigger } from "@/src/components/ui/tabs";
-import { useSummaryInputExceedBehaviour } from "@/src/composables/general-config";
 import { contentLengthExceededStrategys } from "@/src/presets/strategy";
+import type { PageTextExtractMethod } from "@/src/types/summary";
 import { t } from "@/src/utils/extension";
 import { CircleCheckBigIcon } from "lucide-vue-next";
 import { RouterLink } from "vue-router";
 import DefaultSettingValue from "../components/DefaultSettingValue.vue";
-import { useOptionTitle } from "@/src/composables/extension";
 const { summaryInputExceedBehaviour } = useSummaryInputExceedBehaviour();
+const { pageTextExtractMethod } = usePageTextExtractMethod();
+
+const extractMethodOptions: { value: PageTextExtractMethod, label: string, description: string }[] = [
+  {
+    value: 'readability',
+    label: t('Extract_method_readability'),
+    description: t('Extract_method_readability_DESC'),
+  },
+  {
+    value: 'dom-heuristic',
+    label: t('Extract_method_dom_heuristic'),
+    description: t('Extract_method_dom_heuristic_DESC'),
+  },
+]
+
 useOptionTitle(t("Extract_method"))
 </script>
 <template>
@@ -22,8 +38,12 @@ useOptionTitle(t("Extract_method"))
   <div class="mr-auto flex flex-col gap-8 items-stretch">
     <!-- description -->
     <p class="border-l-8 border-l-blue-400 italic pl-2 p-1 bg-neutral-500/10">
-      Currently, only @mozilla/readability is provided as the
-      <span class="font-bold"> general</span> extract method.
+      Two <span class="font-bold">general</span> extract methods are available now.
+      <br />
+      <span class="font-bold">@mozilla/readability</span> remains the default for classic article pages.
+      <br />
+      <span class="font-bold">DOM heuristic</span> keeps visible text from semantic containers and often preserves
+      documentation callouts or notes that Readability may skip.
       <br />
 
       Or you can
@@ -32,7 +52,7 @@ useOptionTitle(t("Extract_method"))
       special site using selectors
 
       <br />
-      If you think of some great ways, please provide feedback.
+      Site customization selectors always take priority over the general extract method.
     </p>
 
     <div class="line mt-[-2em]">
@@ -40,11 +60,19 @@ useOptionTitle(t("Extract_method"))
         <div class="title">{{ t("Extract_method") }}</div>
         <p class="description">how to get text content from .html file</p>
       </div>
-      <div>
-        <!-- just decoration -->
-        <Select>
-          <template #trigger> @mozilla/readability </template>
-        </Select>
+      <div class="w-[28rem] max-w-full">
+        <RadioGroup v-model="pageTextExtractMethod" class="gap-3">
+          <label v-for="option in extractMethodOptions" :key="option.value"
+            class="flex cursor-pointer items-start gap-3 rounded-xl border p-3 transition-colors"
+            :class="pageTextExtractMethod === option.value ? 'border-sky-500 bg-sky-50/70' : 'border-border hover:border-sky-300'">
+            <RadioGroupItem :value="option.value" class="mt-1" />
+            <div>
+              <div class="font-semibold">{{ option.label }}</div>
+              <p class="description not-italic text-sm text-foreground/80">{{ option.description }}</p>
+            </div>
+          </label>
+        </RadioGroup>
+        <DefaultSettingValue value="readability" class="mt-2 w-fit" />
       </div>
     </div>
 
