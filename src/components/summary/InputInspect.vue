@@ -25,15 +25,18 @@
         <div class="flex items-center gap-2 text-sm mb-2">
           <ExtIcon />
           <h1 class="font-bold text-xl"> Input Content View</h1>
+          <span class="rounded border px-2 py-1 font-mono text-[11px]">
+            Source: {{ webpagContent.extractMethod ?? 'unknown' }}
+          </span>
 
           <!-- slide bar -->
           <div class="relative flex flex-col font-xs border p-2 pr-5 bg-white">
-            <Slider v-model.lazy="sliderValue" :min="0" :max="length" class="w-32" />
+            <Slider v-model="sliderValue" :min="0" :max="length" :step="1" class="w-32" />
             <div class="relative h-4 w-full">
-              <div :style="{ left: (sliderValue[0] / length * 100) + '%' }" class="absolute">
+              <div :style="{ left: sliderPercent(sliderValue[0]) + '%' }" class="absolute">
                 {{ showNum(sliderValue[0]) }}
               </div>
-              <div :style="{ left: (sliderValue[1] / length * 100) + '%' }" class="absolute">
+              <div :style="{ left: sliderPercent(sliderValue[1]) + '%' }" class="absolute">
                 {{ showNum(sliderValue[1]) }}
               </div>
             </div>
@@ -82,7 +85,7 @@ import { getSummaryInputExceedBehaviour } from "@/src/composables/general-config
 import { contentLengthExceededStrategys } from "@/src/presets/strategy";
 import { InputContentLengthExceededStrategy, WebpageContent } from "@/src/types/summary";
 import { cn } from "@/src/utils/shadcn";
-import { computed, onMounted, ref, useShadowRoot } from "vue";
+import { computed, ref, watch } from "vue";
 import type { HTMLAttributes } from 'vue';
 import { Slider } from "../ui/slider";
 import { Minimize2Icon, ScanEyeIcon } from "lucide-vue-next";
@@ -99,19 +102,19 @@ const { webpagContent, maxContentLength, class: clazz } = defineProps<{
   maxContentLength?: number,
   class?: HTMLAttributes['class']
 }>()
-const root = ref<ShadowRoot | null>()
+const root = ref<ShadowRoot | null>(null)
 
 getShadowRootAsync().then(r => root.value = r)
 
 
-const length = webpagContent.textContent?.length ?? 0
-const maxLength = maxContentLength ?? length
+const length = computed(() => webpagContent.textContent?.length ?? 0)
+const maxLength = computed(() => maxContentLength ?? length.value)
 const isViewContent = ref(false)
 
-const contentTrimmerFunction = defineModel<{ trim: (s: string) => string }>('content-trimmer')
+const contentTrimmerFunction = defineModel<{ trim: (s: string) => string, range: [number, number] }>('content-trimmer')
 const exceedBehaviour = ref<InputContentLengthExceededStrategy>()
 
-const sliderValue = ref([0, length])
+const sliderValue = ref<[number, number]>([0, length.value])
 const selectLength = computed(() => sliderValue.value[1] - sliderValue.value[0])
 const behaviourFunction = computed(() => {
   if (exceedBehaviour.value) {
@@ -120,19 +123,49 @@ const behaviourFunction = computed(() => {
   return contentLengthExceededStrategys['nothing']['exec']
 })
 
+function normalizeRange(range: readonly number[]) {
+  const safeLength = Math.max(length.value, 0)
+  const rawStart = Number.isFinite(range[0]) ? Math.round(range[0]) : 0
+  const rawEnd = Number.isFinite(range[1]) ? Math.round(range[1]) : safeLength
+  const start = Math.min(Math.max(0, rawStart), safeLength)
+  const end = Math.min(Math.max(0, rawEnd), safeLength)
 
-onMounted(() => {
+  return start <= end ? [start, end] as [number, number] : [end, start] as [number, number]
+}
 
+function isSameRange(left: readonly number[], right: readonly number[]) {
+  return left[0] === right[0] && left[1] === right[1]
+}
 
+function syncSliderRange() {
+  const { start, end } = behaviourFunction.value(length.value, maxLength.value)
+  sliderValue.value = normalizeRange([start, end])
+}
+
+watch([length, maxLength, exceedBehaviour], () => {
+  syncSliderRange()
 })
+
+watch(sliderValue, (range) => {
+  const normalizedRange = normalizeRange(range)
+  if (!isSameRange(range, normalizedRange)) {
+    sliderValue.value = normalizedRange
+    return
+  }
+
+  if (!contentTrimmerFunction.value) {
+    return
+  }
+
+  contentTrimmerFunction.value.trim = (content: string) => {
+    return content.slice(normalizedRange[0], normalizedRange[1])
+  }
+  contentTrimmerFunction.value.range = normalizedRange
+}, { immediate: true, deep: true })
 
 getSummaryInputExceedBehaviour().then(v => {
   exceedBehaviour.value = v
-  const { start, end } = behaviourFunction.value(length, maxLength)
-  sliderValue.value = [start, end]
-  contentTrimmerFunction.value!.trim = (s: string) => {
-    return s.slice(sliderValue.value[0], sliderValue.value[1])
-  }
+  syncSliderRange()
 })
 
 
@@ -143,6 +176,11 @@ function showNum(num?: number) {
   } else {
     return Math.floor(num / 1000) + 'K'
   }
+}
+
+function sliderPercent(value: number) {
+  const safeLength = Math.max(length.value, 1)
+  return value / safeLength * 100
 }
 
 
