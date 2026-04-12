@@ -43,7 +43,7 @@ export function usePromptConfigStorage() {
     const prompts = await promptStorage.getValue()
 
     // Check if any of the prompts have the provided name
-    return prompts.some(prompt => prompt.name === name && (id && prompt.id !== id))
+    return prompts.some(prompt => prompt.name === name && prompt.id !== id)
   }
   /**
    * Creates a new prompt configuration item.
@@ -63,10 +63,10 @@ export function usePromptConfigStorage() {
     prompts.push(configItem)
     // If this is the first prompt, set it as the default.
     if (prompts.length === 1) {
-      defaultPromptItemIdStorage.setValue(configItem.id)
+      await defaultPromptItemIdStorage.setValue(configItem.id)
     }
     //write back
-    promptStorage.setValue(prompts)
+    await promptStorage.setValue(prompts)
     return true;
   }
 
@@ -89,10 +89,11 @@ export function usePromptConfigStorage() {
     if (prompts.findIndex(p => p.name === configItem.name && p.id !== configItem.id) !== -1) {
       return { isSuc: false, msg: `name:<${configItem.name}> already exists` }
     }
+    const nextPrompts = [...prompts]
     // Update the prompt configuration item in the list.
-    prompts[index] = configItem
+    nextPrompts[index] = { ...configItem }
     //write back
-    promptStorage.setValue(prompts)
+    await promptStorage.setValue(nextPrompts)
     return { isSuc: true, msg: `success!` };
   }
 
@@ -121,10 +122,10 @@ export function usePromptConfigStorage() {
     prompts.splice(index, 1)
     // If there are no more prompts, set the default prompt item ID to null.
     if (prompts.length === 0) {
-      defaultPromptItemIdStorage.setValue(null)
+      await defaultPromptItemIdStorage.setValue(null)
     }
     // write back
-    promptStorage.setValue(prompts)
+    await promptStorage.setValue(prompts)
     return true
   }
 
@@ -153,7 +154,7 @@ export function usePromptConfigStorage() {
 
 
     // write back
-    promptStorage.setValue(prompts)
+    await promptStorage.setValue(prompts)
     return true
   }
 
@@ -170,7 +171,7 @@ export function usePromptConfigStorage() {
     // If the prompt configuration item was not found, return false.
     if (index === -1) return false
     // Set the default prompt configuration item ID.
-    defaultPromptItemIdStorage.setValue(id)
+    await defaultPromptItemIdStorage.setValue(id)
     return true
   }
 

@@ -26,15 +26,22 @@ onMounted(() => {
 
 async function onSubmit(name: string, systemMessage: string, userMessage: string) {
   if (!editedItem.value) {
-    alert('null update')
+    toast({
+      title: `unexpected update on null prompt ${id}`,
+      variant: 'destructive'
+    })
     return
   }
-  editedItem.value.name = name
-  editedItem.value.systemMessage = systemMessage
-  editedItem.value.userMessage = userMessage
 
+  const updatedPrompt: PromptConfigItem = {
+    ...editedItem.value,
+    name,
+    systemMessage,
+    userMessage,
+    at: Date.now(),
+  }
 
-  const rs = await updateItem(editedItem.value)
+  const rs = await updateItem(updatedPrompt)
 
   if (!rs.isSuc) {
     toast({
@@ -43,15 +50,12 @@ async function onSubmit(name: string, systemMessage: string, userMessage: string
       description: `update ${name} failed: ${rs.msg}`
     });
   } else {
-    //success, toast and return to list
-    setTimeout(() => {
-      toast({
-        variant: 'success',
-        title: `update ${name} success!`,
-      });
-
-    }, 50)
-    push('/prompts')
+    editedItem.value = updatedPrompt
+    toast({
+      variant: 'success',
+      title: `update ${name} success!`,
+    });
+    await push('/prompts/')
 
   }
 

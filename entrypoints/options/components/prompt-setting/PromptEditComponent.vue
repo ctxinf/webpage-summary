@@ -5,6 +5,7 @@ import Button from "@/src/components/ui/button/Button.vue";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/src/components/ui/collapsible";
 import { FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/src/components/ui/form";
 import { Input } from "@/src/components/ui/input";
+import { toast } from "@/src/components/ui/toast";
 import { usePromptConfigStorage, usePromptDefaultPreset, usePromptPreset } from "@/src/composables/prompt";
 import { PromptConfigItem } from "@/src/types/config/prompt";
 import { t } from "@/src/utils/extension";
@@ -12,10 +13,8 @@ import { toTypedSchema } from "@vee-validate/zod";
 import { ChevronsDown, ChevronsUp } from "lucide-vue-next";
 import { useForm } from "vee-validate";
 import { ref } from "vue";
-import { useRouter } from "vue-router";
 import { z } from "zod";
 const { isNameExist } = usePromptConfigStorage();
-const { back } = useRouter();
 const isCollapseOpen = ref(true);
 const defaultPrompt = usePromptDefaultPreset();
 
@@ -34,19 +33,20 @@ const formSchema = toTypedSchema(
   z.object({
     name: z
       .string()
+      .trim()
       .min(1)
       .refine(
         async (name) => {
-          return !(await isNameExist(name));
+          return !(await isNameExist(name, item?.id));
         },
         { message: "Name already exists" }
       ),
-    systemMessage: z.string().min(1),
-    userMessage: z.string().min(1),
+    systemMessage: z.string().trim().min(1),
+    userMessage: z.string().trim().min(1),
   })
 );
 
-const { isFieldDirty, handleSubmit } = useForm({
+const { handleSubmit } = useForm({
   validationSchema: formSchema,
   initialValues: {
     name: item?.name ?? "My prompt",
@@ -55,20 +55,29 @@ const { isFieldDirty, handleSubmit } = useForm({
   },
 });
 
-const onSubmit = handleSubmit(async (values) => {
-  console.log("Form submitted!", values);
+const onSubmit = handleSubmit(
+  async (values) => {
+    emits("submit", values.name, values.systemMessage, values.userMessage);
+  },
+  ({ errors }) => {
+    const firstError = Object.values(errors).find((error): error is string => Boolean(error));
 
-  /* createNewModelConfig
-   */
-  console.log("[submit][done]");
-
-  emits("submit", values.name, values.systemMessage, values.userMessage);
-});
+    toast({
+      variant: "warning",
+      title: "Validation failed",
+      description: firstError ?? "Please fix the highlighted fields before submitting.",
+    });
+  }
+);
 
 const templatVariables = [
+  { key: "currentModel", description: "selected model for this run, formatted as config-name [provider/model]" },
   { key: "summaryLanguage", description: "language of output summary" },
   { key: "articleUrl", description: "url of page" },
   { key: "textContent", description: "main content of page" },
+  { key: "inputTextLength", description: "length of the actual page content sent to the model" },
+  { key: "readabilityTextLength", description: "length extracted by @mozilla/readability, regardless of current extract method" },
+  { key: "extractMethod", description: "current extract method used for textContent" },
   { key: "currentSelection", description: "current selection" },
 ];
 </script>
@@ -99,12 +108,12 @@ const templatVariables = [
       </CollapsibleTrigger>
     </Collapsible>
 
-    <form @submit="onSubmit" class="flex flex-col gap-4">
+    <form @submit.prevent="onSubmit" class="flex flex-col gap-4">
       <FormField v-slot="{ componentField }" name="name">
         <FormItem>
           <FormLabel>Name</FormLabel>
           <FormControl>
-            <Input type="text" placeholder="my prompt 1" v-bind="componentField" :disable="isDisable" />
+            <Input type="text" placeholder="my prompt 1" v-bind="componentField" :disabled="isDisable" />
           </FormControl>
           <FormMessage />
         </FormItem>
