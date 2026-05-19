@@ -5,6 +5,13 @@ import { defineConfig } from 'wxt';
 export default defineConfig({
   modules: ['@wxt-dev/module-react'],
   vite: () => ({
+    optimizeDeps: {
+      entries: [
+        'entrypoints/**/*.html',
+        'entrypoints/**/*.{ts,tsx,js,jsx}',
+        '!reference/**',
+      ],
+    },
     resolve: {
       alias: {
         '@': fileURLToPath(new URL('./', import.meta.url)),
