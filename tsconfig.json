@@ -20,5 +20,5 @@
     "lib/**/*.tsx",
     "wxt.config.ts"
   ],
-  "exclude": ["node_modules", "reference", ".output"]
+  "exclude": ["node_modules", "reference/**", ".output"]
 }

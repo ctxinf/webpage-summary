@@ -1,7 +1,6 @@
 import { ExternalLink, FileText, Settings } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { Button } from '@/components/ui/button';
-import './App.css';
 
 type PageSnapshot = {
   ok: boolean;
@@ -52,33 +51,44 @@ function App() {
   }, []);
 
   return (
-    <main className="popup-shell">
-      <header className="popup-header">
-        <div className="popup-icon">
+    <main className="grid min-w-[360px] gap-3.5 p-4">
+      <header className="grid grid-cols-[40px_1fr] items-center gap-3">
+        <div className="grid size-10 place-items-center rounded-lg bg-primary text-primary-foreground">
           <FileText size={18} />
         </div>
         <div>
-          <h1>Webpage Summary</h1>
-          <p>{status}</p>
+          <h1 className="text-[17px] font-semibold leading-tight">Webpage Summary</h1>
+          <p className="mt-1 text-xs text-muted-foreground">{status}</p>
         </div>
       </header>
 
-      <section className="popup-panel" aria-label="当前页面">
-        <div className="page-title">{snapshot?.title || '当前页面'}</div>
-        <div className="page-url">{snapshot?.url || '打开任意网页后查看注入状态'}</div>
-        <dl className="page-meta">
-          <div>
-            <dt>文本长度</dt>
-            <dd>{snapshot ? snapshot.textLength.toLocaleString() : '-'}</dd>
+      <section
+        className="grid gap-2.5 rounded-lg border bg-card p-3"
+        aria-label="当前页面"
+      >
+        <div className="truncate text-sm font-semibold text-foreground">
+          {snapshot?.title || '当前页面'}
+        </div>
+        <div className="truncate text-xs text-muted-foreground">
+          {snapshot?.url || '打开任意网页后查看注入状态'}
+        </div>
+        <dl className="grid grid-cols-2 gap-2">
+          <div className="rounded-md bg-muted p-2.5">
+            <dt className="text-[11px] text-muted-foreground">文本长度</dt>
+            <dd className="mt-1 text-[13px] font-semibold">
+              {snapshot ? snapshot.textLength.toLocaleString() : '-'}
+            </dd>
           </div>
-          <div>
-            <dt>注入状态</dt>
-            <dd>{snapshot?.ok ? '已连接' : '等待中'}</dd>
+          <div className="rounded-md bg-muted p-2.5">
+            <dt className="text-[11px] text-muted-foreground">注入状态</dt>
+            <dd className="mt-1 text-[13px] font-semibold">
+              {snapshot?.ok ? '已连接' : '等待中'}
+            </dd>
           </div>
         </dl>
       </section>
 
-      <div className="popup-actions">
+      <div className="flex justify-end gap-2">
         <Button type="button" onClick={() => browser.runtime.openOptionsPage()}>
           <Settings />
           设置
