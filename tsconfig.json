@@ -1,0 +1,24 @@
+{
+  "extends": "./.wxt/tsconfig.json",
+  "compilerOptions": {
+    "allowImportingTsExtensions": true,
+    "jsx": "react-jsx",
+    "paths": {
+      "@/*": ["./*"]
+    }
+  },
+  "include": [
+    ".wxt/wxt.d.ts",
+    "assets/**/*.svg",
+    "components/**/*.ts",
+    "components/**/*.tsx",
+    "entrypoints/**/*.ts",
+    "entrypoints/**/*.tsx",
+    "hooks/**/*.ts",
+    "hooks/**/*.tsx",
+    "lib/**/*.ts",
+    "lib/**/*.tsx",
+    "wxt.config.ts"
+  ],
+  "exclude": ["node_modules", "reference", ".output"]
+}
