@@ -12,6 +12,8 @@
     "assets/**/*.svg",
     "components/**/*.ts",
     "components/**/*.tsx",
+    "constants/**/*.ts",
+    "constants/**/*.tsx",
     "entrypoints/**/*.ts",
     "entrypoints/**/*.tsx",
     "hooks/**/*.ts",

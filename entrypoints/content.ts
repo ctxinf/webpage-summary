@@ -65,7 +65,7 @@ function mountSummaryBadge() {
 }
 
 export default defineContentScript({
-  matches: ['http://*/*', 'https://*/*'],
+  matches: ['<all_urls>'],
   runAt: 'document_idle',
   main() {
     mountSummaryBadge();

@@ -6,6 +6,7 @@ export default {
   content: [
     './entrypoints/**/*.{html,ts,tsx}',
     './components/**/*.{ts,tsx}',
+    './constants/**/*.{ts,tsx}',
     './hooks/**/*.{ts,tsx}',
     './lib/**/*.{ts,tsx}',
   ],
