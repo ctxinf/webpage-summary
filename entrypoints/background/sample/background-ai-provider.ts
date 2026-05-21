@@ -1,5 +1,6 @@
 import { createOpenAICompatible } from '@ai-sdk/openai-compatible';
 import { generateText } from 'ai';
+import { browser } from 'wxt/browser';
 
 export function registerBackgroundAiProviderSample() {
   browser.runtime.onMessage.addListener(

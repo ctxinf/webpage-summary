@@ -1,10 +1,14 @@
-import { ArrowLeft, Bot, ChevronRight, FlaskConical } from 'lucide-react';
+import { ArrowLeft, Bot, ChevronRight, FlaskConical, PlugZap } from 'lucide-react';
 import type { ComponentType } from 'react';
 import { Button } from '@/components/ui/button';
 import { AliyunAiApiSample } from './aliyun-ai-api/AliyunAiApiSample';
 import { BackgroundAiProviderSample } from './background-ai-provider/BackgroundAiProviderSample';
+import { ConnectChatTransportSample } from './connect-chat-transport/ConnectChatTransportSample';
 
-type SampleKey = 'aliyun-ai-api' | 'background-ai-provider';
+type SampleKey =
+  | 'aliyun-ai-api'
+  | 'background-ai-provider'
+  | 'connect-chat-transport';
 
 type SampleItem = {
   key: SampleKey;
@@ -29,11 +33,19 @@ const SAMPLE_ITEMS: SampleItem[] = [
     icon: Bot,
     component: BackgroundAiProviderSample,
   },
+  {
+    key: 'connect-chat-transport',
+    title: 'Connect Chat Transport',
+    description: 'AI SDK useChat -> runtime port -> background UI stream',
+    icon: PlugZap,
+    component: ConnectChatTransportSample,
+  },
 ];
 
 const SAMPLE_RENDERERS: Record<SampleKey, ComponentType> = {
   'aliyun-ai-api': AliyunAiApiSample,
   'background-ai-provider': BackgroundAiProviderSample,
+  'connect-chat-transport': ConnectChatTransportSample,
 };
 
 type SamplePageProps = {

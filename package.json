@@ -27,6 +27,7 @@
     "@ai-sdk/openai": "^3.0.64",
     "@ai-sdk/openai-compatible": "^2.0.47",
     "@ai-sdk/perplexity": "^3.0.33",
+    "@ai-sdk/react": "^3.0.190",
     "@ai-sdk/togetherai": "^2.0.52",
     "@ai-sdk/xai": "^3.0.91",
     "@mozilla/readability": "^0.6.0",
