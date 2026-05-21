@@ -1,6 +1,7 @@
 import { useChat } from '@ai-sdk/react';
 import { Square } from 'lucide-react';
 import { FormEvent, useRef, useState } from 'react';
+import type { UIMessage } from 'ai';
 import { Button } from '@/components/ui/button';
 import { ConnectChatTransport } from './ConnectChatTransport';
 
@@ -61,13 +62,7 @@ export function ConnectChatTransportSample() {
               <p className="text-[12px] font-medium uppercase text-muted-foreground">
                 {message.role}
               </p>
-              {message.parts.map((part, index) =>
-                part.type === 'text' ? (
-                  <p className="whitespace-pre-wrap leading-6" key={index}>
-                    {part.text}
-                  </p>
-                ) : null,
-              )}
+              <MessageParts message={message} />
             </article>
           ))
         ) : (
@@ -111,5 +106,48 @@ export function ConnectChatTransportSample() {
         </div>
       </form>
     </section>
+  );
+}
+
+function MessageParts({ message }: { message: UIMessage }) {
+  return (
+    <div className="grid gap-2">
+      {message.parts.map((part, index) => {
+        if (part.type === 'text') {
+          return (
+            <p
+              className="whitespace-pre-wrap break-words leading-6"
+              key={`${message.id}-text-${index}`}
+            >
+              {part.text}
+            </p>
+          );
+        }
+
+        if (part.type === 'reasoning') {
+          return (
+            <details
+              className="group rounded-md border bg-muted/30 text-[13px] text-muted-foreground"
+              key={`${message.id}-reasoning-${index}`}
+              open={part.state === 'streaming' || undefined}
+            >
+              <summary className="cursor-pointer select-none px-3 py-2 font-medium text-foreground">
+                Reasoning
+                {part.state === 'streaming' ? (
+                  <span className="ml-2 font-normal text-muted-foreground">
+                    streaming
+                  </span>
+                ) : null}
+              </summary>
+              <p className="whitespace-pre-wrap break-words border-t px-3 py-2 leading-6">
+                {part.text}
+              </p>
+            </details>
+          );
+        }
+
+        return null;
+      })}
+    </div>
   );
 }
