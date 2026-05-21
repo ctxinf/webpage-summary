@@ -2,8 +2,9 @@ import { ArrowLeft, Bot, ChevronRight, FlaskConical } from 'lucide-react';
 import type { ComponentType } from 'react';
 import { Button } from '@/components/ui/button';
 import { AliyunAiApiSample } from './aliyun-ai-api/AliyunAiApiSample';
+import { BackgroundAiProviderSample } from './background-ai-provider/BackgroundAiProviderSample';
 
-type SampleKey = 'aliyun-ai-api';
+type SampleKey = 'aliyun-ai-api' | 'background-ai-provider';
 
 type SampleItem = {
   key: SampleKey;
@@ -21,10 +22,18 @@ const SAMPLE_ITEMS: SampleItem[] = [
     icon: Bot,
     component: AliyunAiApiSample,
   },
+  {
+    key: 'background-ai-provider',
+    title: 'Background AI Provider',
+    description: 'Options button -> background -> AI SDK provider',
+    icon: Bot,
+    component: BackgroundAiProviderSample,
+  },
 ];
 
 const SAMPLE_RENDERERS: Record<SampleKey, ComponentType> = {
   'aliyun-ai-api': AliyunAiApiSample,
+  'background-ai-provider': BackgroundAiProviderSample,
 };
 
 type SamplePageProps = {
