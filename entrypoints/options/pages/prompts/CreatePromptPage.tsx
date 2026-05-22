@@ -19,7 +19,6 @@ export function CreatePromptPage() {
   const presetKey = searchParams.get('preset');
   const preset = getPromptPreset(
     isPromptPresetKey(presetKey) ? presetKey : 'basic',
-    browser.i18n.getUILanguage(),
   );
   const initialDraft = useMemo<PromptDraft>(
     () => ({

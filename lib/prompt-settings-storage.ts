@@ -4,6 +4,7 @@ import {
   DEFAULT_PROMPT_ID_STORAGE_KEY,
   getPromptPreset,
   PROMPT_CONFIG_STORAGE_KEY,
+  PROMPT_LIBRARY_SEEDED_STORAGE_KEY,
   SITE_PROMPT_RULES_STORAGE_KEY,
   type PromptConfigItem,
   type PromptDraft,
@@ -264,19 +265,37 @@ export async function setDefaultPrompt(id: string) {
   return true;
 }
 
-export async function ensureSamplePrompt(language: string | undefined) {
+export async function ensureSamplePrompt() {
   const settings = await loadPromptSettings();
 
   if (settings.prompts.length > 0) {
     return settings.prompts[0];
   }
 
-  const preset = getPromptPreset('basic', language);
+  const preset = getPromptPreset('basic');
 
   return createPrompt({
     ...preset,
     name: 'Sample',
   });
+}
+
+export async function seedDefaultPromptIfNeeded() {
+  const hasSeededLibrary = await storage.getItem<boolean>(
+    PROMPT_LIBRARY_SEEDED_STORAGE_KEY,
+    { fallback: false },
+  );
+
+  if (hasSeededLibrary) {
+    return null;
+  }
+
+  const settings = await loadPromptSettings();
+  const prompt = settings.prompts[0] ?? (await ensureSamplePrompt());
+
+  await storage.setItem(PROMPT_LIBRARY_SEEDED_STORAGE_KEY, true);
+
+  return prompt;
 }
 
 function isSitePromptRule(value: unknown): value is SitePromptRule {

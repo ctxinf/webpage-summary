@@ -24,7 +24,7 @@ settings into two React-side layers:
 - `constants/prompt-settings.ts` defines prompt records, preset templates,
   template variables, storage keys, and the reserved per-site prompt rule type.
 - `lib/prompt-settings-storage.ts` owns loading, parsing, validation, CRUD,
-  ordering, default-prompt selection, and first-install Sample prompt creation.
+  ordering, default-prompt selection, and one-time Sample prompt seeding.
 
 The options UI now uses those APIs instead of mutating storage inside page
 components. `/prompts` is the management list; create and edit routes share the

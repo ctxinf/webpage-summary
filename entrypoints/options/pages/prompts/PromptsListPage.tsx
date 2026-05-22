@@ -2,8 +2,8 @@ import {
   ArrowDown,
   ArrowUp,
   Edit3,
+  FileText,
   Plus,
-  Sparkles,
   Trash2,
 } from 'lucide-react';
 import { useEffect, useState } from 'react';
@@ -19,6 +19,7 @@ import {
   deletePrompt,
   loadPromptSettings,
   movePrompt,
+  seedDefaultPromptIfNeeded,
   setDefaultPrompt,
   type PromptSettings,
 } from '@/lib/prompt-settings-storage';
@@ -34,7 +35,7 @@ function PromptMessagePreview({ message }: { message: string }) {
 
 export function PromptsListPage() {
   const messages = getUiMessages();
-  const presets = getPromptPresets(browser.i18n.getUILanguage());
+  const presets = getPromptPresets();
   const [settings, setSettings] = useState<PromptSettings | null>(null);
   const [loadError, setLoadError] = useState<string | null>(null);
   const [busyPromptId, setBusyPromptId] = useState<string | null>(null);
@@ -44,6 +45,7 @@ export function PromptsListPage() {
 
     async function load() {
       try {
+        await seedDefaultPromptIfNeeded();
         const loadedSettings = await loadPromptSettings();
 
         if (!active) return;
@@ -126,34 +128,22 @@ export function PromptsListPage() {
     <div className="grid max-w-5xl gap-7 pb-16">
       <OptionsPageTitle>{messages.pageTitles.prompts}</OptionsPageTitle>
 
-      <section className="grid gap-4 border-b pb-7">
-        <header className="grid gap-2">
-          <div className="flex flex-wrap items-center justify-between gap-3">
-            <div>
-              <h2 className="text-base font-semibold">
-                {messages.prompts.libraryTitle}
-              </h2>
-              <p className="mt-1 max-w-2xl text-sm leading-6 text-muted-foreground">
-                {messages.prompts.libraryDescription}
-              </p>
-            </div>
-            <Button asChild>
-              <Link to="/prompts/create">
-                <Plus />
-                {messages.prompts.create}
-              </Link>
-            </Button>
-          </div>
-        </header>
+      <section className="flex flex-wrap items-end justify-between gap-3 border-b pb-7">
+        <Button asChild>
+          <Link to="/prompts/create">
+            <Plus />
+            {messages.prompts.create}
+          </Link>
+        </Button>
 
-        <div className="flex flex-wrap items-center gap-2">
-          <span className="text-sm text-muted-foreground">
+        <div className="flex flex-wrap items-end justify-end gap-2">
+          <span className="pb-1 text-sm text-muted-foreground">
             {messages.prompts.createFromPreset}
           </span>
           {presets.map((preset) => (
             <Button asChild key={preset.key} size="sm" variant="outline">
               <Link to={`/prompts/create?preset=${preset.key}`}>
-                <Sparkles />
+                <FileText />
                 {preset.name}
               </Link>
             </Button>
