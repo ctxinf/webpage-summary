@@ -1,10 +1,9 @@
 import { cn } from '@/lib/utils';
 
-type PlaceholderDensity = 'default' | 'compact' | 'wide';
+export type PlaceholderDensity = 'default' | 'compact' | 'wide';
 
 type RoutePlaceholderProps = {
   density?: PlaceholderDensity;
-  title?: string;
 };
 
 const densityClasses: Record<PlaceholderDensity, string> = {
@@ -13,7 +12,7 @@ const densityClasses: Record<PlaceholderDensity, string> = {
   wide: 'max-w-4xl',
 };
 
-function PlaceholderRows({ density = 'default' }: RoutePlaceholderProps) {
+export function RoutePlaceholder({ density = 'default' }: RoutePlaceholderProps) {
   const rowCount = density === 'compact' ? 3 : 5;
 
   return (
@@ -34,26 +33,5 @@ function PlaceholderRows({ density = 'default' }: RoutePlaceholderProps) {
         </div>
       ))}
     </div>
-  );
-}
-
-export function RoutePlaceholder({
-  density = 'default',
-  title,
-}: RoutePlaceholderProps) {
-  return (
-    <>
-      {title ? <h1 className="mb-4 text-2xl">{title}</h1> : null}
-      <PlaceholderRows density={density} />
-    </>
-  );
-}
-
-export function DetailRoutePlaceholder({ title }: { title: string }) {
-  return (
-    <>
-      <h2 className="mb-4 text-2xl">{title}</h2>
-      <PlaceholderRows density="compact" />
-    </>
   );
 }

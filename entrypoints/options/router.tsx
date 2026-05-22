@@ -1,32 +1,19 @@
-import {
-  createHashRouter,
-  Navigate,
-  Outlet,
-  RouterProvider,
-} from 'react-router';
+import { createHashRouter, Navigate, RouterProvider } from 'react-router';
 import { OptionsLayout } from './layout/OptionsLayout';
-import {
-  DetailRoutePlaceholder,
-  RoutePlaceholder,
-} from './pages/RoutePlaceholder';
-
-function ModelRoutes() {
-  return (
-    <>
-      <h1 className="my-4 pl-0 text-3xl font-bold">Models</h1>
-      <Outlet />
-    </>
-  );
-}
-
-function PromptRoutes() {
-  return (
-    <>
-      <h1 className="my-4 pl-0 text-3xl font-bold">Prompts</h1>
-      <Outlet />
-    </>
-  );
-}
+import { AppearancePage } from './pages/AppearancePage';
+import { ExportImportPage } from './pages/ExportImportPage';
+import { GeneralPage } from './pages/GeneralPage';
+import { CreateModelPage } from './pages/models/CreateModelPage';
+import { EditModelPage } from './pages/models/EditModelPage';
+import { ModelsListPage } from './pages/models/ModelsListPage';
+import { ModelsPage } from './pages/models/ModelsPage';
+import { PageExtractionPage } from './pages/PageExtractionPage';
+import { CreatePromptPage } from './pages/prompts/CreatePromptPage';
+import { EditPromptPage } from './pages/prompts/EditPromptPage';
+import { PromptsListPage } from './pages/prompts/PromptsListPage';
+import { PromptsPage } from './pages/prompts/PromptsPage';
+import { SiteCustomizationPage } from './pages/SiteCustomizationPage';
+import { WelcomePage } from './pages/WelcomePage';
 
 const optionsRouter = createHashRouter([
   {
@@ -39,71 +26,63 @@ const optionsRouter = createHashRouter([
       },
       {
         path: 'general',
-        element: <RoutePlaceholder title="General Setting" />,
+        Component: GeneralPage,
       },
       {
         path: 'page-extraction',
-        element: <RoutePlaceholder title="Page Extraction" />,
+        Component: PageExtractionPage,
       },
       {
         path: 'models',
-        Component: ModelRoutes,
+        Component: ModelsPage,
         children: [
           {
             index: true,
-            element: <RoutePlaceholder density="compact" />,
+            Component: ModelsListPage,
           },
           {
             path: 'create',
-            element: <DetailRoutePlaceholder title="Create Model" />,
+            Component: CreateModelPage,
           },
           {
             path: 'edit',
-            element: <DetailRoutePlaceholder title="Edit Model" />,
+            Component: EditModelPage,
           },
         ],
       },
       {
         path: 'prompts',
-        Component: PromptRoutes,
+        Component: PromptsPage,
         children: [
           {
             index: true,
-            element: <RoutePlaceholder density="compact" />,
+            Component: PromptsListPage,
           },
           {
             path: 'create',
-            element: <DetailRoutePlaceholder title="Create Prompt" />,
+            Component: CreatePromptPage,
           },
           {
             path: 'edit',
-            element: <DetailRoutePlaceholder title="Edit Prompt" />,
+            Component: EditPromptPage,
           },
         ],
       },
       {
         path: 'site-customization',
-        element: <RoutePlaceholder title="Site Customization" density="wide" />,
+        Component: SiteCustomizationPage,
       },
       {
         path: 'appearance',
-        element: <RoutePlaceholder title="Appearance Setting" density="wide" />,
+        Component: AppearancePage,
       },
       {
         path: 'export_import',
-        element: <RoutePlaceholder title="Export Import" density="compact" />,
-      },
-      {
-        path: 'debug',
-        element: <RoutePlaceholder title="Debug" density="compact" />,
+        Component: ExportImportPage,
       },
       {
         path: 'welcome',
-        element: <RoutePlaceholder title="Welcome" density="compact" />,
-      },
-      {
-        path: 'about',
-        element: <Navigate to="/general" replace />,
+        Component: WelcomePage,
       },
       {
         path: 'p1',

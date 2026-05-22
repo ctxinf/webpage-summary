@@ -60,17 +60,17 @@ function goOptionsHome() {
   window.location.assign(window.location.pathname);
 }
 
-function goSamplesHome() {
+function goDebugHome() {
   window.location.assign(`${window.location.pathname}?samples=1`);
 }
 
-export function SamplesNavPage() {
+export function DebugPage() {
   return (
     <main className="min-h-screen bg-muted px-4 py-8">
       <div className="mx-auto grid w-full max-w-[880px] gap-[18px]">
         <header className="flex items-center justify-between gap-4 max-sm:flex-col max-sm:items-start">
           <div>
-            <p className="mb-1 text-[13px] text-muted-foreground">Samples</p>
+            <p className="mb-1 text-[13px] text-muted-foreground">Debug</p>
             <h1 className="text-[28px] font-semibold leading-tight">
               示例导航
             </h1>
@@ -81,7 +81,7 @@ export function SamplesNavPage() {
           </Button>
         </header>
 
-        <section className="grid gap-3" aria-label="Samples">
+        <section className="grid gap-3" aria-label="Debug samples">
           {SAMPLE_ITEMS.map((sample) => {
             const Icon = sample.icon;
 
@@ -118,12 +118,12 @@ export function SamplePage({ sampleKey }: SamplePageProps) {
       <div className="mx-auto grid w-full max-w-[880px] gap-[18px]">
         <header className="flex items-center justify-between gap-4 max-sm:flex-col max-sm:items-start">
           <div>
-            <p className="mb-1 text-[13px] text-muted-foreground">Sample</p>
+            <p className="mb-1 text-[13px] text-muted-foreground">Debug</p>
             <h1 className="text-[28px] font-semibold leading-tight">
               {sampleKey}
             </h1>
           </div>
-          <Button type="button" variant="outline" onClick={goSamplesHome}>
+          <Button type="button" variant="outline" onClick={goDebugHome}>
             <ArrowLeft />
             返回
           </Button>

@@ -1,6 +1,7 @@
 import { ArrowLeft, ExternalLink } from 'lucide-react';
 import { NavLink, Outlet, useLocation, useNavigate } from 'react-router';
 import { Button } from '@/components/ui/button';
+import { ENABLE_SAMPLES } from '@/constants/flag';
 import { cn } from '@/lib/utils';
 
 type SidebarLink = {
@@ -15,10 +16,6 @@ const primaryLinks: SidebarLink[] = [
   { label: 'Prompts', to: '/prompts' },
   { label: 'Site Customization', to: '/site-customization' },
   { label: 'Appearance', to: '/appearance' },
-];
-
-const secondaryLinks: SidebarLink[] = [
-  ...(import.meta.env.DEV ? [{ label: 'Debug', to: '/debug' }] : []),
   { label: 'Export Import', to: '/export_import' },
 ];
 
@@ -87,32 +84,17 @@ export function OptionsLayout() {
             ))}
           </div>
 
-          <div className="mx-4 my-4 border-b" />
-
-          <div className="flex flex-col gap-2 px-4 text-sm font-extralight text-gray-500">
-            {secondaryLinks.map((link) => (
-              <NavLink
-                className={({ isActive }) =>
-                  cn(
-                    'rounded-sm transition-colors hover:text-foreground',
-                    isActive && 'bg-gray-200 text-green-600',
-                  )
-                }
-                key={link.to}
-                to={link.to}
+          {ENABLE_SAMPLES ? (
+            <>
+              <div className="mx-4 my-4 border-b" />
+              <a
+                className="mx-4 block rounded-sm px-1 text-sm font-extralight text-gray-500 transition-colors hover:text-foreground"
+                href="?samples=1"
               >
-                {link.label}
-              </NavLink>
-            ))}
-            <a
-              className="transition-colors hover:text-foreground"
-              href="https://github.com/slow-groovin/webpage-summary"
-              rel="noreferrer noopener"
-              target="_blank"
-            >
-              About
-            </a>
-          </div>
+                Debug
+              </a>
+            </>
+          ) : null}
         </nav>
 
         <main className="relative ml-8 w-full max-w-5xl flex-1 p-4 max-sm:ml-0">
