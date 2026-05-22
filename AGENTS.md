@@ -9,3 +9,13 @@
 1. 权限和原来一致, 是所有网站的权限
 ## 当前阶段:
 现在来跑通一些示例, 必须以samples/ 子目录区分, 且通过constants配置开关统一控制.
+
+
+## 配置AgentBrowser调试
+```sh
+agent-browser open "chrome-extension://agkkdeeogabdcoenmlakmamblageajhg/options.html?samples=1" #尽量直接打开需要测试的路径
+agent-browser snapshot -i  
+
+agent-browser console 
+#... 更多参考对应skills
+```
