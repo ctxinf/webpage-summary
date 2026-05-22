@@ -1,0 +1,19 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :host {
+    color: #18181b;
+    font-family:
+      Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont,
+      "Segoe UI", sans-serif;
+    font-size: 13px;
+    line-height: 1.45;
+    letter-spacing: 0;
+  }
+
+  button {
+    cursor: pointer;
+  }
+}

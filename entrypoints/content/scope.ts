@@ -64,21 +64,17 @@ function mountSummaryBadge() {
   document.documentElement.append(host);
 }
 
-export default defineContentScript({
-  matches: ['<all_urls>'],
-  runAt: 'document_idle',
-  main() {
-    mountSummaryBadge();
+export function mountContentScope() {
+  mountSummaryBadge();
 
-    browser.runtime.onMessage.addListener((message: PingMessage) => {
-      if (message?.type !== 'WEBPAGE_SUMMARY_PING') return;
+  browser.runtime.onMessage.addListener((message: PingMessage) => {
+    if (message?.type !== 'WEBPAGE_SUMMARY_PING') return;
 
-      return Promise.resolve({
-        ok: true,
-        title: document.title || 'Untitled page',
-        url: location.href,
-        textLength: collectPageTextLength(),
-      });
+    return Promise.resolve({
+      ok: true,
+      title: document.title || 'Untitled page',
+      url: location.href,
+      textLength: collectPageTextLength(),
     });
-  },
-});
+  });
+}

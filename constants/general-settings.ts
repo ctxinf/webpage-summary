@@ -1,4 +1,8 @@
 import type { StorageItemKey } from '#imports';
+import {
+  isPageTextExtractMethod,
+  type PageTextExtractMethod,
+} from './page-extraction';
 
 type GeneralSettingDefinition<T> = {
   defaultValue: T | (() => T);
@@ -29,9 +33,25 @@ function stringSetting(
   };
 }
 
+function pageTextExtractMethodSetting(
+  storageKey: StorageItemKey,
+  defaultValue: PageTextExtractMethod,
+): GeneralSettingDefinition<PageTextExtractMethod> {
+  return {
+    defaultValue,
+    parse: (value, fallback) =>
+      isPageTextExtractMethod(value) ? value : fallback,
+    storageKey,
+  };
+}
+
 export const GENERAL_SETTING_DEFINITIONS = {
   summaryLanguage: stringSetting('local:summary-lang', () =>
     browser.i18n.getUILanguage(),
+  ),
+  pageTextExtractMethod: pageTextExtractMethodSetting(
+    'local:page-text-extract-method',
+    'readability',
   ),
   enableChatInputBox: booleanSetting('local:enable-chat-input-box', true),
   enableFloatingBall: booleanSetting('local:enable-floating-ball', true),

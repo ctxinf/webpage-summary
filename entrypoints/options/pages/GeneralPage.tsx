@@ -14,7 +14,10 @@ import {
 import { cn } from '@/lib/utils';
 import { OptionsPageTitle } from './OptionsPageTitle';
 
-type BooleanSettingKey = Exclude<GeneralSettingKey, 'summaryLanguage'>;
+type BooleanSettingKey = Exclude<
+  GeneralSettingKey,
+  'pageTextExtractMethod' | 'summaryLanguage'
+>;
 
 type GeneralSettingSection = {
   title: string;

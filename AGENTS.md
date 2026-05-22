@@ -19,4 +19,6 @@ agent-browser snapshot -i
 
 agent-browser console 
 #... 更多参考对应skills
+#每次用完不必close
+# 有时候有bug, 第一次打开是blank, 再open一次就可以正常打开了
 ```
