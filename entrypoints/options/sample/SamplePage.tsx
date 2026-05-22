@@ -1,14 +1,23 @@
-import { ArrowLeft, Bot, ChevronRight, FlaskConical, PlugZap } from 'lucide-react';
+import {
+  ArrowLeft,
+  BellRing,
+  Bot,
+  ChevronRight,
+  FlaskConical,
+  PlugZap,
+} from 'lucide-react';
 import type { ComponentType } from 'react';
 import { Button } from '@/components/ui/button';
 import { AliyunAiApiSample } from './aliyun-ai-api/AliyunAiApiSample';
 import { BackgroundAiProviderSample } from './background-ai-provider/BackgroundAiProviderSample';
 import { ConnectChatTransportSample } from './connect-chat-transport/ConnectChatTransportSample';
+import { SonnerToastSample } from './sonner-toast/SonnerToastSample';
 
 type SampleKey =
   | 'aliyun-ai-api'
   | 'background-ai-provider'
-  | 'connect-chat-transport';
+  | 'connect-chat-transport'
+  | 'sonner-toast';
 
 type SampleItem = {
   key: SampleKey;
@@ -40,12 +49,20 @@ const SAMPLE_ITEMS: SampleItem[] = [
     icon: PlugZap,
     component: ConnectChatTransportSample,
   },
+  {
+    key: 'sonner-toast',
+    title: 'Sonner Toast',
+    description: 'Shared toaster host and toast variants',
+    icon: BellRing,
+    component: SonnerToastSample,
+  },
 ];
 
 const SAMPLE_RENDERERS: Record<SampleKey, ComponentType> = {
   'aliyun-ai-api': AliyunAiApiSample,
   'background-ai-provider': BackgroundAiProviderSample,
   'connect-chat-transport': ConnectChatTransportSample,
+  'sonner-toast': SonnerToastSample,
 };
 
 type SamplePageProps = {

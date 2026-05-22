@@ -14,7 +14,7 @@
 ## 配置AgentBrowser调试
 不要运行"npm run dev", 这个一直常驻后台, 如果需要重启, 通知用户手动进行
 ```sh
-agent-browser open "chrome-extension://agkkdeeogabdcoenmlakmamblageajhg/options.html?samples=1" #尽量直接打开需要测试的路径
+agent-browser open "chrome-extension://agkkdeeogabdcoenmlakmamblageajhg/options.html#/general" #尽量直接打开需要测试的路径
 agent-browser snapshot -i  
 
 agent-browser console 
