@@ -1,3 +1,5 @@
+import { getUiMessages } from '@/lib/i18n';
+
 type PingMessage = {
   type: 'WEBPAGE_SUMMARY_PING';
 };
@@ -7,6 +9,7 @@ function collectPageTextLength() {
 }
 
 function mountSummaryBadge() {
+  const messages = getUiMessages();
   const hostId = 'webpage-summary-react-root';
   if (document.getElementById(hostId)) return;
 
@@ -56,15 +59,20 @@ function mountSummaryBadge() {
   `;
 
   const badge = document.createElement('button');
+  const badgeMark = document.createElement('span');
+  const badgeText = document.createElement('strong');
   badge.type = 'button';
-  badge.title = 'Webpage Summary';
-  badge.innerHTML = '<span>W</span><strong>Summary</strong>';
+  badge.title = messages.content.badgeLabel;
+  badgeMark.textContent = 'W';
+  badgeText.textContent = messages.content.summary;
+  badge.append(badgeMark, badgeText);
 
   shadow.append(style, badge);
   document.documentElement.append(host);
 }
 
 export function mountContentScope() {
+  const messages = getUiMessages();
   mountSummaryBadge();
 
   browser.runtime.onMessage.addListener((message: PingMessage) => {
@@ -72,7 +80,7 @@ export function mountContentScope() {
 
     return Promise.resolve({
       ok: true,
-      title: document.title || 'Untitled page',
+      title: document.title || messages.content.untitledPage,
       url: location.href,
       textLength: collectPageTextLength(),
     });

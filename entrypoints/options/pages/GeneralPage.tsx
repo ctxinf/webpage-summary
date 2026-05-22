@@ -11,6 +11,7 @@ import {
   loadGeneralSettings,
   saveGeneralSettings,
 } from '@/lib/general-settings-storage';
+import { getUiMessages } from '@/lib/i18n';
 import { cn } from '@/lib/utils';
 import { OptionsPageTitle } from './OptionsPageTitle';
 
@@ -19,103 +20,39 @@ type BooleanSettingKey = Exclude<
   'pageTextExtractMethod' | 'summaryLanguage'
 >;
 
-type GeneralSettingSection = {
-  title: string;
-  description: string;
-  fields: Array<{
-    key: BooleanSettingKey;
-    label: string;
-    description: string;
-    caution?: string;
-  }>;
-};
-
-const BOOLEAN_SETTING_SECTIONS: GeneralSettingSection[] = [
+const BOOLEAN_SETTING_SECTIONS = [
   {
-    title: 'Panel',
-    description: 'Choose how summary controls appear inside the page.',
     fields: [
-      {
-        key: 'enableChatInputBox',
-        label: 'Chat input box',
-        description: 'Show the chat input inside the summary panel.',
-      },
-      {
-        key: 'enableFloatingBall',
-        label: 'Floating button',
-        description: 'Show a page control for opening the summary panel.',
-      },
-      {
-        key: 'enablePopupClickTrigger',
-        label: 'Popup click opens summary',
-        description:
-          'Use the extension action click as a summary trigger instead of the popup panel.',
-      },
-      {
-        key: 'enableSummaryWindowDefault',
-        label: 'Open panel on new pages',
-        description: 'Open the summary panel as a page starts.',
-        caution: 'This changes the default behavior on every matching page.',
-      },
+      'enableChatInputBox',
+      'enableFloatingBall',
+      'enablePopupClickTrigger',
+      'enableSummaryWindowDefault',
     ],
+    key: 'panel',
   },
   {
-    title: 'Triggers',
-    description: 'Control when an open panel starts work automatically.',
     fields: [
-      {
-        key: 'enableAutoBeginSummary',
-        label: 'Start summary after panel opens',
-        description: 'Begin summarizing as soon as the summary panel opens.',
-      },
-      {
-        key: 'enableAutoBeginSummaryByActionOrContextTrigger',
-        label: 'Start after action or context trigger',
-        description:
-          'Begin summarizing when the extension action or a context menu opens the panel.',
-      },
-      {
-        key: 'enableAutoBeginChatForAddSelectionToChat',
-        label: 'Send selected text after adding it',
-        description:
-          'Start chat automatically after selected page text is added to the conversation.',
-      },
+      'enableAutoBeginSummary',
+      'enableAutoBeginSummaryByActionOrContextTrigger',
+      'enableAutoBeginChatForAddSelectionToChat',
     ],
+    key: 'triggers',
   },
   {
-    title: 'Display',
-    description: 'Keep the summary panel focused on the controls you use.',
-    fields: [
-      {
-        key: 'enableTokenUsageView',
-        label: 'Token usage',
-        description: 'Show token usage information in the panel header.',
-      },
-      {
-        key: 'enableCreateNewPanelButton',
-        label: 'New panel button',
-        description: 'Show the control for creating another summary panel.',
-      },
-    ],
+    fields: ['enableTokenUsageView', 'enableCreateNewPanelButton'],
+    key: 'display',
   },
   {
-    title: 'Context Menu',
-    description: 'Choose which page menu entries the extension exposes.',
     fields: [
-      {
-        key: 'enableContextMenuSummarizeThisPage',
-        label: 'Summarize this page',
-        description: 'Show the context menu item for summarizing the page.',
-      },
-      {
-        key: 'enableContextMenuAddSelectionToChat',
-        label: 'Add selection to chat',
-        description:
-          'Show the context menu item for adding selected text to chat.',
-      },
+      'enableContextMenuSummarizeThisPage',
+      'enableContextMenuAddSelectionToChat',
     ],
+    key: 'contextMenu',
   },
-];
+] satisfies Array<{
+  fields: BooleanSettingKey[];
+  key: 'contextMenu' | 'display' | 'panel' | 'triggers';
+}>;
 
 function settingsMatch(left: GeneralSettings, right: GeneralSettings) {
   return (Object.keys(left) as GeneralSettingKey[]).every(
@@ -129,6 +66,10 @@ type SettingRowProps = {
   description: string;
   label: string;
   onChange: (checked: boolean) => void;
+  statusLabels: {
+    off: string;
+    on: string;
+  };
 };
 
 function SettingRow({
@@ -137,6 +78,7 @@ function SettingRow({
   description,
   label,
   onChange,
+  statusLabels,
 }: SettingRowProps) {
   return (
     <label className="grid cursor-pointer grid-cols-[minmax(0,1fr)_auto] items-center gap-4 border-b py-4 last:border-b-0 max-sm:grid-cols-1">
@@ -159,13 +101,14 @@ function SettingRow({
           onChange={(event) => onChange(event.currentTarget.checked)}
           type="checkbox"
         />
-        <span>{checked ? 'On' : 'Off'}</span>
+        <span>{checked ? statusLabels.on : statusLabels.off}</span>
       </span>
     </label>
   );
 }
 
 export function GeneralPage() {
+  const messages = getUiMessages();
   const [settings, setSettings] = useState<GeneralSettings | null>(null);
   const [savedSettings, setSavedSettings] = useState<GeneralSettings | null>(
     null,
@@ -186,9 +129,8 @@ export function GeneralPage() {
         setSavedSettings(loadedSettings);
       } catch (error) {
         if (!active) return;
-        console.log('error',error)
         setLoadError(
-          error instanceof Error ? error.message : 'General settings failed to load.',
+          error instanceof Error ? error.message : messages.general.loadFailed,
         );
       }
     }
@@ -198,7 +140,7 @@ export function GeneralPage() {
     return () => {
       active = false;
     };
-  }, []);
+  }, [messages.general.loadFailed]);
 
   const isDirty = useMemo(
     () =>
@@ -227,10 +169,10 @@ export function GeneralPage() {
     try {
       await saveGeneralSettings(settings);
       setSavedSettings(settings);
-      toast.success('General settings saved.');
+      toast.success(messages.general.savedToast);
     } catch (error) {
       toast.error(
-        error instanceof Error ? error.message : 'General settings failed to save.',
+        error instanceof Error ? error.message : messages.general.saveFailed,
       );
     } finally {
       setIsSaving(false);
@@ -244,7 +186,7 @@ export function GeneralPage() {
   if (loadError) {
     return (
       <>
-        <OptionsPageTitle>General Setting</OptionsPageTitle>
+        <OptionsPageTitle>{messages.general.title}</OptionsPageTitle>
         <div className="max-w-2xl rounded-md border border-destructive/30 bg-destructive/10 p-4 text-sm text-destructive">
           {loadError}
         </div>
@@ -255,21 +197,25 @@ export function GeneralPage() {
   if (!settings) {
     return (
       <>
-        <OptionsPageTitle>General Setting</OptionsPageTitle>
-        <div className="text-sm text-muted-foreground">Loading settings...</div>
+        <OptionsPageTitle>{messages.general.title}</OptionsPageTitle>
+        <div className="text-sm text-muted-foreground">
+          {messages.common.loadingSettings}
+        </div>
       </>
     );
   }
 
   return (
     <form className="grid max-w-4xl gap-7 pb-24" onSubmit={handleSubmit}>
-      <OptionsPageTitle>General Setting</OptionsPageTitle>
+      <OptionsPageTitle>{messages.general.title}</OptionsPageTitle>
 
       <section className="grid gap-3 border-b pb-7">
         <label className="grid gap-2" htmlFor="summary-language">
-          <span className="text-base font-semibold">Summary Language</span>
+          <span className="text-base font-semibold">
+            {messages.general.summaryLanguage.label}
+          </span>
           <span className="max-w-2xl text-sm leading-6 text-muted-foreground">
-            Language tag or locale used for generated summaries.
+            {messages.general.summaryLanguage.description}
           </span>
           <input
             className="h-9 w-full max-w-sm rounded-md border bg-background px-3 text-sm shadow-sm outline-none focus-visible:ring-1 focus-visible:ring-ring"
@@ -283,27 +229,38 @@ export function GeneralPage() {
         </label>
       </section>
 
-      {BOOLEAN_SETTING_SECTIONS.map((section) => (
-        <section key={section.title} aria-label={section.title}>
-          <header className="mb-1">
-            <h2 className="text-base font-semibold">{section.title}</h2>
-            <p className="mt-1 max-w-2xl text-sm leading-6 text-muted-foreground">
-              {section.description}
-            </p>
-          </header>
+      {BOOLEAN_SETTING_SECTIONS.map((section) => {
+        const sectionMessage = messages.general.sections[section.key];
 
-          {section.fields.map((field) => (
-            <SettingRow
-              checked={settings[field.key]}
-              caution={field.caution}
-              description={field.description}
-              key={field.key}
-              label={field.label}
-              onChange={(checked) => updateSetting(field.key, checked)}
-            />
-          ))}
-        </section>
-      ))}
+        return (
+          <section key={section.key} aria-label={sectionMessage.title}>
+            <header className="mb-1">
+              <h2 className="text-base font-semibold">
+                {sectionMessage.title}
+              </h2>
+              <p className="mt-1 max-w-2xl text-sm leading-6 text-muted-foreground">
+                {sectionMessage.description}
+              </p>
+            </header>
+
+            {section.fields.map((field) => {
+              const fieldMessage = messages.general.settings[field];
+
+              return (
+                <SettingRow
+                  checked={settings[field]}
+                  caution={fieldMessage.caution}
+                  description={fieldMessage.description}
+                  key={field}
+                  label={fieldMessage.label}
+                  onChange={(checked) => updateSetting(field, checked)}
+                  statusLabels={messages.common}
+                />
+              );
+            })}
+          </section>
+        );
+      })}
 
       <footer
         className={cn(
@@ -312,7 +269,9 @@ export function GeneralPage() {
         )}
       >
         <p className="text-sm text-muted-foreground" aria-live="polite">
-          {isDirty ? 'Unsaved changes.' : 'All changes are saved.'}
+          {isDirty
+            ? messages.common.unsavedChanges
+            : messages.common.allChangesSaved}
         </p>
         <div className="flex flex-wrap gap-2">
           <Button
@@ -322,11 +281,11 @@ export function GeneralPage() {
             variant="outline"
           >
             <RotateCcw />
-            Restore defaults
+            {messages.general.restoreDefaults}
           </Button>
           <Button disabled={!isDirty || isSaving} type="submit">
             <Save />
-            {isSaving ? 'Saving' : 'Save'}
+            {isSaving ? messages.common.saving : messages.common.save}
           </Button>
         </div>
       </footer>

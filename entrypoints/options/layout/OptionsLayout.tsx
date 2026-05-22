@@ -2,22 +2,13 @@ import { ArrowLeft, ExternalLink } from 'lucide-react';
 import { NavLink, Outlet, useLocation, useNavigate } from 'react-router';
 import { Button } from '@/components/ui/button';
 import { ENABLE_SAMPLES } from '@/constants/flag';
+import { getUiMessages } from '@/lib/i18n';
 import { cn } from '@/lib/utils';
 
 type SidebarLink = {
   label: string;
   to: string;
 };
-
-const primaryLinks: SidebarLink[] = [
-  { label: 'General', to: '/general' },
-  { label: 'Page Extraction', to: '/page-extraction' },
-  { label: 'Models', to: '/models' },
-  { label: 'Prompts', to: '/prompts' },
-  { label: 'Site Customization', to: '/site-customization' },
-  { label: 'Appearance', to: '/appearance' },
-  { label: 'Export Import', to: '/export_import' },
-];
 
 function OptionsSidebarLink({ label, to }: SidebarLink) {
   return (
@@ -45,6 +36,22 @@ export function OptionsLayout() {
   const location = useLocation();
   const navigate = useNavigate();
   const manifest = browser.runtime.getManifest();
+  const messages = getUiMessages();
+  const primaryLinks: SidebarLink[] = [
+    { label: messages.options.navigation.general, to: '/general' },
+    {
+      label: messages.options.navigation.pageExtraction,
+      to: '/page-extraction',
+    },
+    { label: messages.options.navigation.models, to: '/models' },
+    { label: messages.options.navigation.prompts, to: '/prompts' },
+    {
+      label: messages.options.navigation.siteCustomization,
+      to: '/site-customization',
+    },
+    { label: messages.options.navigation.appearance, to: '/appearance' },
+    { label: messages.options.navigation.exportImport, to: '/export_import' },
+  ];
 
   return (
     <div className="flex min-h-screen flex-col bg-background">
@@ -75,7 +82,7 @@ export function OptionsLayout() {
 
       <div className="flex min-h-0 flex-1 max-sm:flex-col">
         <nav
-          aria-label="Options"
+          aria-label={messages.options.navigationLabel}
           className="w-[196px] shrink-0 border-r-2 pt-4 max-sm:w-full max-sm:border-b-2 max-sm:border-r-0 max-sm:pb-4"
         >
           <div className="grid">
@@ -91,7 +98,7 @@ export function OptionsLayout() {
                 className="mx-4 block rounded-sm px-1 text-sm font-extralight text-gray-500 transition-colors hover:text-foreground"
                 href="?samples=1"
               >
-                Debug
+                {messages.options.debug}
               </a>
             </>
           ) : null}
@@ -100,7 +107,7 @@ export function OptionsLayout() {
         <main className="relative ml-8 w-full max-w-5xl flex-1 p-4 max-sm:ml-0">
           {isDetailRoute(location.pathname) ? (
             <Button
-              aria-label="Back"
+              aria-label={messages.common.back}
               className="mb-2"
               onClick={() => navigate(-1)}
               size="icon"

@@ -1,6 +1,7 @@
 import { ExternalLink, FileText, Settings } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { Button } from '@/components/ui/button';
+import { getUiMessages } from '@/lib/i18n';
 
 type PageSnapshot = {
   ok: boolean;
@@ -10,8 +11,9 @@ type PageSnapshot = {
 };
 
 function App() {
+  const messages = getUiMessages();
   const [snapshot, setSnapshot] = useState<PageSnapshot | null>(null);
-  const [status, setStatus] = useState('正在连接当前页面');
+  const [status, setStatus] = useState(messages.popup.connectingCurrentPage);
 
   useEffect(() => {
     let cancelled = false;
@@ -23,7 +25,7 @@ function App() {
       });
 
       if (!tab?.id) {
-        setStatus('没有可用的当前标签页');
+        setStatus(messages.popup.noActiveTab);
         return;
       }
 
@@ -34,11 +36,13 @@ function App() {
 
         if (!cancelled) {
           setSnapshot(result);
-          setStatus(result.ok ? '页面注入已连接' : '页面注入未就绪');
+          setStatus(
+            result.ok ? messages.popup.connected : messages.popup.injectionPending,
+          );
         }
       } catch {
         if (!cancelled) {
-          setStatus('当前页面暂不支持注入');
+          setStatus(messages.popup.unsupportedPage);
         }
       }
     }
@@ -48,7 +52,7 @@ function App() {
     return () => {
       cancelled = true;
     };
-  }, []);
+  }, [messages.popup]);
 
   return (
     <main className="grid min-w-[360px] gap-3.5 p-4">
@@ -64,25 +68,31 @@ function App() {
 
       <section
         className="grid gap-2.5 rounded-lg border bg-card p-3"
-        aria-label="当前页面"
+        aria-label={messages.popup.pageSectionLabel}
       >
         <div className="truncate text-sm font-semibold text-foreground">
-          {snapshot?.title || '当前页面'}
+          {snapshot?.title || messages.popup.pageFallback}
         </div>
         <div className="truncate text-xs text-muted-foreground">
-          {snapshot?.url || '打开任意网页后查看注入状态'}
+          {snapshot?.url || messages.popup.pageUrlFallback}
         </div>
         <dl className="grid grid-cols-2 gap-2">
           <div className="rounded-md bg-muted p-2.5">
-            <dt className="text-[11px] text-muted-foreground">文本长度</dt>
+            <dt className="text-[11px] text-muted-foreground">
+              {messages.popup.textLength}
+            </dt>
             <dd className="mt-1 text-[13px] font-semibold">
               {snapshot ? snapshot.textLength.toLocaleString() : '-'}
             </dd>
           </div>
           <div className="rounded-md bg-muted p-2.5">
-            <dt className="text-[11px] text-muted-foreground">注入状态</dt>
+            <dt className="text-[11px] text-muted-foreground">
+              {messages.popup.injectionStatus}
+            </dt>
             <dd className="mt-1 text-[13px] font-semibold">
-              {snapshot?.ok ? '已连接' : '等待中'}
+              {snapshot?.ok
+                ? messages.popup.connected
+                : messages.popup.injectionPending}
             </dd>
           </div>
         </dl>
@@ -91,7 +101,7 @@ function App() {
       <div className="flex justify-end gap-2">
         <Button type="button" onClick={() => browser.runtime.openOptionsPage()}>
           <Settings />
-          设置
+          {messages.popup.openOptions}
         </Button>
         {snapshot?.url ? (
           <Button
@@ -100,7 +110,7 @@ function App() {
             onClick={() => browser.tabs.create({ url: snapshot.url })}
           >
             <ExternalLink />
-            打开
+            {messages.popup.open}
           </Button>
         ) : null}
       </div>
