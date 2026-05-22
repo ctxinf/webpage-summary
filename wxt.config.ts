@@ -6,7 +6,8 @@ export default defineConfig({
   modules: ['@wxt-dev/module-react'],
   manifest: {
     name: 'Webpage Summary React',
-    permissions: ['activeTab'],
+    host_permissions: ['<all_urls>'],
+    permissions: ['activeTab', 'storage'],
   },
   vite: () => ({
     optimizeDeps: {
