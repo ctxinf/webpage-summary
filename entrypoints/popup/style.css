@@ -65,4 +65,8 @@
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
   }
+
+  #root {
+    min-height: 100vh;
+  }
 }

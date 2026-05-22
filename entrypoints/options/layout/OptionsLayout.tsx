@@ -1,0 +1,136 @@
+import { ArrowLeft, ExternalLink } from 'lucide-react';
+import { NavLink, Outlet, useLocation, useNavigate } from 'react-router';
+import { Button } from '@/components/ui/button';
+import { cn } from '@/lib/utils';
+
+type SidebarLink = {
+  label: string;
+  to: string;
+};
+
+const primaryLinks: SidebarLink[] = [
+  { label: 'General', to: '/general' },
+  { label: 'Page Extraction', to: '/page-extraction' },
+  { label: 'Models', to: '/models' },
+  { label: 'Prompts', to: '/prompts' },
+  { label: 'Site Customization', to: '/site-customization' },
+  { label: 'Appearance', to: '/appearance' },
+];
+
+const secondaryLinks: SidebarLink[] = [
+  ...(import.meta.env.DEV ? [{ label: 'Debug', to: '/debug' }] : []),
+  { label: 'Export Import', to: '/export_import' },
+];
+
+function OptionsSidebarLink({ label, to }: SidebarLink) {
+  return (
+    <NavLink
+      className={({ isActive }) =>
+        cn(
+          'flex min-h-9 items-center rounded-md px-4 py-2 text-sm font-medium transition-colors',
+          isActive
+            ? 'bg-gray-200 text-green-600'
+            : 'text-foreground hover:bg-accent hover:text-accent-foreground',
+        )
+      }
+      to={to}
+    >
+      <span className="ml-1">{label}</span>
+    </NavLink>
+  );
+}
+
+function isDetailRoute(pathname: string) {
+  return pathname.split('/').filter(Boolean).length > 1;
+}
+
+export function OptionsLayout() {
+  const location = useLocation();
+  const navigate = useNavigate();
+  const manifest = browser.runtime.getManifest();
+
+  return (
+    <div className="flex min-h-screen flex-col bg-background">
+      <header className="flex min-h-11 flex-row items-center gap-1 px-4 py-2 shadow-md">
+        <img
+          alt=""
+          className="size-6 shrink-0"
+          src="/icon/32.png"
+        />
+        <h1 className="font-semibold">
+          {manifest.name}{' '}
+          <span className="text-xs font-light">{manifest.version}</span>
+        </h1>
+
+        <div className="grow" />
+        <a
+          aria-label="GitHub"
+          className="grid size-8 place-items-center text-neutral-600 transition-colors hover:text-black focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
+          href="https://github.com/slow-groovin/webpage-summary"
+          rel="noreferrer noopener"
+          target="_blank"
+          title="GitHub"
+        >
+          <ExternalLink size={20} />
+        </a>
+        <div className="w-16 max-md:w-10" />
+      </header>
+
+      <div className="flex min-h-0 flex-1 max-sm:flex-col">
+        <nav
+          aria-label="Options"
+          className="w-[196px] shrink-0 border-r-2 pt-4 max-sm:w-full max-sm:border-b-2 max-sm:border-r-0 max-sm:pb-4"
+        >
+          <div className="grid">
+            {primaryLinks.map((link) => (
+              <OptionsSidebarLink key={link.to} {...link} />
+            ))}
+          </div>
+
+          <div className="mx-4 my-4 border-b" />
+
+          <div className="flex flex-col gap-2 px-4 text-sm font-extralight text-gray-500">
+            {secondaryLinks.map((link) => (
+              <NavLink
+                className={({ isActive }) =>
+                  cn(
+                    'rounded-sm transition-colors hover:text-foreground',
+                    isActive && 'bg-gray-200 text-green-600',
+                  )
+                }
+                key={link.to}
+                to={link.to}
+              >
+                {link.label}
+              </NavLink>
+            ))}
+            <a
+              className="transition-colors hover:text-foreground"
+              href="https://github.com/slow-groovin/webpage-summary"
+              rel="noreferrer noopener"
+              target="_blank"
+            >
+              About
+            </a>
+          </div>
+        </nav>
+
+        <main className="relative ml-8 w-full max-w-5xl flex-1 p-4 max-sm:ml-0">
+          {isDetailRoute(location.pathname) ? (
+            <Button
+              aria-label="Back"
+              className="mb-2"
+              onClick={() => navigate(-1)}
+              size="icon"
+              type="button"
+              variant="outline"
+            >
+              <ArrowLeft />
+            </Button>
+          ) : null}
+          <Outlet />
+        </main>
+      </div>
+    </div>
+  );
+}

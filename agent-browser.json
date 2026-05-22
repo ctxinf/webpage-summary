@@ -1,7 +1,6 @@
 {
   "headed": true,
   "profile": "./.wxt/browser-data",
-  "ignoreHttpsErrors": true,
   "extensions":[
     "./.output/chrome-mv3-dev"
   ]
