@@ -1,6 +1,7 @@
 import { browser } from 'wxt/browser';
 import { ENABLE_SAMPLES } from '@/constants/flag';
 import { seedDefaultPromptIfNeeded } from '@/lib/prompt-settings-storage';
+import { registerAiSdkConnectBridge } from './ai-sdk-connect-bridge';
 import { registerBackgroundAiProviderSample } from './sample/background-ai-provider';
 import { registerConnectChatTransportSample } from './sample/connect-chat-transport';
 
@@ -14,6 +15,7 @@ export default defineBackground(() => {
   }
 
   seedPromptLibrary();
+  registerAiSdkConnectBridge();
 
   console.log('ENABLE_SAMPLES', ENABLE_SAMPLES);
   if (ENABLE_SAMPLES) {
