@@ -168,6 +168,12 @@ export function ModelsListPage() {
                       }
                       type="radio"
                     />
+                    <img
+                      alt=""
+                      className="size-5 shrink-0 object-contain"
+                      src={provider.iconPath}
+                      title={provider.label}
+                    />
                     <span className="min-w-0 text-base font-semibold">
                       {model.name}
                     </span>

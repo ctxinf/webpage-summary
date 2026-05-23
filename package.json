@@ -26,7 +26,6 @@
     "@ai-sdk/react": "^3.0.190",
     "@browser-ai/core": "^2.1.12",
     "@mozilla/readability": "^0.6.0",
-    "@openrouter/ai-sdk-provider": "^2.9.0",
     "@radix-ui/react-slot": "^1.2.4",
     "@webext-core/messaging": "^3.0.1",
     "ai": "^6.0.185",

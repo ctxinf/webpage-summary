@@ -4,7 +4,6 @@ import { createGoogleGenerativeAI } from '@ai-sdk/google';
 import { createOpenAI } from '@ai-sdk/openai';
 import { createOpenAICompatible } from '@ai-sdk/openai-compatible';
 import { createOpenResponses } from '@ai-sdk/open-responses';
-import { createOpenRouter } from '@openrouter/ai-sdk-provider';
 import { createOllama } from 'ollama-ai-provider';
 import type { LanguageModel } from 'ai';
 import type { ModelConfigItem } from '@/constants/model-settings';
@@ -49,11 +48,6 @@ export function createLanguageModelFromConfig(
       return createAnthropic(settings).languageModel(config.modelId);
     case 'google':
       return createGoogleGenerativeAI(settings).languageModel(config.modelId);
-    case 'openrouter':
-      return createOpenRouter({
-        ...settings,
-        extraBody: config.extraBody,
-      }).languageModel(config.modelId);
     case 'ollama':
       return createOllama(settings).languageModel(config.modelId) as unknown as LanguageModel;
     case 'browser-ai':

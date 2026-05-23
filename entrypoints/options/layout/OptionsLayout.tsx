@@ -108,7 +108,7 @@ export function OptionsLayout() {
           {isDetailRoute(location.pathname) ? (
             <Button
               aria-label={messages.common.back}
-              className="mb-2"
+              className="mb-1 size-6 rounded-sm p-0 [&_svg]:size-3.5"
               onClick={() => navigate(-1)}
               size="icon"
               type="button"

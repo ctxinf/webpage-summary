@@ -19,8 +19,8 @@
    - `local:react-model-configs-v2`
    - `local:react-default-model-id-v2`
 2. 新增 provider 描述表：`constants/model-settings.ts`
-   - provider 直接展示当前 `package.json` 仍保留的 provider：OpenAI、Open Responses、OpenAI Compatible、Anthropic、Google Generative AI、OpenRouter、Ollama、Browser AI。
-   - Base URL 不是伪装成 provider，而是在 provider 下提供快捷服务商 URL。
+   - provider 直接展示当前 `package.json` 仍保留的 provider：OpenAI Compatible、OpenAI、Open Responses、Anthropic、Google Generative AI、Ollama、Browser AI。
+   - Base URL 不是伪装成 provider，而是在 provider 下提供快捷服务商 URL；OpenRouter 作为 OpenAI Compatible 的快捷 URL。
    - 每个 provider 维护 `docsUrl`，编辑页展示当前 provider 描述并可跳到对应 AI SDK provider 文档。
    - `open-responses` 是单独 provider，只表示 Responses API POST endpoint。
    - `browser-ai` 作为特殊 provider 保留，不展示 API Key / Base URL / extraBody / headers。
@@ -32,7 +32,7 @@
    - 支持按 provider 的 `baseURL + modelsPath` 拉取模型列表，先覆盖 OpenAI-compatible 类接口。
 4. 新增 provider factory：`lib/model-provider.ts`
    - background 可通过 `createLanguageModelFromConfig(config)` 创建 AI SDK model。
-   - extraBody 先通过 provider 自定义 fetch 合并到 JSON body；OpenRouter 额外走 provider 原生 `extraBody`。
+   - extraBody 先通过 provider 自定义 fetch 合并到 JSON body。
 5. `/models` 设置页已从占位替换为可用页面：
    - 列表页：创建、编辑、删除、选择默认。
    - 编辑页：顶部 provider icon 选择、当前 provider 说明与文档外链、Base URL 快捷选择、Model Name input、`/models` 拉取后用模态框选择、API Key 明文切换。

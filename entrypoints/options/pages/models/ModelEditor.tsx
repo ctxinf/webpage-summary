@@ -1,4 +1,13 @@
-import { ExternalLink, Eye, EyeOff, RefreshCcw, Save, X } from 'lucide-react';
+import {
+  ChevronDown,
+  ChevronUp,
+  ExternalLink,
+  Eye,
+  EyeOff,
+  RefreshCcw,
+  Save,
+  X,
+} from 'lucide-react';
 import { useEffect, useMemo, useState, type FormEvent } from 'react';
 import { toast } from 'sonner';
 import { Button } from '@/components/ui/button';
@@ -65,6 +74,8 @@ export function ModelEditor({
   const [isModelPickerOpen, setIsModelPickerOpen] = useState(false);
   const [isLoadingModels, setIsLoadingModels] = useState(false);
   const [isApiKeyVisible, setIsApiKeyVisible] = useState(false);
+  const [areBaseURLPresetsExpanded, setAreBaseURLPresetsExpanded] =
+    useState(false);
 
   const provider = useMemo(
     () => getModelProviderDefinition(draft.providerId),
@@ -77,6 +88,7 @@ export function ModelEditor({
     setExtraBodyText(stringifyJson(initialDraft.extraBody));
     setRemoteModels([]);
     setIsModelPickerOpen(false);
+    setAreBaseURLPresetsExpanded(false);
   }, [initialDraft]);
 
   function updateDraft<Key extends keyof ModelDraft>(
@@ -106,6 +118,7 @@ export function ModelEditor({
     }));
     setRemoteModels([]);
     setIsModelPickerOpen(false);
+    setAreBaseURLPresetsExpanded(false);
   }
 
   async function loadRemoteModels() {
@@ -153,10 +166,14 @@ export function ModelEditor({
     }
   }
 
+  const shouldCollapseBaseURLPresets = provider.baseURLPresets.length > 8;
+  const areBaseURLPresetsCollapsed =
+    shouldCollapseBaseURLPresets && !areBaseURLPresetsExpanded;
+
   return (
     <>
-      <form className="grid max-w-4xl gap-7 pb-24" onSubmit={handleSubmit}>
-        <section className="grid gap-5 border-b pb-7">
+      <form className="grid max-w-4xl gap-8 pb-24" onSubmit={handleSubmit}>
+        <section className="grid gap-3 border-b pb-8">
           <fieldset className="grid gap-3">
             <legend className="text-sm font-medium">
               <FieldLabel required>Provider</FieldLabel>
@@ -168,7 +185,7 @@ export function ModelEditor({
                 return (
                   <button
                     className={cn(
-                      'inline-flex min-h-11 flex-1 basis-[180px] items-center gap-2 rounded-md border px-3 py-2 text-left text-sm transition-colors hover:bg-accent',
+                      'inline-flex min-h-11 w-[210px] items-center gap-2 rounded-md border px-3 py-2 text-left text-sm transition-colors hover:bg-accent',
                       isSelected
                         ? 'border-primary bg-primary/10 text-primary'
                         : 'bg-background',
@@ -180,11 +197,11 @@ export function ModelEditor({
                   >
                     <img
                       alt=""
-                      className="max-h-6 max-w-20 shrink-0 object-contain"
+                      className="size-5 shrink-0 object-contain"
                       src={providerDefinition.iconPath}
                       title={providerDefinition.desc}
                     />
-                    <span className="min-w-0 break-words font-medium leading-5">
+                    <span className="min-w-0 whitespace-nowrap font-medium leading-5">
                       {providerDefinition.label}
                     </span>
                   </button>
@@ -192,7 +209,9 @@ export function ModelEditor({
               })}
             </div>
           </fieldset>
+        </section>
 
+        <section className="grid gap-5 border-b pb-7">
           <div className="grid max-w-2xl gap-1">
             <div className="flex items-center gap-2">
               <img
@@ -250,22 +269,57 @@ export function ModelEditor({
                 value={draft.baseURL}
               />
               {provider.baseURLPresets.length > 0 ? (
-                <div className="flex flex-wrap gap-2">
-                  {provider.baseURLPresets.map((preset) => (
-                    <button
-                      className={cn(
-                        'rounded-md border px-2.5 py-1.5 text-xs transition-colors hover:bg-accent',
-                        draft.baseURL === preset.url
-                          ? 'border-primary bg-primary/10 text-primary'
-                          : 'bg-background text-muted-foreground',
-                      )}
-                      key={`${provider.id}-${preset.url}`}
-                      onClick={() => updateDraft('baseURL', preset.url)}
+                <div className="flex items-start gap-2">
+                  <div
+                    className={cn(
+                      'flex min-w-0 flex-1 flex-wrap gap-2',
+                      areBaseURLPresetsCollapsed && 'max-h-8 overflow-hidden',
+                    )}
+                  >
+                    {provider.baseURLPresets.map((preset) => (
+                      <button
+                        className={cn(
+                          'shrink-0 whitespace-nowrap rounded-md border px-2.5 py-1.5 text-xs transition-colors hover:bg-accent',
+                          draft.baseURL === preset.url
+                            ? 'border-primary bg-primary/10 text-primary'
+                            : 'bg-background text-muted-foreground',
+                        )}
+                        key={`${provider.id}-${preset.url}`}
+                        onClick={() => updateDraft('baseURL', preset.url)}
+                        type="button"
+                      >
+                        {preset.label}
+                      </button>
+                    ))}
+                  </div>
+                  {shouldCollapseBaseURLPresets ? (
+                    <Button
+                      aria-expanded={areBaseURLPresetsExpanded}
+                      className="h-8 shrink-0 px-2.5 text-xs"
+                      onClick={() =>
+                        setAreBaseURLPresetsExpanded((value) => !value)
+                      }
+                      title={
+                        areBaseURLPresetsExpanded
+                          ? 'Collapse Base URL presets'
+                          : 'Show more Base URL presets'
+                      }
                       type="button"
+                      variant="outline"
                     >
-                      {preset.label}
-                    </button>
-                  ))}
+                      {areBaseURLPresetsExpanded ? (
+                        <>
+                          <ChevronUp className="size-3.5" />
+                          收起
+                        </>
+                      ) : (
+                        <>
+                          <ChevronDown className="size-3.5" />
+                          更多...
+                        </>
+                      )}
+                    </Button>
+                  ) : null}
                 </div>
               ) : null}
             </div>
