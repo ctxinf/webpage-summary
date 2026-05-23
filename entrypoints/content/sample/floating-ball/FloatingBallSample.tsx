@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { ToggleLeft, ToggleRight, Sparkles, HelpCircle } from 'lucide-react';
 import RightFloatingBallContainer from '@/components/container/RightFloatingBallContainer';
 import { cn } from '@/lib/utils';
+import iconUrl from '@/assets/16.png';
 
 export function FloatingBallSample() {
   const [isEnabled, setIsEnabled] = useState(true);
@@ -20,15 +21,6 @@ export function FloatingBallSample() {
       return () => clearTimeout(timer);
     }
   }, [bounceActive]);
-
-  // Try to use browser extension API to resolve the local icon path.
-  // Fallback to WXT logo if not in extension context.
-  let iconUrl = '';
-  try {
-    iconUrl = browser.runtime.getURL('icon/32.png' as any);
-  } catch {
-    iconUrl = 'https://wxt.dev/wxt.svg';
-  }
 
   // Construct storage key dynamically with correct local prefix format
   const dynamicStorageKey = `local:right-floating-ball-top-${storageKey}` as const;

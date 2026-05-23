@@ -8,7 +8,7 @@ export default defineContentScript({
   runAt: 'document_idle',
   cssInjectionMode: 'ui',
   async main(ctx) {
-    mountContentScope();
+    await mountContentScope(ctx);
 
     if (ENABLE_CONTENT_SAMPLES) {
       console.log('ENABLE_CONTENT_SAMPLES',ENABLE_CONTENT_SAMPLES)

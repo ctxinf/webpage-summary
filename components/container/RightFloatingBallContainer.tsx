@@ -188,7 +188,7 @@ export default function RightFloatingBallContainer({
         cursor: isDragging ? 'grabbing' : 'grab',
       }}
       className={cn(
-        'fixed z-50 group flex items-center justify-center p-1 rounded-full bg-white border border-zinc-200/80 shadow-[0_12px_24px_rgba(24,24,27,0.1)] hover:shadow-[0_16px_32px_rgba(24,24,27,0.15)] hover:border-zinc-300/90 active:scale-95 select-none',
+        'fixed z-50 group flex items-center justify-center rounded-full select-none',
         // Enable smooth sliding transition when not actively dragging
         !isDragging && 'transition-all duration-300 cubic-bezier(0.16, 1, 0.3, 1)',
         className
