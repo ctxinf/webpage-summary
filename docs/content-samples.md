@@ -29,12 +29,30 @@ stylesheet：
 - 开关：`constants/flag.ts` 的 `ENABLE_CONTENT_SAMPLES`
 - 样式入口：`entrypoints/content/style.css`
 - sample 索引页：`entrypoints/content/sample/ContentSamplePage.tsx`
-- 当前子页面：`entrypoints/content/sample/page-extraction/`
+- 当前子页面：
+  - `entrypoints/content/sample/ai-dialog/`
+  - `entrypoints/content/sample/page-extraction/`
 
 开关关闭时单一 content 入口不挂载 sample UI。
 
 ## sample 索引页
 
-索引页负责 launcher、关闭状态和 tabs。当前 tab 只有 `Page Extraction`，但子页面
-通过 `CONTENT_SAMPLE_ITEMS` 注册，后续 sample 应继续放到各自子目录，再把页面
-组件注册到索引页，而不是把 sample 逻辑塞回 `entrypoints/content/index.ts`。
+索引页负责 launcher、关闭状态和 tabs。子页面通过 `CONTENT_SAMPLE_ITEMS`
+注册，后续 sample 应继续放到各自子目录，再把页面组件注册到索引页，而不是把
+sample 逻辑塞回 `entrypoints/content/index.ts`。
+
+## AI Dialog sample
+
+`entrypoints/content/sample/ai-dialog/ContentAiDialogSample.tsx` 用来验证当前最关键
+的 content 流程：
+
+1. content sample 面板作为页面内对话框入口。
+2. 读取默认模型配置和默认 prompt 配置。
+3. 使用 AI SDK UI 的 `useChat()` 管理对话状态，并用 `setMessages()` 把默认
+   prompt 的 `systemMessage` 初始化为第一条 `system` `UIMessage`。
+4. 通过 `AiSdkConnectTransport` 连接 `ai-sdk-connect-bridge` port。
+5. background 中的 `registerAiSdkConnectBridge()` 根据模型配置创建 provider，
+   执行 `streamText()`，再把 UI message chunks 流式传回 content dialog。
+
+这个 sample 暂时只做最小闭环验证，不包含页面抽取、网页变量渲染或正式页面交互
+设计。

@@ -1,8 +1,9 @@
 import { FileSearch, X } from 'lucide-react';
 import { type ComponentType, useState } from 'react';
+import { ContentAiDialogSample } from './ai-dialog/ContentAiDialogSample';
 import { PageExtractionSample } from './page-extraction/PageExtractionSample';
 
-type ContentSampleKey = 'page-extraction';
+type ContentSampleKey = 'ai-dialog' | 'page-extraction';
 
 type ContentSampleItem = {
   key: ContentSampleKey;
@@ -12,6 +13,12 @@ type ContentSampleItem = {
 };
 
 const CONTENT_SAMPLE_ITEMS: ContentSampleItem[] = [
+  {
+    key: 'ai-dialog',
+    label: 'AI Dialog',
+    title: 'Content AI Dialog',
+    component: ContentAiDialogSample,
+  },
   {
     key: 'page-extraction',
     label: 'Page Extraction',
@@ -23,7 +30,7 @@ const CONTENT_SAMPLE_ITEMS: ContentSampleItem[] = [
 export function ContentSamplesIndexPage() {
   const [isOpen, setIsOpen] = useState(true);
   const [activeSampleKey, setActiveSampleKey] =
-    useState<ContentSampleKey>('page-extraction');
+    useState<ContentSampleKey>('ai-dialog');
   const activeSample =
     CONTENT_SAMPLE_ITEMS.find((item) => item.key === activeSampleKey) ??
     CONTENT_SAMPLE_ITEMS[0];
