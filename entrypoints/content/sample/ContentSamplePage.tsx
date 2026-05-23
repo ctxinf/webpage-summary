@@ -2,8 +2,9 @@ import { FileSearch, X } from 'lucide-react';
 import { type ComponentType, useState } from 'react';
 import { ContentAiDialogSample } from './ai-dialog/ContentAiDialogSample';
 import { PageExtractionSample } from './page-extraction/PageExtractionSample';
+import { FloatingBallSample } from './floating-ball/FloatingBallSample';
 
-type ContentSampleKey = 'ai-dialog' | 'page-extraction';
+type ContentSampleKey = 'ai-dialog' | 'page-extraction' | 'floating-ball';
 
 type ContentSampleItem = {
   key: ContentSampleKey;
@@ -24,6 +25,12 @@ const CONTENT_SAMPLE_ITEMS: ContentSampleItem[] = [
     label: 'Page Extraction',
     title: 'Page Extraction',
     component: PageExtractionSample,
+  },
+  {
+    key: 'floating-ball',
+    label: 'Floating Ball',
+    title: 'Floating Ball',
+    component: FloatingBallSample,
   },
 ];
 
