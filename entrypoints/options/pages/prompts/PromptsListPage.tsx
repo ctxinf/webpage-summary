@@ -25,10 +25,28 @@ import {
 } from '@/lib/prompt-settings-storage';
 import { OptionsPageTitle } from '../OptionsPageTitle';
 
+const TEMPLATE_VARIABLE_PATTERN = /(\{\{[^}]*\}\})/g;
+
+function renderPromptMessage(message: string) {
+  return message.split(TEMPLATE_VARIABLE_PATTERN).map((part, index) => {
+    if (!part) return null;
+
+    if (part.startsWith('{{') && part.endsWith('}}')) {
+      return (
+        <span className="font-bold text-black" key={`${part}-${index}`}>
+          {part}
+        </span>
+      );
+    }
+
+    return part;
+  });
+}
+
 function PromptMessagePreview({ message }: { message: string }) {
   return (
-    <pre className="max-h-24 overflow-hidden whitespace-pre-wrap break-words rounded-md bg-muted/70 px-3 py-2 font-mono text-xs leading-5 text-muted-foreground">
-      {message}
+    <pre className="max-h-40 overflow-auto whitespace-pre-wrap break-words rounded-md bg-muted/70 px-3 py-2 font-mono text-xs leading-5 text-muted-foreground">
+      {renderPromptMessage(message)}
     </pre>
   );
 }
