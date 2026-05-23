@@ -1,8 +1,14 @@
-import { ArrowLeft, ExternalLink } from 'lucide-react';
+import { ArrowLeft, ExternalLink, Languages } from 'lucide-react';
 import { NavLink, Outlet, useLocation, useNavigate } from 'react-router';
 import { Button } from '@/components/ui/button';
 import { ENABLE_SAMPLES } from '@/constants/flag';
-import { getUiMessages } from '@/lib/i18n';
+import {
+  getUiLocale,
+  getUiMessages,
+  setUiLocaleOverride,
+  UI_LOCALE_OPTIONS,
+  type UiLocale,
+} from '@/lib/i18n';
 import { cn } from '@/lib/utils';
 
 type SidebarLink = {
@@ -32,11 +38,16 @@ function isDetailRoute(pathname: string) {
   return pathname.split('/').filter(Boolean).length > 1;
 }
 
+function reloadOptionsPage() {
+  window.location.reload();
+}
+
 export function OptionsLayout() {
   const location = useLocation();
   const navigate = useNavigate();
   const manifest = browser.runtime.getManifest();
   const messages = getUiMessages();
+  const currentLocale = getUiLocale();
   const primaryLinks: SidebarLink[] = [
     { label: messages.options.navigation.general, to: '/general' },
     {
@@ -56,28 +67,46 @@ export function OptionsLayout() {
   return (
     <div className="flex min-h-screen flex-col bg-background">
       <header className="flex min-h-11 flex-row items-center gap-1 px-4 py-2 shadow-md">
-        <img
-          alt=""
-          className="size-6 shrink-0"
-          src="/icon/32.png"
-        />
-        <h1 className="font-semibold">
-          {manifest.name}{' '}
-          <span className="text-xs font-light">{manifest.version}</span>
-        </h1>
+        <div className="flex min-w-0 items-center gap-2">
+          <img alt="" className="size-6 shrink-0" src="/icon/32.png" />
+          <h1 className="truncate font-semibold">
+            {manifest.name}{' '}
+            <span className="text-xs font-light">{manifest.version}</span>
+          </h1>
+        </div>
 
         <div className="grow" />
-        <a
-          aria-label="GitHub"
-          className="grid size-8 place-items-center text-neutral-600 transition-colors hover:text-black focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
-          href="https://github.com/slow-groovin/webpage-summary"
-          rel="noreferrer noopener"
-          target="_blank"
-          title="GitHub"
-        >
-          <ExternalLink size={20} />
-        </a>
-        <div className="w-16 max-md:w-10" />
+        <div className="flex min-w-0 items-center gap-2">
+          <label className="inline-flex h-8 min-w-0 items-center gap-1 rounded-md border bg-background px-2 text-sm shadow-sm">
+            <Languages className="shrink-0 text-muted-foreground" size={15} />
+            <span className="sr-only">{messages.options.header.language}</span>
+            <select
+              aria-label={messages.options.header.language}
+              className="min-w-0 bg-transparent text-xs font-medium outline-none"
+              onChange={(event) => {
+                setUiLocaleOverride(event.currentTarget.value as UiLocale);
+                reloadOptionsPage();
+              }}
+              value={currentLocale}
+            >
+              {UI_LOCALE_OPTIONS.map((locale) => (
+                <option key={locale.value} value={locale.value}>
+                  {locale.label}
+                </option>
+              ))}
+            </select>
+          </label>
+          <a
+            aria-label="GitHub"
+            className="grid size-8 shrink-0 place-items-center text-neutral-600 transition-colors hover:text-black focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
+            href="https://github.com/slow-groovin/webpage-summary"
+            rel="noreferrer noopener"
+            target="_blank"
+            title="GitHub"
+          >
+            <ExternalLink size={20} />
+          </a>
+        </div>
       </header>
 
       <div className="flex min-h-0 flex-1 max-sm:flex-col">

@@ -362,8 +362,8 @@ export function ModelEditor({
               <label className="text-sm font-medium" htmlFor="model-id">
                 <FieldLabel required>Model Name</FieldLabel>
               </label>
-              <div className="grow" />
               <Button
+                className="h-7 px-2"
                 disabled={!provider.supportsModelFetch || isLoadingModels}
                 onClick={() => void loadRemoteModels()}
                 size="sm"

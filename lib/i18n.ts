@@ -1,5 +1,12 @@
 export type UiLocale = 'en' | 'zh-CN';
 
+export const UI_LOCALE_OPTIONS = [
+  { label: 'English', value: 'en' },
+  { label: '简体中文', value: 'zh-CN' },
+] as const satisfies Array<{ label: string; value: UiLocale }>;
+
+const UI_LOCALE_OVERRIDE_STORAGE_KEY = 'webpage-summary-ui-locale';
+
 type GeneralBooleanSettingMessageKey =
   | 'enableChatInputBox'
   | 'enableFloatingBall'
@@ -58,6 +65,15 @@ type UiMessages = {
   };
   options: {
     debug: string;
+    header: {
+      defaultModel: string;
+      defaultModelFailed: string;
+      defaultPrompt: string;
+      defaultPromptFailed: string;
+      language: string;
+      noModels: string;
+      noPrompts: string;
+    };
     navigation: Record<
       | 'appearance'
       | 'exportImport'
@@ -254,6 +270,15 @@ const UI_MESSAGES: Record<UiLocale, UiMessages> = {
     },
     options: {
       debug: 'Debug',
+      header: {
+        defaultModel: 'Default model',
+        defaultModelFailed: 'Default model could not be changed.',
+        defaultPrompt: 'Default prompt',
+        defaultPromptFailed: 'Default prompt could not be changed.',
+        language: 'Language',
+        noModels: 'No model configs',
+        noPrompts: 'No prompt templates',
+      },
       navigation: {
         appearance: 'Appearance',
         exportImport: 'Export Import',
@@ -456,6 +481,15 @@ const UI_MESSAGES: Record<UiLocale, UiMessages> = {
     },
     options: {
       debug: '调试',
+      header: {
+        defaultModel: '默认模型',
+        defaultModelFailed: '默认模型切换失败。',
+        defaultPrompt: '默认提示词',
+        defaultPromptFailed: '默认提示词切换失败。',
+        language: '语言',
+        noModels: '还没有模型配置',
+        noPrompts: '还没有提示词模板',
+      },
       navigation: {
         appearance: '外观',
         exportImport: '导入导出',
@@ -563,8 +597,41 @@ export function resolveUiLocale(language: string | undefined): UiLocale {
   return language?.toLowerCase().startsWith('zh') ? 'zh-CN' : 'en';
 }
 
+export function isUiLocale(value: string | null | undefined): value is UiLocale {
+  return value === 'en' || value === 'zh-CN';
+}
+
+function canUseExtensionLocalStorage() {
+  if (typeof window === 'undefined') return false;
+
+  return [
+    'chrome-extension:',
+    'moz-extension:',
+    'ms-browser-extension:',
+    'safari-web-extension:',
+  ].includes(window.location.protocol);
+}
+
+export function getUiLocaleOverride(): UiLocale | null {
+  if (!canUseExtensionLocalStorage()) return null;
+
+  try {
+    const storedLocale = window.localStorage.getItem(UI_LOCALE_OVERRIDE_STORAGE_KEY);
+
+    return isUiLocale(storedLocale) ? storedLocale : null;
+  } catch {
+    return null;
+  }
+}
+
+export function setUiLocaleOverride(locale: UiLocale) {
+  if (!canUseExtensionLocalStorage()) return;
+
+  window.localStorage.setItem(UI_LOCALE_OVERRIDE_STORAGE_KEY, locale);
+}
+
 export function getUiLocale() {
-  return resolveUiLocale(browser.i18n.getUILanguage());
+  return getUiLocaleOverride() ?? resolveUiLocale(browser.i18n.getUILanguage());
 }
 
 export function getUiMessages(locale = getUiLocale()) {
