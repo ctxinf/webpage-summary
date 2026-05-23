@@ -1,0 +1,51 @@
+export const INPUT_TOKEN_COUNT_MODEL = 'gpt-5';
+
+export type InputTokenCountTiming = {
+  calculateMs: number;
+  loadMs: number;
+};
+
+export type InputTokenCountResult = {
+  model: typeof INPUT_TOKEN_COUNT_MODEL;
+  tokenCount: number;
+  timing: InputTokenCountTiming;
+};
+
+type Gpt5Tokenizer = typeof import('gpt-tokenizer/model/gpt-5');
+
+let gpt5TokenizerPromise: Promise<Gpt5Tokenizer> | null = null;
+
+function nowMs() {
+  return globalThis.performance?.now() ?? Date.now();
+}
+
+function loadGpt5Tokenizer() {
+  gpt5TokenizerPromise ??= import('gpt-tokenizer/model/gpt-5');
+  return gpt5TokenizerPromise;
+}
+
+export async function countInputTokens(input: string): Promise<number> {
+  const tokenizer = await loadGpt5Tokenizer();
+  return tokenizer.countTokens(input);
+}
+
+export async function countInputTokensWithTiming(
+  input: string,
+): Promise<InputTokenCountResult> {
+  const loadStart = nowMs();
+  const tokenizer = await loadGpt5Tokenizer();
+  const loadMs = nowMs() - loadStart;
+
+  const calculateStart = nowMs();
+  const tokenCount = tokenizer.countTokens(input);
+  const calculateMs = nowMs() - calculateStart;
+
+  return {
+    model: INPUT_TOKEN_COUNT_MODEL,
+    tokenCount,
+    timing: {
+      calculateMs,
+      loadMs,
+    },
+  };
+}

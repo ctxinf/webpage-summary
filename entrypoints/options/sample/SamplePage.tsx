@@ -2,6 +2,7 @@ import {
   ArrowLeft,
   BellRing,
   Bot,
+  Calculator,
   ChevronRight,
   FlaskConical,
   PlugZap,
@@ -11,12 +12,14 @@ import { Button } from '@/components/ui/button';
 import { AliyunAiApiSample } from './aliyun-ai-api/AliyunAiApiSample';
 import { BackgroundAiProviderSample } from './background-ai-provider/BackgroundAiProviderSample';
 import { ConnectChatTransportSample } from './connect-chat-transport/ConnectChatTransportSample';
+import { GptTokenizerSample } from './gpt-tokenizer/GptTokenizerSample';
 import { SonnerToastSample } from './sonner-toast/SonnerToastSample';
 
 type SampleKey =
   | 'aliyun-ai-api'
   | 'background-ai-provider'
   | 'connect-chat-transport'
+  | 'gpt-tokenizer'
   | 'sonner-toast';
 
 type SampleItem = {
@@ -50,6 +53,13 @@ const SAMPLE_ITEMS: SampleItem[] = [
     component: ConnectChatTransportSample,
   },
   {
+    key: 'gpt-tokenizer',
+    title: 'GPT Tokenizer',
+    description: 'gpt-tokenizer input token count for gpt-5',
+    icon: Calculator,
+    component: GptTokenizerSample,
+  },
+  {
     key: 'sonner-toast',
     title: 'Sonner Toast',
     description: 'Shared toaster host and toast variants',
@@ -62,6 +72,7 @@ const SAMPLE_RENDERERS: Record<SampleKey, ComponentType> = {
   'aliyun-ai-api': AliyunAiApiSample,
   'background-ai-provider': BackgroundAiProviderSample,
   'connect-chat-transport': ConnectChatTransportSample,
+  'gpt-tokenizer': GptTokenizerSample,
   'sonner-toast': SonnerToastSample,
 };
 
