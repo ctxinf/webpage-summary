@@ -26,3 +26,4 @@ web-ext.config.ts
 *.sln
 *.sw?
 .agents
+.antigravitycli/

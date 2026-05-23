@@ -4,6 +4,7 @@ import { seedDefaultPromptIfNeeded } from '@/lib/prompt-settings-storage';
 import { registerAiSdkConnectBridge } from './ai-sdk-connect-bridge';
 import { registerBackgroundAiProviderSample } from './sample/background-ai-provider';
 import { registerConnectChatTransportSample } from './sample/connect-chat-transport';
+import { registerControlMessages, addContextMenus, initializeControlHandlers } from './control';
 
 export default defineBackground(() => {
   console.log('Hello background!', { id: browser.runtime.id });
@@ -16,6 +17,9 @@ export default defineBackground(() => {
 
   seedPromptLibrary();
   registerAiSdkConnectBridge();
+  registerControlMessages();
+  addContextMenus().catch((err) => console.error('Failed to setup context menus:', err));
+  initializeControlHandlers();
 
   console.log('ENABLE_SAMPLES', ENABLE_SAMPLES);
   if (ENABLE_SAMPLES) {

@@ -3,7 +3,7 @@
 
  ## 重写综合要求
  1. 不必1:1复刻, 大胆重构, 因为原有的代码有些地方很垃圾
- 2. 多问, 多停下来询问使用者意见
+ 2. 多问, 多停下来询问使用者意见 (不是让你先计划后执行)
 
 ## 项目要求
 1. 权限和原来一致, 是所有网站的权限
@@ -13,12 +13,4 @@
 
 ## 配置AgentBrowser调试
 不要运行"npm run dev", 这个一直常驻后台, 如果需要重启, 通知用户手动进行
-```sh
-agent-browser open "chrome-extension://agkkdeeogabdcoenmlakmamblageajhg/options.html#/general" #尽量直接打开需要测试的路径
-agent-browser snapshot -i  
-
-agent-browser console 
-#... 更多参考对应skills
-#每次用完不必close
-# 有时候有bug, 第一次打开是blank, 再open一次就可以正常打开了
-```
+不要使用AgentBrowser进行测试

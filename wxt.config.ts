@@ -7,7 +7,23 @@ export default defineConfig({
   manifest: {
     name: 'Webpage Summary React',
     host_permissions: ['<all_urls>'],
-    permissions: ['activeTab', 'storage'],
+    permissions: ['activeTab', 'storage', 'contextMenus', 'scripting', 'cookies'],
+    commands: {
+      COMMAND_INVOKE_SUMMARY: {
+        suggested_key: {
+          default: 'Alt+S',
+          mac: 'Command+S',
+        },
+        description: 'Open summary panel',
+      },
+      COMMAND_ADD_SELECTION: {
+        suggested_key: {
+          default: 'Alt+A',
+          mac: 'Command+A',
+        },
+        description: 'Add selection to chat',
+      },
+    },
   },
   vite: () => ({
     optimizeDeps: {
@@ -17,6 +33,9 @@ export default defineConfig({
         '!reference/**',
       ],
     },
+    // esbuild: {
+    //   charset: 'ascii',
+    // },
     resolve: {
       alias: {
         '@': fileURLToPath(new URL('./', import.meta.url)),

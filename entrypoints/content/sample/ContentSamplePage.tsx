@@ -5,6 +5,7 @@ import { PageExtractionSample } from './page-extraction/PageExtractionSample';
 import { FloatingBallSample } from './floating-ball/FloatingBallSample';
 import { SidebarSample, type SqueezeTarget } from './sidebar/SidebarSample';
 import { SidebarPanel } from './sidebar/SidebarPanel';
+import RightFloatingBallContainer from '@/components/container/RightFloatingBallContainer';
 
 type ContentSampleKey = 'ai-dialog' | 'page-extraction' | 'floating-ball' | 'sidebar';
 
@@ -43,7 +44,7 @@ const CONTENT_SAMPLE_ITEMS: ContentSampleItem[] = [
 ];
 
 export function ContentSamplesIndexPage() {
-  const [isOpen, setIsOpen] = useState(true);
+  const [isOpen, setIsOpen] = useState(false);
   const [activeSampleKey, setActiveSampleKey] =
     useState<ContentSampleKey>('ai-dialog');
 
@@ -68,15 +69,21 @@ export function ContentSamplesIndexPage() {
   return (
     <>
       {!isOpen ? (
-        <button
-          className="fixed right-4 top-4 inline-flex min-h-[34px] items-center justify-center gap-[7px] rounded-md border border-zinc-300 bg-white px-[11px] text-[13px] font-semibold text-zinc-900 shadow-[0_10px_28px_rgba(23,23,23,0.16)]"
-          onClick={() => setIsOpen(true)}
-          title="Content samples"
-          type="button"
+        <RightFloatingBallContainer
+          storageKey="sample-page"
+          onClose={() => {}}
         >
-          <FileSearch size={16} />
-          Samples
-        </button>
+          <div
+            onClick={() => setIsOpen(true)}
+            className="relative flex items-center justify-center p-1.5 rounded-full border border-purple-200/80 bg-purple-50/50 hover:bg-purple-100/70 hover:border-purple-300 transition-all duration-200 shadow-xs cursor-pointer group"
+            title="Content samples"
+          >
+            <FileSearch size={24} className="text-purple-600" />
+            <div className="absolute right-12 top-1/2 -translate-y-1/2 rounded bg-zinc-900/90 px-2 py-1 text-[11px] font-medium text-white opacity-0 group-hover:opacity-100 scale-95 group-hover:scale-100 transition-all duration-200 pointer-events-none whitespace-nowrap shadow-md">
+              Content Samples
+            </div>
+          </div>
+        </RightFloatingBallContainer>
       ) : (
         <section
           aria-label="Content samples"

@@ -89,6 +89,7 @@ export const GENERAL_SETTING_DEFINITIONS = {
     'local:context-menu-add-selection-to-chat',
     true,
   ),
+  panelLayoutMode: stringSetting('local:panel-layout-mode', 'dialog'),
 } as const;
 
 type GeneralSettingDefinitionMap = typeof GENERAL_SETTING_DEFINITIONS;

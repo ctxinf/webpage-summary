@@ -11,6 +11,17 @@
     font-size: 13px;
     line-height: 1.45;
     letter-spacing: 0;
+
+    /* webpage-summary default CSS variables */
+    --webpage-summary-panel-srem: 16px;
+    --webpage-summary-panel-width: 30em;
+    --webpage-summary-panel-dialog-max-height: 30em;
+    --webpage-summary-panel-background: #ffffff;
+    --webpage-summary-panel-top: 4em;
+    --webpage-summary-panel-right: 4em;
+    --webpage-summary-panel-bottom: unset;
+    --webpage-summary-panel-left: unset;
+    --webpage-summary-calc-scale: 100%;
   }
 
   button {

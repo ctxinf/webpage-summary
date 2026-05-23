@@ -13,8 +13,12 @@ function collectPageTextLength() {
 }
 
 async function mountSummaryBadge(ctx: ContentScriptContext) {
+  console.log('[ContentScope] mountSummaryBadge running');
   const hostId = 'webpage-summary-react-root';
-  if (document.getElementById(hostId)) return;
+  if (document.getElementById(hostId)) {
+    console.log('[ContentScope] hostId already exists, skipping');
+    return;
+  }
 
   const ui = await createShadowRootUi<Root>(ctx, {
     name: 'webpage-summary-entrance',
@@ -24,19 +28,23 @@ async function mountSummaryBadge(ctx: ContentScriptContext) {
     append: 'last',
     zIndex: 2147483647,
     onMount(container) {
+      console.log('[ContentScope] UI container mounted, rendering React root');
       const root = createRoot(container);
       root.render(createElement(ContentEntrance));
       return root;
     },
     onRemove(root) {
+      console.log('[ContentScope] UI container unmounted');
       root?.unmount();
     },
   });
 
   ui.mount();
+  console.log('[ContentScope] ui.mount() called');
 }
 
 export async function mountContentScope(ctx: ContentScriptContext) {
+  console.log('[ContentScope] mountContentScope called');
   const messages = getUiMessages();
   await mountSummaryBadge(ctx);
 
