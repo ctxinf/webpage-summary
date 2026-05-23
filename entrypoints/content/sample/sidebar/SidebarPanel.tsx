@@ -76,7 +76,7 @@ export function SidebarPanel({
       html.classList.remove('webpage-summary-sidebar-html');
       body.classList.remove('webpage-summary-sidebar-body');
       
-      const timer = setTimeout(() => {
+      setTimeout(() => {
         // Only remove transition if sidebar hasn't been reopened in the meantime
         const activeStyle = document.getElementById('webpage-summary-sidebar-style');
         if (!activeStyle || !html.classList.contains('webpage-summary-sidebar-html')) {
@@ -84,8 +84,6 @@ export function SidebarPanel({
           body.classList.remove('webpage-summary-sidebar-transition');
         }
       }, speed * 1000);
-
-      return () => clearTimeout(timer);
     };
   }, [isOpen, width, squeezeTarget, speed]);
 
