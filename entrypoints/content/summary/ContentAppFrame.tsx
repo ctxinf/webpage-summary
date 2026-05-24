@@ -15,7 +15,19 @@ import { parsePageContent, type WebpageContent } from '@/lib/page-extraction';
 import { getModelProviderDefinition, type ModelConfigItem } from '@/constants/model-settings';
 import type { PromptConfigItem } from '@/constants/prompt-settings';
 import type { GeneralSettings } from '@/constants/general-settings';
+import { truncateByTokens } from '@/lib/token-count';
+// import {
+//   Conversation,
+//   ConversationContent,
+//   ConversationScrollButton,
+// } from "@/components/ai-elements/conversation";
 
+// import {
+//   Message,
+//   MessageContent,
+//   MessageResponse,
+// } from "@/components/ai-elements/message";
+// console.log('Conversation', Conversation, ConversationContent, MessageContent)
 import {
   PromptInput,
   type PromptInputMessage,
@@ -25,6 +37,7 @@ import {
   PromptInputTools,
   PromptInputSubmit,
 } from "@/components/ai-elements/prompt-input";
+
 
 interface ContentAppFrameProps {
   onClose: () => void;
@@ -89,7 +102,7 @@ export function ContentAppFrame({ onClose, isMain = true, onAdd }: ContentAppFra
       console.log('[ContentAppFrame] Extracting page content...');
       const extracted = parsePageContent(generalSettings.pageTextExtractMethod, document);
       if (extracted) {
-        
+
         // TODO: 在这里根据model的maxoutputTokens,进行截断, 
         setPageContent(extracted);
 
@@ -110,25 +123,40 @@ export function ContentAppFrame({ onClose, isMain = true, onAdd }: ContentAppFra
     return () => { active = false; };
   }, []);
 
-  const initContextMessage = () => {
-    if (messages.length > 0) return;
-
+  const getContextMessageTexts = async () => {
     const prompt = prompts.find(p => p.id === currentPromptId);
-    if (!prompt || !pageContent || !settings) return;
+    if (!prompt || !pageContent || !settings) return null;
+
+    let textContent = pageContent.textContent;
+    const currentModel = models.find(m => m.id === currentModelId);
+    
+    if (currentModel && currentModel.maxInputTokens > 0) {
+      textContent = await truncateByTokens(textContent, currentModel.maxInputTokens);
+    }
 
     const view = {
-      textContent: pageContent.textContent,
+      textContent,
       articleUrl: pageContent.articleUrl,
       summaryLanguage: settings.summaryLanguage,
       currentSelection: '',
     };
 
-    const systemMessageText = Mustache.render(prompt.systemMessage, view);
-    const userMessageText = Mustache.render(prompt.userMessage, view);
+    return {
+      prompt,
+      systemMessageText: Mustache.render(prompt.systemMessage, view),
+      userMessageText: Mustache.render(prompt.userMessage, view)
+    };
+  };
+
+  const initContextMessage = async () => {
+    if (messages.length > 0) return;
+
+    const texts = await getContextMessageTexts();
+    if (!texts) return;
 
     setMessages([
-      { id: `system-${prompt.id}`, role: 'system', parts: [{ type: 'text', text: systemMessageText }] },
-      { id: `context-${prompt.id}`, role: 'user', parts: [{ type: 'text', text: userMessageText }] }
+      { id: `system-${texts.prompt.id}`, role: 'system', parts: [{ type: 'text', text: texts.systemMessageText }] },
+      { id: `context-${texts.prompt.id}`, role: 'user', parts: [{ type: 'text', text: texts.userMessageText }] }
     ]);
   };
 
@@ -137,33 +165,23 @@ export function ContentAppFrame({ onClose, isMain = true, onAdd }: ContentAppFra
       stop();
     }
 
-    const prompt = prompts.find(p => p.id === currentPromptId);
-    if (!prompt || !pageContent || !settings) {
+    const texts = await getContextMessageTexts();
+    if (!texts) {
       console.warn('[ContentAppFrame] Missing prompt, content, or settings');
       return;
     }
 
     console.log('[ContentAppFrame] Triggering summarize...');
 
-    const view = {
-      textContent: pageContent.textContent,
-      articleUrl: pageContent.articleUrl,
-      summaryLanguage: settings.summaryLanguage,
-      currentSelection: '',
-    };
-
-    const systemMessageText = Mustache.render(prompt.systemMessage, view);
-    const userMessageText = Mustache.render(prompt.userMessage, view);
-
-    setMessages([{ id: `system-${prompt.id}`, role: 'system', parts: [{ type: 'text', text: systemMessageText }] }]);
-    await sendMessage({ text: userMessageText });
+    setMessages([{ id: `system-${texts.prompt.id}`, role: 'system', parts: [{ type: 'text', text: texts.systemMessageText }] }]);
+    await sendMessage({ text: texts.userMessageText });
   };
 
   const handleMessageSubmit = async (message: PromptInputMessage) => {
     if (!message.text) return;
-    
-    initContextMessage();
-    
+
+    await initContextMessage();
+
     await sendMessage({ text: message.text });
     setInputText('');
   };
@@ -253,6 +271,7 @@ export function ContentAppFrame({ onClose, isMain = true, onAdd }: ContentAppFra
           )}
         </div>
 
+
         <div className="flex items-center justify-center gap-1.5 shrink-0">
           <div className="relative flex items-center">
             {(() => {
@@ -308,7 +327,7 @@ export function ContentAppFrame({ onClose, isMain = true, onAdd }: ContentAppFra
               title={mode === 'floating' ? 'Switch to Sidebar' : 'Switch to Floating'}
               onClick={() => setMode(mode === 'floating' ? 'sidebar' : 'floating')}
             >
-              {mode === 'floating' ? <PanelRight size={14} /> : <PictureInPicture2  size={14}/>}
+              {mode === 'floating' ? <PanelRight size={14} /> : <PictureInPicture2 size={14} />}
             </button>
           )}
           <button
@@ -327,40 +346,40 @@ export function ContentAppFrame({ onClose, isMain = true, onAdd }: ContentAppFra
       {/* 中间的对话列表 / Middle Chat List Placeholder */}
       <div className="flex-1 relative min-h-0">
         <div ref={scrollRef} className="absolute inset-0 overflow-auto p-0.5 cursor-auto">
-        {/* ⬇️TODO: 下面这个固定到顶部, 随着对话列表scroll也会留在最上方 */}
-        <div data-section="top-sticky-line" className="sticky top-1 w-full flex justify-end pr-1 flex-row gap-1 z-10  rounded-sm">
-          <div className="flex items-center rounded-lg underline decoration-dashed text-nowrap text-xs font-light ml-2">
-            <div title=" click the right eye button to View&Change">
-              内容字符串长度: <span>{pageContent ? pageContent.textContent.length : 0}</span>
+          {/* ⬇️TODO: 下面这个固定到顶部, 随着对话列表scroll也会留在最上方 */}
+          <div data-section="top-sticky-line" className="sticky top-1 w-full flex justify-end pr-1 flex-row gap-1 z-10  rounded-sm">
+            <div className="flex items-center rounded-lg underline decoration-dashed text-nowrap text-xs font-light ml-2">
+              <div title=" click the right eye button to View&Change">
+                内容字符串长度: <span>{pageContent ? pageContent.textContent.length : 0}</span>
+              </div>
+              <button className="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 hover:bg-zinc-100 hover:text-zinc-900 w-6 h-6 text-zinc-500">
+                <ScanEye size={16} strokeWidth={2} />
+              </button>
             </div>
-            <button className="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 hover:bg-zinc-100 hover:text-zinc-900 w-6 h-6 text-zinc-500">
-              <ScanEye size={16} strokeWidth={2} />
+            <div className="grow"></div>
+            <button
+              className="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 bg-white border border-zinc-200 hover:bg-zinc-50 text-zinc-700 w-6 h-6"
+              title="copy all"
+              onClick={handleCopyMessages}
+            >
+              <Copy size={14} />
             </button>
           </div>
-          <div className="grow"></div>
-          <button 
-            className="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 bg-white border border-zinc-200 hover:bg-zinc-50 text-zinc-700 w-6 h-6" 
-            title="copy all"
-            onClick={handleCopyMessages}
-          >
-            <Copy size={14} />
-          </button>
+          <div data-section="conversation" className="flex-1 text-left text-xs text-zinc-600 rounded-lg px-1 overflow-auto">
+            <pre className="whitespace-pre-wrap">{JSON.stringify(messages, null, 2)}</pre>
+          </div>
         </div>
-        <div data-section="conversation" className="flex-1 text-left text-xs text-zinc-600 rounded-lg px-1 overflow-auto">
-          <pre className="whitespace-pre-wrap">{JSON.stringify(messages, null, 2)}</pre>
-        </div>
-        </div>
-        
+
         {/* Scroll buttons anchored to the conversation area */}
         <div className="absolute right-4 bottom-4 flex flex-col gap-1.5 z-10 pointer-events-none [&_button]:pointer-events-auto">
-          <button 
+          <button
             className="p-1.5 rounded-full border border-zinc-200 text-zinc-400 hover:text-zinc-600 shadow-sm bg-white/90 backdrop-blur"
             onClick={scrollToTop}
             title="Go to top"
           >
             <ArrowUpToLine size={14} />
           </button>
-          <button 
+          <button
             className="p-1.5 rounded-full border border-zinc-200 text-zinc-400 hover:text-zinc-600 shadow-sm bg-white/90 backdrop-blur"
             onClick={scrollToBottom}
             title="Go to bottom"

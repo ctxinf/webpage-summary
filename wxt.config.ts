@@ -1,5 +1,6 @@
 import { fileURLToPath, URL } from 'node:url';
 import { defineConfig } from 'wxt';
+import { visualizer } from 'rollup-plugin-visualizer';
 
 // See https://wxt.dev/api/config.html
 export default defineConfig({
@@ -39,6 +40,7 @@ export default defineConfig({
         '!reference/**',
       ],
     },
+    plugins: [visualizer({ filename: 'stats.html', open: false })],
     // esbuild: {
     //   charset: 'ascii',
     // },

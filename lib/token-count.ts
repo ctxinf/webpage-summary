@@ -1,5 +1,24 @@
 export const INPUT_TOKEN_COUNT_MODEL = 'gpt-5';
 
+export async function truncateByTokens(text: string, maxTokens: number): Promise<string> {
+  const tokenizer = await loadGpt5Tokenizer();
+  const tokens = tokenizer.encode(text);
+  const originalLength = text.length;
+  const originalTokens = tokens.length;
+
+  if (originalTokens <= maxTokens) {
+    console.log(`[TokenCount] No truncation needed: String length ${originalLength}, Tokens ${originalTokens}`);
+    return text;
+  }
+
+  const truncatedText = tokenizer.decode(tokens.slice(0, maxTokens));
+  const truncatedLength = truncatedText.length;
+
+  console.log(`[TokenCount] Truncated: String length ${originalLength} -> ${truncatedLength}, Tokens ${originalTokens} -> ${maxTokens}`);
+
+  return truncatedText;
+}
+
 export type InputTokenCountTiming = {
   calculateMs: number;
   loadMs: number;
