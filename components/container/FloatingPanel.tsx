@@ -7,8 +7,6 @@ import { type StorageItemKey } from '#imports';
 interface FloatingPanelProps {
   children: React.ReactNode;
   className?: string;
-  defaultWidth?: number;
-  defaultHeight?: number;
   storageKey?: string | null;
 }
 
@@ -17,8 +15,6 @@ type FloatingState = { width: number; height: number; left: string; top: string;
 export function FloatingPanel({ 
   children, 
   className,
-  defaultWidth = 320,
-  defaultHeight = 450,
   storageKey,
 }: FloatingPanelProps) {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -60,23 +56,25 @@ export function FloatingPanel({
   return (
     <div
       ref={containerRef}
-      style={!savedState ? { width: defaultWidth, height: defaultHeight } : undefined}
+      style={savedState ? { 
+        width: `${savedState.width}px`, 
+        height: `${savedState.height}px`,
+        left: savedState.left || undefined,
+        top: savedState.top || undefined,
+        right: savedState.right || undefined,
+        bottom: savedState.bottom || undefined,
+      } : undefined}
       onMouseDown={startDrag}
       className={cn(
-        "fixed top-[4em] right-[4em] bg-white rounded-xl shadow-[0_12px_48px_rgba(0,0,0,0.12)] border border-zinc-200/60 flex flex-col z-[2147483647]",
+        "fixed top-[4em] right-[4em] bg-white rounded-xl shadow-[0_12px_48px_rgba(0,0,0,0.12)] border border-zinc-200/60 flex flex-col z-[2147483647] max-w-[100vw] max-h-[100vh]",
         className
       )}
     >
       {/* Edge handles */}
-      <div className="absolute top-0 left-0 w-full h-1.5 cursor-ns-resize z-50" onMouseDown={(e) => startResize(e, 'top')} />
-      <div className="absolute top-0 right-0 w-1.5 h-full cursor-ew-resize z-50" onMouseDown={(e) => startResize(e, 'right')} />
       <div className="absolute bottom-0 left-0 w-full h-1.5 cursor-ns-resize z-50" onMouseDown={(e) => startResize(e, 'bottom')} />
       <div className="absolute top-0 left-0 w-1.5 h-full cursor-ew-resize z-50" onMouseDown={(e) => startResize(e, 'left')} />
-      {/* Corner handles */}
-      <div className="absolute top-0 left-0 w-3 h-3 cursor-nw-resize z-50" onMouseDown={(e) => startResize(e, 'topLeft')} />
-      <div className="absolute top-0 right-0 w-3 h-3 cursor-ne-resize z-50" onMouseDown={(e) => startResize(e, 'topRight')} />
+      {/* Corner handle */}
       <div className="absolute bottom-0 left-0 w-3 h-3 cursor-sw-resize z-50" onMouseDown={(e) => startResize(e, 'bottomLeft')} />
-      <div className="absolute bottom-0 right-0 w-3 h-3 cursor-se-resize z-50" onMouseDown={(e) => startResize(e, 'bottomRight')} />
       
       {children}
     </div>

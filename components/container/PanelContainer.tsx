@@ -18,14 +18,20 @@ function PanelRenderer({ children, storageKey }: { children: React.ReactNode, st
 
   if (mode === 'sidebar') {
     return (
-      <SidebarPanel storageKey={storageKey}>
+      <SidebarPanel 
+        storageKey={storageKey}
+        className="w-[24rem] min-w-[20rem]"
+      >
         {children}
       </SidebarPanel>
     );
   }
 
   return (
-    <FloatingPanel storageKey={storageKey}>
+    <FloatingPanel 
+      storageKey={storageKey}
+      className="w-[30rem] h-[36rem] min-w-[24rem] min-h-[25rem]"
+    >
       {children}
     </FloatingPanel>
   );

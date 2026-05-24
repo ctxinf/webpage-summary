@@ -3,7 +3,8 @@ import RightFloatingBallContainer from '@/components/container/RightFloatingBall
 import useWxtStorage from '@/hooks/useWxtStorage';
 import { getUiMessages } from '@/lib/i18n';
 import { onMessage } from '@/lib/messaging';
-// import { SummaryPanelLayout } from '@/components/summary/SummaryPanelLayout';
+import { PanelContainer } from '@/components/container/PanelContainer';
+import { ContentAppFrame } from '@/entrypoints/content/summary/ContentAppFrame';
 // import { useSummaryChatController } from '@/hooks/useSummaryChatController';
 import { loadGeneralSettings } from '@/lib/general-settings-storage';
 import iconUrl from '@/assets/16.png';
@@ -15,43 +16,16 @@ export function ContentEntrance() {
     true
   );
 
-  const [isOpenPanel, setIsOpenPanel] = useState(false);
+  const [mainPanelOpen, setMainPanelOpen] = useState(false);
+  const [copies, setCopies] = useState<string[]>([]);
 
-  // // Lift the controller up so we can inject draft text from message listeners
-  // const controller = useSummaryChatController();
+  const handleAddCopy = () => {
+    setCopies(prev => [...prev, Date.now().toString()]);
+  };
 
-  // // Load default open settings on mount
-  // useEffect(() => {
-  //   async function init() {
-  //     const settings = await loadGeneralSettings();
-  //     if (settings.enableSummaryWindowDefault) {
-  //       setIsOpenPanel(true);
-  //     }
-  //   }
-  //   init();
-  // }, []);
-
-  // // Listen to background invocations
-  // useEffect(() => {
-  //   // 1. Toggle summary panel
-  //   const unsubscribeInvoke = onMessage('invokeSummary', () => {
-  //     setIsOpenPanel((prev) => !prev);
-  //   });
-
-  //   // 2. Add selection to chat dialog — open panel and pre-fill draft
-  //   const unsubscribeAddSelection = onMessage('addContentToChatDialog', (msg) => {
-  //     const text = msg.data || window.getSelection()?.toString() || '';
-  //     setIsOpenPanel(true);
-  //     if (text) {
-  //       controller.setDraft(text);
-  //     }
-  //   });
-
-    // return () => {
-      // unsubscribeInvoke();
-      // unsubscribeAddSelection();
-    // };
-  // }, []);
+  const handleCloseCopy = (idToRemove: string) => {
+    setCopies(prev => prev.filter(id => id !== idToRemove));
+  };
 
   const messages = getUiMessages();
 
@@ -59,24 +33,36 @@ export function ContentEntrance() {
     <>
       {/* Switchable summary panel layout — controller is shared from parent */}
       {
-        isOpenPanel && <div>Hello</div>
+        mainPanelOpen && (
+          <PanelContainer defaultMode="floating">
+            <ContentAppFrame 
+              isMain={true} 
+              onClose={() => setMainPanelOpen(false)} 
+              onAdd={handleAddCopy}
+            />
+          </PanelContainer>
+        )
       }
-      {/* <SummaryPanelLayout
-        isOpen={isOpenPanel}
-        closeOrHide="hide"
-        controller={controller}
-        // onMinimize={() => setIsOpenPanel(false)}
-        // onClose={() => setIsOpenPanel(false)}
-      /> */}
 
-      {/* Floating Ball Trigger — shown only when panel is closed */}
-      {enableFloatingBall &&  (
+      {/* Render dynamic floating panel copies */}
+      {copies.map(copyId => (
+        <PanelContainer key={copyId} defaultMode="floating" storageKey={null}>
+          <ContentAppFrame 
+            isMain={false} 
+            onClose={() => handleCloseCopy(copyId)} 
+            onAdd={handleAddCopy}
+          />
+        </PanelContainer>
+      ))}
+
+      {/* Floating Ball Trigger — shown only when main panel is closed */}
+      {enableFloatingBall && !mainPanelOpen && (
         <RightFloatingBallContainer
           storageKey="page"
           onClose={() => setEnableFloatingBall(false)}
         >
           <div
-            onClick={() => {setIsOpenPanel(true)}}
+            onClick={() => setMainPanelOpen(true)}
             className="relative flex items-center justify-center p-1.5 rounded-full border border-purple-200/80 bg-purple-50/50 hover:bg-purple-100/70 hover:border-purple-300 transition-all duration-200 shadow-xs cursor-pointer group"
             title={messages.content.badgeLabel}
           >

@@ -24,6 +24,12 @@ export default defineConfig({
         description: 'Add selection to chat',
       },
     },
+    web_accessible_resources: [
+      {
+        resources: ['icon/*', '*.svg', '*.png'],
+        matches: ['<all_urls>'],
+      },
+    ],
   },
   vite: () => ({
     optimizeDeps: {

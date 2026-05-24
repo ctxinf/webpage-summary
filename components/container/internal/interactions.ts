@@ -13,7 +13,6 @@ type ResizeDirection =
 interface UseResizableProps<T extends HTMLElement> {
   targetRef: RefObject<T | null>;
   enabled?: boolean;
-  modifyLeftOnResize?: boolean;
   onResizeStart?: () => void;
   onResizeEnd?: () => void;
 }
@@ -21,7 +20,6 @@ interface UseResizableProps<T extends HTMLElement> {
 export function useResizable<T extends HTMLElement>({ 
   targetRef, 
   enabled = true,
-  modifyLeftOnResize = true,
   onResizeStart,
   onResizeEnd
 }: UseResizableProps<T>) {
@@ -29,6 +27,7 @@ export function useResizable<T extends HTMLElement>({
   const startMouse = useRef({ x: 0, y: 0 });
   const startDim = useRef({ width: 0, height: 0, left: 0, top: 0 });
   const resizeDir = useRef<ResizeDirection>('bottomRight');
+  const limits = useRef({ minW: 0, maxW: Infinity, minH: 0, maxH: Infinity });
 
   const startResize = (event: React.MouseEvent, direction: ResizeDirection) => {
     if (!enabled || !targetRef.current) return;
@@ -39,6 +38,7 @@ export function useResizable<T extends HTMLElement>({
     startMouse.current = { x: event.clientX, y: event.clientY };
     
     const el = targetRef.current;
+
     startDim.current = {
       width: el.offsetWidth,
       height: el.offsetHeight,
@@ -47,40 +47,83 @@ export function useResizable<T extends HTMLElement>({
     };
     resizeDir.current = direction;
 
+    const computed = window.getComputedStyle(el);
+    limits.current = {
+      minW: parseFloat(computed.minWidth) || 0,
+      maxW: parseFloat(computed.maxWidth) || Infinity,
+      minH: parseFloat(computed.minHeight) || 0,
+      maxH: parseFloat(computed.maxHeight) || Infinity,
+    };
+
     if (onResizeStart) onResizeStart();
 
     document.addEventListener('mousemove', resize);
     document.addEventListener('mouseup', stopResize);
   };
 
+  const rafRef = useRef<number | null>(null);
+
   const resize = (event: MouseEvent) => {
     if (!isResizingRef.current || !targetRef.current) return;
-    const el = targetRef.current;
     
+    // Calculate new dimensions immediately to avoid stale event data
     const diffX = event.clientX - startMouse.current.x;
     const diffY = event.clientY - startMouse.current.y;
     const dir = resizeDir.current;
+    
+    if (rafRef.current) {
+      cancelAnimationFrame(rafRef.current);
+    }
 
-    if (dir === 'right' || dir === 'bottomRight' || dir === 'topRight') {
-      el.style.width = `${startDim.current.width + diffX}px`;
-    }
-    if (dir === 'left' || dir === 'bottomLeft' || dir === 'topLeft') {
-      el.style.width = `${startDim.current.width - diffX}px`;
-      if (modifyLeftOnResize) {
-        el.style.left = `${startDim.current.left + diffX}px`;
+    rafRef.current = requestAnimationFrame(() => {
+      const el = targetRef.current;
+      if (!el) return;
+
+      const { minW, maxW, minH, maxH } = limits.current;
+
+      let newW = startDim.current.width;
+      let newH = startDim.current.height;
+      let widthChanged = false;
+      let heightChanged = false;
+
+      if (dir === 'right' || dir === 'bottomRight' || dir === 'topRight') {
+        newW = startDim.current.width + diffX;
+        newW = Math.max(minW, Math.min(newW, maxW));
+        el.style.width = `${newW}px`;
+        widthChanged = true;
       }
-    }
-    if (dir === 'bottom' || dir === 'bottomRight' || dir === 'bottomLeft') {
-      el.style.height = `${startDim.current.height + diffY}px`;
-    }
-    if (dir === 'top' || dir === 'topRight' || dir === 'topLeft') {
-      el.style.height = `${startDim.current.height - diffY}px`;
-      el.style.top = `${startDim.current.top + diffY}px`;
-    }
+      if (dir === 'left' || dir === 'bottomLeft' || dir === 'topLeft') {
+        newW = startDim.current.width - diffX;
+        newW = Math.max(minW, Math.min(newW, maxW));
+        el.style.width = `${newW}px`;
+        widthChanged = true;
+      }
+      if (dir === 'bottom' || dir === 'bottomRight' || dir === 'bottomLeft') {
+        newH = startDim.current.height + diffY;
+        newH = Math.max(minH, Math.min(newH, maxH));
+        el.style.height = `${newH}px`;
+        heightChanged = false; // We don't apply dynamic constraint to height
+      }
+      if (dir === 'top' || dir === 'topRight' || dir === 'topLeft') {
+        newH = startDim.current.height - diffY;
+        newH = Math.max(minH, Math.min(newH, maxH));
+        el.style.height = `${newH}px`;
+        heightChanged = false;
+      }
+
+      // Dynamic Content Constraint: physically stop shrinking if children are overflowing
+      if (widthChanged) {
+        const content = el.lastElementChild as HTMLElement;
+        if (content && content.scrollWidth > Math.ceil(content.clientWidth)) {
+          el.style.width = `${content.scrollWidth + (el.offsetWidth - el.clientWidth)}px`;
+        }
+      }
+    });
   };
 
   const stopResize = () => {
     isResizingRef.current = false;
+    if (rafRef.current) cancelAnimationFrame(rafRef.current);
     if (onResizeEnd) onResizeEnd();
     document.removeEventListener('mousemove', resize);
     document.removeEventListener('mouseup', stopResize);
@@ -153,9 +196,11 @@ export function useDraggable<T extends HTMLElement>({
       newY = clientHeight - THRESHOLD;
     }
 
-    el.style.left = `${newX}px`;
+    const newRight = clientWidth - (newX + elementWidth);
+
+    el.style.right = `${newRight}px`;
     el.style.top = `${newY}px`;
-    el.style.right = 'auto';
+    el.style.left = 'auto';
     el.style.bottom = 'auto';
     el.style.transform = 'none';
 
