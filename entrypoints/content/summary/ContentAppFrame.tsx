@@ -37,6 +37,21 @@ import {
   PromptInputTools,
   PromptInputSubmit,
 } from "@/components/ai-elements/prompt-input";
+import {
+  Conversation,
+  ConversationContent,
+  ConversationScrollButton,
+} from "@/components/ai-elements/conversation";
+import {
+  Message,
+  MessageContent,
+  MessageResponse,
+} from "@/components/ai-elements/message";
+import {
+  Reasoning,
+  ReasoningContent,
+  ReasoningTrigger,
+} from "@/components/ai-elements/reasoning";
 
 import { TokenViewerModal } from '@/components/TokenViewerModal';
 
@@ -346,53 +361,94 @@ export function ContentAppFrame({ onClose, isMain = true, onAdd }: ContentAppFra
         </div>
       </header>
 
-      {/* 中间的对话列表 / Middle Chat List Placeholder */}
-      <div className="flex-1 relative min-h-0">
-        <div ref={scrollRef} className="absolute inset-0 overflow-auto p-0.5 cursor-auto">
-          {/* ⬇️TODO: 下面这个固定到顶部, 随着对话列表scroll也会留在最上方 */}
-          <div data-section="top-sticky-line" className="sticky top-1 w-full flex justify-end pr-1 flex-row gap-1 z-10  rounded-sm">
-            <div className="flex items-center rounded-lg underline decoration-dashed text-nowrap text-xs font-light ml-2">
-              <div title=" click the right eye button to View&Change">
-                内容字符串长度: <span>{pageContent ? pageContent.textContent.length : 0}</span>
-              </div>
-              <button 
-                className="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 hover:bg-zinc-100 hover:text-zinc-900 w-6 h-6 text-zinc-500"
-                onClick={() => setIsTokenViewerOpen(true)}
-              >
-                <ScanEye size={16} strokeWidth={2} />
-              </button>
+      <div className="flex-1 relative min-h-0 flex flex-col">
+        {/* 悬浮在右上角的工具栏 */}
+        <div data-section="top-sticky-line" className="absolute top-1 right-1 flex justify-end flex-row gap-1 z-10 rounded-sm">
+          <div className="flex items-center rounded-lg underline decoration-dashed text-nowrap text-xs font-light bg-background/80 backdrop-blur-sm px-2 py-1">
+            <div title="click the right eye button to View&Change">
+              内容字符串长度: <span>{pageContent ? pageContent.textContent.length : 0}</span>
             </div>
-            <div className="grow"></div>
-            <button
-              className="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 bg-white border border-zinc-200 hover:bg-zinc-50 text-zinc-700 w-6 h-6"
-              title="copy all"
-              onClick={handleCopyMessages}
+            <button 
+              className="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 hover:bg-zinc-100 hover:text-zinc-900 w-6 h-6 text-zinc-500 ml-1"
+              onClick={() => setIsTokenViewerOpen(true)}
             >
-              <Copy size={14} />
+              <ScanEye size={16} strokeWidth={2} />
             </button>
           </div>
-          <div data-section="conversation" className="flex-1 text-left text-xs text-zinc-600 rounded-lg px-1 overflow-auto">
-            <pre className="whitespace-pre-wrap">{JSON.stringify(messages, null, 2)}</pre>
-          </div>
+          <button
+            className="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 bg-white/80 backdrop-blur-sm border border-zinc-200 hover:bg-zinc-50 text-zinc-700 w-8 h-8"
+            title="copy all"
+            onClick={handleCopyMessages}
+          >
+            <Copy size={14} />
+          </button>
         </div>
 
-        {/* Scroll buttons anchored to the conversation area */}
-        <div className="absolute right-4 bottom-4 flex flex-col gap-1.5 z-10 pointer-events-none [&_button]:pointer-events-auto">
-          <button
-            className="p-1.5 rounded-full border border-zinc-200 text-zinc-400 hover:text-zinc-600 shadow-sm bg-white/90 backdrop-blur"
-            onClick={scrollToTop}
-            title="Go to top"
-          >
-            <ArrowUpToLine size={14} />
-          </button>
-          <button
-            className="p-1.5 rounded-full border border-zinc-200 text-zinc-400 hover:text-zinc-600 shadow-sm bg-white/90 backdrop-blur"
-            onClick={scrollToBottom}
-            title="Go to bottom"
-          >
-            <ArrowDownToLine size={14} />
-          </button>
-        </div>
+        <Conversation className="relative size-full">
+          <ConversationContent>
+            {messages.slice(2).map((message, index) => {
+              const displayMessages = messages.slice(2);
+              const isLastMessage = index === displayMessages.length - 1;
+              const reasoningParts = message.parts.filter((part) => part.type === "reasoning");
+              const reasoningText = reasoningParts.map((part) => part.text).join("\n\n");
+              const hasReasoning = reasoningParts.length > 0;
+              const lastPart = message.parts.at(-1);
+              const isReasoningStreaming = isLastMessage && status === "streaming" && lastPart?.type === "reasoning";
+
+              return (
+                <Message from={message.role} key={message.id}>
+                  <MessageContent>
+                    {hasReasoning && (
+                      <Reasoning className="w-full" isStreaming={isReasoningStreaming}>
+                        <ReasoningTrigger />
+                        <ReasoningContent>{reasoningText}</ReasoningContent>
+                      </Reasoning>
+                    )}
+                    {message.parts.map((part, i) => {
+                      if (part.type === "text") {
+                        return (
+                          <MessageResponse key={`${message.id}-${i}`}>
+                            {part.text}
+                          </MessageResponse>
+                        );
+                      }
+                      return null;
+                    })}
+                  </MessageContent>
+                </Message>
+              );
+            })}
+            {status === "submitted" && (
+              <Message from="assistant">
+                <MessageContent>
+                  <div className="flex items-center gap-2">
+                    <div className="size-4 animate-spin rounded-full border-2 border-zinc-300 border-t-zinc-900" />
+                    <span className="text-sm text-zinc-500">Thinking...</span>
+                  </div>
+                </MessageContent>
+              </Message>
+            )}
+          </ConversationContent>
+          <ConversationScrollButton />
+        </Conversation>
+      </div>
+
+      {/* Scroll buttons anchored to the conversation area */}
+      <div className="absolute right-4 bottom-4 flex flex-col gap-1.5 z-10 pointer-events-none [&_button]:pointer-events-auto">
+        <button
+          className="p-1.5 rounded-full border border-zinc-200 text-zinc-400 hover:text-zinc-600 shadow-sm bg-white/90 backdrop-blur"
+          onClick={scrollToTop}
+          title="Go to top"
+        >
+          <ArrowUpToLine size={14} />
+        </button>
+        <button
+          className="p-1.5 rounded-full border border-zinc-200 text-zinc-400 hover:text-zinc-600 shadow-sm bg-white/90 backdrop-blur"
+          onClick={scrollToBottom}
+          title="Go to bottom"
+        >
+          <ArrowDownToLine size={14} />
+        </button>
       </div>
 
       {/* 底部的对话输入 / Bottom Input Area */}
