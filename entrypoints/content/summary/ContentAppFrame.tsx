@@ -38,6 +38,8 @@ import {
   PromptInputSubmit,
 } from "@/components/ai-elements/prompt-input";
 
+import { TokenViewerModal } from '@/components/TokenViewerModal';
+
 
 interface ContentAppFrameProps {
   onClose: () => void;
@@ -56,6 +58,7 @@ export function ContentAppFrame({ onClose, isMain = true, onAdd }: ContentAppFra
   const [settings, setSettings] = useState<GeneralSettings | null>(null);
   const [pageContent, setPageContent] = useState<WebpageContent | null>(null);
   const [inputText, setInputText] = useState('');
+  const [isTokenViewerOpen, setIsTokenViewerOpen] = useState(false);
   const scrollRef = useRef<HTMLDivElement>(null);
 
   const modelConfigIdRef = useRef<string | null>(null);
@@ -352,7 +355,10 @@ export function ContentAppFrame({ onClose, isMain = true, onAdd }: ContentAppFra
               <div title=" click the right eye button to View&Change">
                 内容字符串长度: <span>{pageContent ? pageContent.textContent.length : 0}</span>
               </div>
-              <button className="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 hover:bg-zinc-100 hover:text-zinc-900 w-6 h-6 text-zinc-500">
+              <button 
+                className="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 hover:bg-zinc-100 hover:text-zinc-900 w-6 h-6 text-zinc-500"
+                onClick={() => setIsTokenViewerOpen(true)}
+              >
                 <ScanEye size={16} strokeWidth={2} />
               </button>
             </div>
@@ -419,6 +425,15 @@ export function ContentAppFrame({ onClose, isMain = true, onAdd }: ContentAppFra
           {showBottom ? <ChevronUp size={14} /> : <ChevronDown size={14} />}
         </button>
       </div>
+
+      {pageContent && (
+        <TokenViewerModal 
+          isOpen={isTokenViewerOpen}
+          onClose={() => setIsTokenViewerOpen(false)}
+          textContent={pageContent.textContent}
+          maxInputTokens={models.find(m => m.id === currentModelId)?.maxInputTokens ?? 0}
+        />
+      )}
     </div>
   );
 }

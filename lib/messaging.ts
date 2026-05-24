@@ -14,11 +14,11 @@ export interface ProtocolMap {
   addContentToChatDialog(content: string): void;
 
   /** Token counting and truncation */
-  countInputTokens(input: { text: string }): Promise<number>;
-  countInputTokensWithTiming(input: { text: string }): Promise<import('./token-count').InputTokenCountResult>;
-  truncateByTokens(input: { text: string; maxTokens: number }): Promise<string>;
-  truncateByTokensWithTiming(input: { text: string; maxTokens: number }): Promise<import('./token-count').TruncateByTokensResult>;
-  splitTokensWithTiming(input: { text: string }): Promise<import('./token-count').SplitTokensResult>;
+  countInputTokens(input: { text: string }): number;
+  countInputTokensWithTiming(input: { text: string }): import('./token-count').InputTokenCountResult;
+  truncateByTokens(input: { text: string; maxTokens: number }): string;
+  truncateByTokensWithTiming(input: { text: string; maxTokens: number }): import('./token-count').TruncateByTokensResult;
+  splitTokensWithTiming(input: { text: string }): import('./token-count').SplitTokensResult;
 }
 
 export const { sendMessage, onMessage } = defineExtensionMessaging<ProtocolMap>();
