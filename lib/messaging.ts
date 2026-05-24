@@ -12,6 +12,13 @@ export interface ProtocolMap {
 
   /** Passes text selection from a context menu action to the content chat input */
   addContentToChatDialog(content: string): void;
+
+  /** Token counting and truncation */
+  countInputTokens(input: { text: string }): Promise<number>;
+  countInputTokensWithTiming(input: { text: string }): Promise<import('./token-count').InputTokenCountResult>;
+  truncateByTokens(input: { text: string; maxTokens: number }): Promise<string>;
+  truncateByTokensWithTiming(input: { text: string; maxTokens: number }): Promise<import('./token-count').TruncateByTokensResult>;
+  splitTokensWithTiming(input: { text: string }): Promise<import('./token-count').SplitTokensResult>;
 }
 
 export const { sendMessage, onMessage } = defineExtensionMessaging<ProtocolMap>();

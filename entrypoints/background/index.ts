@@ -2,6 +2,7 @@ import { browser } from 'wxt/browser';
 import { ENABLE_SAMPLES } from '@/constants/flag';
 import { seedDefaultPromptIfNeeded } from '@/lib/prompt-settings-storage';
 import { registerAiSdkConnectBridge } from './ai-sdk-connect-bridge';
+import { registerTokenCountMessages } from './token-count-bg';
 import { registerBackgroundAiProviderSample } from './sample/background-ai-provider';
 import { registerConnectChatTransportSample } from './sample/connect-chat-transport';
 import { registerControlMessages, addContextMenus, initializeControlHandlers } from './control';
@@ -17,6 +18,7 @@ export default defineBackground(() => {
 
   seedPromptLibrary();
   registerAiSdkConnectBridge();
+  registerTokenCountMessages();
   registerControlMessages();
   addContextMenus().catch((err) => console.error('Failed to setup context menus:', err));
   initializeControlHandlers();
