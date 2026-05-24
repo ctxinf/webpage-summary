@@ -1,6 +1,7 @@
 import { ENABLE_CONTENT_SAMPLES } from '@/constants/flag';
 import { mountContentScope } from './scope';
 import { mountContentSamples } from './sample/mountContentSamples';
+import 'sonner/dist/styles.css';
 import './style.css';
 
 export default defineContentScript({
