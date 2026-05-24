@@ -1,14 +1,12 @@
 import { FileSearch, X } from 'lucide-react';
-import { type ComponentType, useState, useEffect } from 'react';
+import { type ComponentType, useState } from 'react';
 import { ContentAiDialogSample } from './ai-dialog/ContentAiDialogSample';
 import { PageExtractionSample } from './page-extraction/PageExtractionSample';
 import { FloatingBallSample } from './floating-ball/FloatingBallSample';
-import { SidebarSample } from './sidebar/SidebarSample';
-import { SidebarContainer, type SqueezeTarget } from '@/components/container/SidebarContainer';
-import { SidebarSampleContent } from './sidebar/SidebarSampleContent';
 import RightFloatingBallContainer from '@/components/container/RightFloatingBallContainer';
+import { OmniPanelSample } from './omni-panel/OmniPanelSample';
 
-type ContentSampleKey = 'ai-dialog' | 'page-extraction' | 'floating-ball' | 'sidebar';
+type ContentSampleKey = 'ai-dialog' | 'page-extraction' | 'floating-ball' | 'omni-panel';
 
 type ContentSampleItem = {
   key: ContentSampleKey;
@@ -37,34 +35,18 @@ const CONTENT_SAMPLE_ITEMS: ContentSampleItem[] = [
     component: FloatingBallSample,
   },
   {
-    key: 'sidebar',
-    label: 'Sidebar',
-    title: 'Page-injected Sidebar',
+    key: 'omni-panel',
+    label: 'Omni Panel',
+    title: 'OmniPanel Architecture',
     component: () => null, // Rendered specifically in tab panel
   },
 ];
 
 export function ContentSamplesIndexPage() {
   const [isOpen, setIsOpen] = useState(false);
-  const [activeSampleKey, setActiveSampleKey] =
-    useState<ContentSampleKey>('ai-dialog');
+  const [activeSampleKey, setActiveSampleKey] = useState<ContentSampleKey>('ai-dialog');
 
-  // Sidebar specific states
-  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-  const [sidebarWidth, setSidebarWidth] = useState(350);
-  const [squeezeTarget, setSqueezeTarget] = useState<SqueezeTarget>('html');
-  const [transitionSpeed, setTransitionSpeed] = useState(0.3);
-
-  // Automatically close sidebar if active sample is switched or launcher panel is closed
-  useEffect(() => {
-    if (activeSampleKey !== 'sidebar' || !isOpen) {
-      setIsSidebarOpen(false);
-    }
-  }, [activeSampleKey, isOpen]);
-
-  const activeSample =
-    CONTENT_SAMPLE_ITEMS.find((item) => item.key === activeSampleKey) ??
-    CONTENT_SAMPLE_ITEMS[0];
+  const activeSample = CONTENT_SAMPLE_ITEMS.find((item) => item.key === activeSampleKey) ?? CONTENT_SAMPLE_ITEMS[0];
   const ActiveSample = activeSample.component;
 
   return (
@@ -116,7 +98,7 @@ export function ContentSamplesIndexPage() {
             {CONTENT_SAMPLE_ITEMS.map((item) => (
               <button
                 aria-selected={activeSampleKey === item.key}
-                className="min-h-[30px] rounded-md border border-zinc-300 bg-white px-[10px] text-zinc-900 aria-selected:border-zinc-900 aria-selected:bg-zinc-900 aria-selected:text-white"
+                className="min-h-[30px] rounded-md border border-zinc-300 bg-white px-[10px] text-zinc-900 aria-selected:border-zinc-900 aria-selected:bg-zinc-900 aria-selected:text-white transition-colors"
                 key={item.key}
                 onClick={() => setActiveSampleKey(item.key)}
                 role="tab"
@@ -128,33 +110,15 @@ export function ContentSamplesIndexPage() {
           </nav>
 
           <div role="tabpanel">
-            {activeSampleKey === 'sidebar' ? (
-              <SidebarSample
-                isOpen={isSidebarOpen}
-                onToggle={() => setIsSidebarOpen(!isSidebarOpen)}
-                width={sidebarWidth}
-                onWidthChange={setSidebarWidth}
-                squeezeTarget={squeezeTarget}
-                onSqueezeTargetChange={setSqueezeTarget}
-                speed={transitionSpeed}
-                onSpeedChange={setTransitionSpeed}
-              />
-            ) : (
-              <ActiveSample />
-            )}
+            {activeSampleKey === 'omni-panel' ? null : <ActiveSample />}
           </div>
         </section>
       )}
 
-      {/* Render the actual full-height sidebar panel outside the small floating card */}
-      <SidebarContainer
-        isOpen={isSidebarOpen && activeSampleKey === 'sidebar' && isOpen}
-        width={sidebarWidth}
-        squeezeTarget={squeezeTarget}
-        speed={transitionSpeed}
-      >
-        <SidebarSampleContent onClose={() => setIsSidebarOpen(false)} />
-      </SidebarContainer>
+      {/* OmniPanel Sample is rendered completely separate from the card to allow screen-level rendering */}
+      {activeSampleKey === 'omni-panel' && isOpen && (
+        <OmniPanelSample />
+      )}
     </>
   );
 }

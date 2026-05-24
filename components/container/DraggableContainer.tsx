@@ -1,3 +1,4 @@
+
 import React, { useRef, useState, useEffect } from 'react';
 import { cn } from '@/lib/utils';
 
@@ -5,12 +6,15 @@ interface DraggableContainerProps {
   className?: string;
   children?: React.ReactNode;
 }
-
-export function DraggableContainer({
+/**
+ * @deprecated only used in sample
+ */
+export const DraggableContainer = React.forwardRef<HTMLDivElement, DraggableContainerProps>(({
   className,
   children,
-}: DraggableContainerProps) {
-  const dragContainerRef = useRef<HTMLDivElement>(null);
+}, forwardedRef) => {
+  const internalRef = useRef<HTMLDivElement>(null);
+  const dragContainerRef = (forwardedRef as React.RefObject<HTMLDivElement>) || internalRef;
   const [isDragging, setIsDragging] = useState(false);
   const isDraggingRef = useRef(false);
   
@@ -39,38 +43,38 @@ export function DraggableContainer({
     document.addEventListener('mouseup', endDrag);
   };
 
-  const drag = (event: MouseEvent) => {
-    if (!isDraggingRef.current || !dragContainerRef.current) return;
+    const drag = (event: MouseEvent) => {
+      if (!isDraggingRef.current || !dragContainerRef.current) return;
 
-    const el = dragContainerRef.current;
-    const clientWidth = document.documentElement.clientWidth;
-    const clientHeight = document.documentElement.clientHeight;
+      const el = dragContainerRef.current;
+      const clientWidth = document.documentElement.clientWidth;
+      const clientHeight = document.documentElement.clientHeight;
 
-    const elementWidth = el.clientWidth;
-    
-    let newX = el.offsetLeft + (event.clientX - initialMousePosition.current.x);
-    let newY = el.offsetTop + (event.clientY - initialMousePosition.current.y);
+      const elementWidth = el.clientWidth;
 
-    // Keep within bounds
-    if (newX < 0) {
-      newX = 0;
-    } else if (newX + elementWidth + THRESHOLD > clientWidth) {
-      newX = clientWidth - elementWidth - THRESHOLD;
-    }
+      let newX = el.offsetLeft + (event.clientX - initialMousePosition.current.x);
+      let newY = el.offsetTop + (event.clientY - initialMousePosition.current.y);
 
-    if (newY < 0) {
-      newY = 0;
-    } else if (newY + THRESHOLD > clientHeight) {
-      newY = clientHeight - THRESHOLD;
-    }
+      // Keep within bounds
+      if (newX < 0) {
+        newX = 0;
+      } else if (newX + elementWidth + THRESHOLD > clientWidth) {
+        newX = clientWidth - elementWidth - THRESHOLD;
+      }
 
-    el.style.left = `${newX}px`;
-    el.style.top = `${newY}px`;
-    el.style.right = 'auto';
-    el.style.bottom = 'auto';
+      if (newY < 0) {
+        newY = 0;
+      } else if (newY + THRESHOLD > clientHeight) {
+        newY = clientHeight - THRESHOLD;
+      }
 
-    initialMousePosition.current = { x: event.clientX, y: event.clientY };
-  };
+      el.style.left = `${newX}px`;
+      el.style.top = `${newY}px`;
+      el.style.right = 'auto';
+      el.style.bottom = 'auto';
+
+      initialMousePosition.current = { x: event.clientX, y: event.clientY };
+    };
 
   const endDrag = () => {
     if (isDraggingRef.current) {
@@ -110,4 +114,4 @@ export function DraggableContainer({
       {children}
     </div>
   );
-}
+});

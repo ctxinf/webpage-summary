@@ -8,6 +8,7 @@ interface ResizableContainerProps {
   enableBottomResize?: boolean;
   enableLeftResize?: boolean;
   children?: React.ReactNode;
+  targetRef?: React.RefObject<HTMLElement|null>;
 }
 
 type ResizeDirection =
@@ -27,6 +28,7 @@ export function ResizableContainer({
   enableBottomResize = true,
   enableLeftResize = true,
   children,
+  targetRef,
 }: ResizableContainerProps) {
   const resizableContainerRef = useRef<HTMLDivElement>(null);
   const [isResizing, setIsResizing] = useState(false);
@@ -36,6 +38,8 @@ export function ResizableContainer({
   const startY = useRef(0);
   const startWidth = useRef(0);
   const startHeight = useRef(0);
+  const startLeft = useRef(0);
+  const startTop = useRef(0);
   const resizeDirection = useRef<ResizeDirection>('bottomRight');
 
   const startResize = (event: React.MouseEvent, direction: ResizeDirection) => {
@@ -48,9 +52,12 @@ export function ResizableContainer({
     startX.current = event.clientX;
     startY.current = event.clientY;
 
-    if (resizableContainerRef.current) {
-      startWidth.current = resizableContainerRef.current.offsetWidth;
-      startHeight.current = resizableContainerRef.current.offsetHeight;
+    const el = targetRef?.current || resizableContainerRef.current;
+    if (el) {
+      startWidth.current = el.offsetWidth;
+      startHeight.current = el.offsetHeight;
+      startLeft.current = el.offsetLeft;
+      startTop.current = el.offsetTop;
     }
     
     resizeDirection.current = direction;
@@ -60,9 +67,8 @@ export function ResizableContainer({
   };
 
   const resize = (event: MouseEvent) => {
-    if (!isResizingRef.current || !resizableContainerRef.current) return;
-
-    const el = resizableContainerRef.current;
+    const el = targetRef?.current || resizableContainerRef.current;
+    if (!isResizingRef.current || !el) return;
     const diffX = event.clientX - startX.current;
     const diffY = event.clientY - startY.current;
 
@@ -73,14 +79,14 @@ export function ResizableContainer({
     }
     if (dir === 'left' || dir === 'bottomLeft' || dir === 'topLeft') {
       el.style.width = `${startWidth.current - diffX}px`;
-      el.style.left = `${el.offsetLeft + diffX}px`;
+      el.style.left = `${startLeft.current + diffX}px`;
     }
     if (dir === 'bottom' || dir === 'bottomRight' || dir === 'bottomLeft') {
       el.style.height = `${startHeight.current + diffY}px`;
     }
     if (dir === 'top' || dir === 'topRight' || dir === 'topLeft') {
       el.style.height = `${startHeight.current - diffY}px`;
-      el.style.top = `${el.offsetTop + diffY}px`;
+      el.style.top = `${startTop.current + diffY}px`;
     }
   };
 
