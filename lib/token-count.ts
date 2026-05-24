@@ -1,7 +1,20 @@
 export const INPUT_TOKEN_COUNT_MODEL = 'gpt-5';
 
+type Gpt5Tokenizer = typeof import('gpt-tokenizer/model/gpt-5');
+
+let tokenizerPromise: Promise<Gpt5Tokenizer> | null = null;
+
+function nowMs() {
+  return globalThis.performance?.now() ?? Date.now();
+}
+
+function loadTokenizer() {
+  tokenizerPromise ??= import('gpt-tokenizer/model/gpt-5');
+  return tokenizerPromise;
+}
+
 export async function truncateByTokens(text: string, maxTokens: number): Promise<string> {
-  const tokenizer = await loadGpt5Tokenizer();
+  const tokenizer = await loadTokenizer();
   const tokens = tokenizer.encode(text);
   const originalLength = text.length;
   const originalTokens = tokens.length;
@@ -30,21 +43,8 @@ export type InputTokenCountResult = {
   timing: InputTokenCountTiming;
 };
 
-type Gpt5Tokenizer = typeof import('gpt-tokenizer/model/gpt-5');
-
-let gpt5TokenizerPromise: Promise<Gpt5Tokenizer> | null = null;
-
-function nowMs() {
-  return globalThis.performance?.now() ?? Date.now();
-}
-
-function loadGpt5Tokenizer() {
-  gpt5TokenizerPromise ??= import('gpt-tokenizer/model/gpt-5');
-  return gpt5TokenizerPromise;
-}
-
 export async function countInputTokens(input: string): Promise<number> {
-  const tokenizer = await loadGpt5Tokenizer();
+  const tokenizer = await loadTokenizer();
   return tokenizer.countTokens(input);
 }
 
@@ -52,7 +52,7 @@ export async function countInputTokensWithTiming(
   input: string,
 ): Promise<InputTokenCountResult> {
   const loadStart = nowMs();
-  const tokenizer = await loadGpt5Tokenizer();
+  const tokenizer = await loadTokenizer();
   const loadMs = nowMs() - loadStart;
 
   const calculateStart = nowMs();
@@ -82,7 +82,7 @@ export async function truncateByTokensWithTiming(
   maxTokens: number,
 ): Promise<TruncateByTokensResult> {
   const loadStart = nowMs();
-  const tokenizer = await loadGpt5Tokenizer();
+  const tokenizer = await loadTokenizer();
   const loadMs = nowMs() - loadStart;
 
   const calculateStart = nowMs();
@@ -125,7 +125,7 @@ export async function splitTokensWithTiming(
   input: string,
 ): Promise<SplitTokensResult> {
   const loadStart = nowMs();
-  const tokenizer = await loadGpt5Tokenizer();
+  const tokenizer = await loadTokenizer();
   const loadMs = nowMs() - loadStart;
 
   const calculateStart = nowMs();
