@@ -49,3 +49,80 @@ export async function countInputTokensWithTiming(
     },
   };
 }
+
+export type TruncateByTokensResult = {
+  model: typeof INPUT_TOKEN_COUNT_MODEL;
+  truncatedText: string;
+  originalTokenCount: number;
+  truncatedTokenCount: number;
+  timing: InputTokenCountTiming;
+};
+
+export async function truncateByTokensWithTiming(
+  input: string,
+  maxTokens: number,
+): Promise<TruncateByTokensResult> {
+  const loadStart = nowMs();
+  const tokenizer = await loadGpt5Tokenizer();
+  const loadMs = nowMs() - loadStart;
+
+  const calculateStart = nowMs();
+  const tokens = tokenizer.encode(input);
+  const originalTokenCount = tokens.length;
+  let truncatedText = input;
+  let truncatedTokenCount = originalTokenCount;
+
+  if (tokens.length > maxTokens) {
+    const slicedTokens = tokens.slice(0, maxTokens);
+    truncatedText = tokenizer.decode(slicedTokens);
+    truncatedTokenCount = maxTokens;
+  }
+  const calculateMs = nowMs() - calculateStart;
+
+  return {
+    model: INPUT_TOKEN_COUNT_MODEL,
+    truncatedText,
+    originalTokenCount,
+    truncatedTokenCount,
+    timing: {
+      calculateMs,
+      loadMs,
+    },
+  };
+}
+
+export type TokenPiece = {
+  id: number;
+  text: string;
+};
+
+export type SplitTokensResult = {
+  model: typeof INPUT_TOKEN_COUNT_MODEL;
+  pieces: TokenPiece[];
+  timing: InputTokenCountTiming;
+};
+
+export async function splitTokensWithTiming(
+  input: string,
+): Promise<SplitTokensResult> {
+  const loadStart = nowMs();
+  const tokenizer = await loadGpt5Tokenizer();
+  const loadMs = nowMs() - loadStart;
+
+  const calculateStart = nowMs();
+  const ids = tokenizer.encode(input);
+  const pieces = ids.map((id) => ({
+    id,
+    text: tokenizer.decode([id]),
+  }));
+  const calculateMs = nowMs() - calculateStart;
+
+  return {
+    model: INPUT_TOKEN_COUNT_MODEL,
+    pieces,
+    timing: {
+      calculateMs,
+      loadMs,
+    },
+  };
+}
