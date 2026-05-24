@@ -87,6 +87,7 @@ async function streamMessages(
     const result = streamText({
       abortSignal,
       messages: await convertToModelMessages(request.messages),
+      allowSystemInMessages: true,
       model: createLanguageModelFromConfig(modelConfig),
       system: request.system,
     });
