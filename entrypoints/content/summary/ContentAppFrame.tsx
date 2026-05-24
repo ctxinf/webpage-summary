@@ -43,6 +43,7 @@ export function ContentAppFrame({ onClose, isMain = true, onAdd }: ContentAppFra
   const [settings, setSettings] = useState<GeneralSettings | null>(null);
   const [pageContent, setPageContent] = useState<WebpageContent | null>(null);
   const [inputText, setInputText] = useState('');
+  const scrollRef = useRef<HTMLDivElement>(null);
 
   const modelConfigIdRef = useRef<string | null>(null);
   modelConfigIdRef.current = currentModelId || null;
@@ -88,6 +89,8 @@ export function ContentAppFrame({ onClose, isMain = true, onAdd }: ContentAppFra
       console.log('[ContentAppFrame] Extracting page content...');
       const extracted = parsePageContent(generalSettings.pageTextExtractMethod, document);
       if (extracted) {
+        
+        // TODO: 在这里根据model的maxoutputTokens,进行截断, 
         setPageContent(extracted);
 
 
@@ -158,13 +161,48 @@ export function ContentAppFrame({ onClose, isMain = true, onAdd }: ContentAppFra
 
   const handleMessageSubmit = async (message: PromptInputMessage) => {
     if (!message.text) return;
-
+    
     initContextMessage();
-
+    
     await sendMessage({ text: message.text });
     setInputText('');
   };
 
+  const handleCopyMessages = async () => {
+    try {
+      const formattedMessages = messages.map(m => {
+        let textContent = (m as any).content || '';
+        // If content is empty but parts exist (e.g. system/user injected via parts), extract text from parts
+        if (!textContent && m.parts) {
+          textContent = (m.parts as any[])
+            .filter(p => p.type === 'text')
+            .map(p => p.text)
+            .join('');
+        }
+        return {
+          role: m.role,
+          content: textContent
+        };
+      });
+      await navigator.clipboard.writeText(JSON.stringify(formattedMessages, null, 2));
+      toast.success('复制成功');
+    } catch (err) {
+      toast.error('复制失败');
+      console.error('Failed to copy messages', err);
+    }
+  };
+
+  const scrollToTop = () => {
+    if (scrollRef.current) {
+      scrollRef.current.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+  };
+
+  const scrollToBottom = () => {
+    if (scrollRef.current) {
+      scrollRef.current.scrollTo({ top: scrollRef.current.scrollHeight, behavior: 'smooth' });
+    }
+  };
 
   return (
     <div className="flex flex-col w-full h-full bg-white text-zinc-900 overflow-hidden relative pointer-events-auto">
@@ -287,7 +325,8 @@ export function ContentAppFrame({ onClose, isMain = true, onAdd }: ContentAppFra
       </header>
 
       {/* 中间的对话列表 / Middle Chat List Placeholder */}
-      <div className="flex-1 overflow-auto p-0.5  cursor-auto">
+      <div className="flex-1 relative min-h-0">
+        <div ref={scrollRef} className="absolute inset-0 overflow-auto p-0.5 cursor-auto">
         {/* ⬇️TODO: 下面这个固定到顶部, 随着对话列表scroll也会留在最上方 */}
         <div data-section="top-sticky-line" className="sticky top-1 w-full flex justify-end pr-1 flex-row gap-1 z-10  rounded-sm">
           <div className="flex items-center rounded-lg underline decoration-dashed text-nowrap text-xs font-light ml-2">
@@ -299,28 +338,41 @@ export function ContentAppFrame({ onClose, isMain = true, onAdd }: ContentAppFra
             </button>
           </div>
           <div className="grow"></div>
-          <button className="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 bg-white border border-zinc-200 hover:bg-zinc-50 text-zinc-700 w-6 h-6" title="copy all">
+          <button 
+            className="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 bg-white border border-zinc-200 hover:bg-zinc-50 text-zinc-700 w-6 h-6" 
+            title="copy all"
+            onClick={handleCopyMessages}
+          >
             <Copy size={14} />
           </button>
         </div>
         <div data-section="conversation" className="flex-1 text-left text-xs text-zinc-600 rounded-lg px-1 overflow-auto">
           <pre className="whitespace-pre-wrap">{JSON.stringify(messages, null, 2)}</pre>
         </div>
+        </div>
+        
+        {/* Scroll buttons anchored to the conversation area */}
+        <div className="absolute right-4 bottom-4 flex flex-col gap-1.5 z-10 pointer-events-none [&_button]:pointer-events-auto">
+          <button 
+            className="p-1.5 rounded-full border border-zinc-200 text-zinc-400 hover:text-zinc-600 shadow-sm bg-white/90 backdrop-blur"
+            onClick={scrollToTop}
+            title="Go to top"
+          >
+            <ArrowUpToLine size={14} />
+          </button>
+          <button 
+            className="p-1.5 rounded-full border border-zinc-200 text-zinc-400 hover:text-zinc-600 shadow-sm bg-white/90 backdrop-blur"
+            onClick={scrollToBottom}
+            title="Go to bottom"
+          >
+            <ArrowDownToLine size={14} />
+          </button>
+        </div>
       </div>
 
       {/* 底部的对话输入 / Bottom Input Area */}
       {showBottom && (
         <div className="flex-none p-1  relative cursor-auto">
-          {/* Mock scroll/action buttons above input */}
-          <div className="absolute right-4 -top-12 flex flex-col gap-1.5">
-            <button className="p-1.5 rounded-full border border-zinc-200 text-zinc-400 hover:text-zinc-600 shadow-sm bg-white/90 backdrop-blur">
-              <ArrowUpToLine size={14} />
-            </button>
-            <button className="p-1.5 rounded-full border border-zinc-200 text-zinc-400 hover:text-zinc-600 shadow-sm bg-white/90 backdrop-blur">
-              <ArrowDownToLine size={14} />
-            </button>
-          </div>
-
           <PromptInput onSubmit={handleMessageSubmit} className="mt-2">
             <PromptInputBody>
               <PromptInputTextarea
