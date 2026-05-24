@@ -1,6 +1,8 @@
 import React, { useRef, useEffect } from 'react';
 import { cn } from '@/lib/utils';
 import { useResizable } from './internal/interactions';
+import useWxtStorage from '@/hooks/useWxtStorage';
+import { type StorageItemKey } from '#imports';
 
 export type SqueezeTarget = 'html' | 'body' | 'both' | 'none';
 
@@ -8,6 +10,7 @@ interface SidebarPanelProps {
   children: React.ReactNode;
   className?: string;
   defaultWidth?: number;
+  storageKey?: string | null;
   squeezeTarget?: SqueezeTarget;
   speed?: number;
 }
@@ -16,10 +19,15 @@ export function SidebarPanel({
   children, 
   className,
   defaultWidth = 350,
+  storageKey,
   squeezeTarget = 'html',
   speed = 0.3
 }: SidebarPanelProps) {
   const containerRef = useRef<HTMLDivElement>(null);
+  
+  const stateKey = storageKey ? (`local:${storageKey}-sidebar-width` as StorageItemKey) : null;
+  const [savedWidth, setSavedWidth, isLoaded] = useWxtStorage<number>(stateKey, defaultWidth);
+
   const { startResize } = useResizable({ 
     targetRef: containerRef,
     modifyLeftOnResize: false, // Prevents setting style.left which conflicts with right-0
@@ -34,6 +42,10 @@ export function SidebarPanel({
         document.documentElement.classList.add('webpage-summary-sidebar-transition');
         document.body.classList.add('webpage-summary-sidebar-transition');
       });
+      // Save new width
+      if (containerRef.current) {
+        setSavedWidth(containerRef.current.offsetWidth);
+      }
     }
   });
 
@@ -50,7 +62,7 @@ export function SidebarPanel({
     // instead of recreating the stylesheet.
     styleEl.textContent = `
       :root {
-        --wps-sidebar-width: ${defaultWidth}px;
+        --wps-sidebar-width: ${savedWidth}px;
       }
       html.webpage-summary-sidebar-html {
         width: calc(100% - var(--wps-sidebar-width)) !important;
@@ -95,7 +107,7 @@ export function SidebarPanel({
         }
       }, speed * 1000);
     };
-  }, [squeezeTarget, speed, defaultWidth]);
+  }, [squeezeTarget, speed, savedWidth]);
 
   // Sync resized width to the CSS variable for smooth squeezing
   useEffect(() => {
@@ -125,10 +137,12 @@ export function SidebarPanel({
     };
   }, []);
 
+  if (!isLoaded) return null;
+
   return (
     <div
       ref={containerRef}
-      style={{ width: defaultWidth }}
+      style={{ width: savedWidth }}
       className={cn(
         "fixed right-0 top-0 bottom-0 h-screen flex flex-col z-[2147483647]",
         "bg-zinc-950/95 backdrop-blur-xl border-l border-zinc-800 shadow-[0_0_50px_rgba(0,0,0,0.8)] text-zinc-100",

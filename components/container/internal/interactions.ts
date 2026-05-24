@@ -99,9 +99,16 @@ export function useResizable<T extends HTMLElement>({
 interface UseDraggableProps<T extends HTMLElement> {
   targetRef: RefObject<T | null>;
   enabled?: boolean;
+  onDragStart?: () => void;
+  onDragEnd?: () => void;
 }
 
-export function useDraggable<T extends HTMLElement>({ targetRef, enabled = true }: UseDraggableProps<T>) {
+export function useDraggable<T extends HTMLElement>({ 
+  targetRef, 
+  enabled = true,
+  onDragStart,
+  onDragEnd
+}: UseDraggableProps<T>) {
   const isDraggingRef = useRef(false);
   const startMouse = useRef({ x: 0, y: 0 });
   const THRESHOLD = 10;
@@ -109,17 +116,17 @@ export function useDraggable<T extends HTMLElement>({ targetRef, enabled = true 
   const startDrag = (event: React.MouseEvent<HTMLElement>) => {
     if (!enabled || !targetRef.current || event.button !== 0) return;
 
-    // Only drag when clicking the header area (or specifically marked handle)
     const target = event.target as HTMLElement;
     const dragHandle = target.closest('[data-drag-handle]');
     if (!dragHandle) return;
 
-    // Do not drag when clicking controls inside the header
     const controlEl = target.closest('button, select, input, textarea, a');
     if (controlEl) return;
 
     startMouse.current = { x: event.clientX, y: event.clientY };
     isDraggingRef.current = true;
+
+    if (onDragStart) onDragStart();
 
     document.addEventListener('mousemove', drag);
     document.addEventListener('mouseup', endDrag);
@@ -150,13 +157,14 @@ export function useDraggable<T extends HTMLElement>({ targetRef, enabled = true 
     el.style.top = `${newY}px`;
     el.style.right = 'auto';
     el.style.bottom = 'auto';
-    el.style.transform = 'none'; // Clear any transform centering if present
+    el.style.transform = 'none';
 
     startMouse.current = { x: event.clientX, y: event.clientY };
   };
 
   const endDrag = () => {
     isDraggingRef.current = false;
+    if (onDragEnd) onDragEnd();
     document.removeEventListener('mousemove', drag);
     document.removeEventListener('mouseup', endDrag);
   };

@@ -6,33 +6,35 @@ import { SidebarPanel } from './SidebarPanel';
 interface PanelContainerProps {
   children: React.ReactNode;
   defaultMode?: PanelMode;
+  storageKey?: string | null;
 }
 
 /**
- * route sub component by panel mode
+ * A unified container that can seamlessly transition between a floating draggable/resizable panel
+ * and a right-anchored sidebar that squeezes the page content.
  */
-function PanelRenderer({ children }: { children: React.ReactNode }) {
+function PanelRenderer({ children, storageKey }: { children: React.ReactNode, storageKey?: string | null }) {
   const { mode } = usePanel();
 
   if (mode === 'sidebar') {
     return (
-      <SidebarPanel>
+      <SidebarPanel storageKey={storageKey}>
         {children}
       </SidebarPanel>
     );
   }
 
   return (
-    <FloatingPanel>
+    <FloatingPanel storageKey={storageKey}>
       {children}
     </FloatingPanel>
   );
 }
 
-export function PanelContainer({ children, defaultMode = 'floating' }: PanelContainerProps) {
+export function PanelContainer({ children, defaultMode = 'floating', storageKey}: PanelContainerProps) {
   return (
     <PanelProvider defaultMode={defaultMode}>
-      <PanelRenderer>
+      <PanelRenderer storageKey={storageKey}>
         {children}
       </PanelRenderer>
     </PanelProvider>

@@ -1,28 +1,66 @@
-import React, { useRef } from 'react';
+import React, { useRef, useEffect } from 'react';
 import { cn } from '@/lib/utils';
 import { useResizable, useDraggable } from './internal/interactions';
+import useWxtStorage from '@/hooks/useWxtStorage';
+import { type StorageItemKey } from '#imports';
 
 interface FloatingPanelProps {
   children: React.ReactNode;
   className?: string;
   defaultWidth?: number;
   defaultHeight?: number;
+  storageKey?: string | null;
 }
+
+type FloatingState = { width: number; height: number; left: string; top: string; right: string; bottom: string };
 
 export function FloatingPanel({ 
   children, 
   className,
   defaultWidth = 320,
-  defaultHeight = 450
+  defaultHeight = 450,
+  storageKey,
 }: FloatingPanelProps) {
   const containerRef = useRef<HTMLDivElement>(null);
-  const { startResize } = useResizable({ targetRef: containerRef });
-  const { startDrag } = useDraggable({ targetRef: containerRef });
+  const stateKey = storageKey ? (`local:${storageKey}-floating-state` as StorageItemKey) : null;
+  const [savedState, setSavedState, isLoaded] = useWxtStorage<FloatingState | null>(stateKey, null);
+
+  const saveState = () => {
+    if (containerRef.current) {
+      const el = containerRef.current;
+      setSavedState({
+        width: el.offsetWidth,
+        height: el.offsetHeight,
+        left: el.style.left,
+        top: el.style.top,
+        right: el.style.right,
+        bottom: el.style.bottom,
+      });
+    }
+  };
+
+  const { startResize } = useResizable({ targetRef: containerRef, onResizeEnd: saveState });
+  const { startDrag } = useDraggable({ targetRef: containerRef, onDragEnd: saveState });
+
+  useEffect(() => {
+    if (isLoaded && savedState && containerRef.current) {
+      const el = containerRef.current;
+      el.style.width = `${savedState.width}px`;
+      el.style.height = `${savedState.height}px`;
+      if (savedState.left) el.style.left = savedState.left;
+      if (savedState.top) el.style.top = savedState.top;
+      if (savedState.right) el.style.right = savedState.right;
+      if (savedState.bottom) el.style.bottom = savedState.bottom;
+      el.style.transform = 'none';
+    }
+  }, [isLoaded]); // Empty dependency logic intentional: only restore once on mount/load
+
+  if (!isLoaded) return null;
 
   return (
     <div
       ref={containerRef}
-      style={{ width: defaultWidth, height: defaultHeight }}
+      style={!savedState ? { width: defaultWidth, height: defaultHeight } : undefined}
       onMouseDown={startDrag}
       className={cn(
         "fixed top-[4em] right-[4em] bg-white rounded-xl shadow-[0_12px_48px_rgba(0,0,0,0.12)] border border-zinc-200/60 flex flex-col z-[2147483647]",
