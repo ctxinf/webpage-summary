@@ -20,7 +20,22 @@ export function SidebarPanel({
   speed = 0.3
 }: SidebarPanelProps) {
   const containerRef = useRef<HTMLDivElement>(null);
-  const { startResize } = useResizable({ targetRef: containerRef });
+  const { startResize } = useResizable({ 
+    targetRef: containerRef,
+    modifyLeftOnResize: false, // Prevents setting style.left which conflicts with right-0
+    onResizeStart: () => {
+      // Disable CSS transitions during active resizing to prevent massive lag
+      document.documentElement.classList.remove('webpage-summary-sidebar-transition');
+      document.body.classList.remove('webpage-summary-sidebar-transition');
+    },
+    onResizeEnd: () => {
+      // Re-enable transitions after user releases the mouse
+      requestAnimationFrame(() => {
+        document.documentElement.classList.add('webpage-summary-sidebar-transition');
+        document.body.classList.add('webpage-summary-sidebar-transition');
+      });
+    }
+  });
 
   useEffect(() => {
     let styleEl = document.getElementById('webpage-summary-sidebar-style') as HTMLStyleElement;

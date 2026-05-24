@@ -13,9 +13,18 @@ type ResizeDirection =
 interface UseResizableProps<T extends HTMLElement> {
   targetRef: RefObject<T | null>;
   enabled?: boolean;
+  modifyLeftOnResize?: boolean;
+  onResizeStart?: () => void;
+  onResizeEnd?: () => void;
 }
 
-export function useResizable<T extends HTMLElement>({ targetRef, enabled = true }: UseResizableProps<T>) {
+export function useResizable<T extends HTMLElement>({ 
+  targetRef, 
+  enabled = true,
+  modifyLeftOnResize = true,
+  onResizeStart,
+  onResizeEnd
+}: UseResizableProps<T>) {
   const isResizingRef = useRef(false);
   const startMouse = useRef({ x: 0, y: 0 });
   const startDim = useRef({ width: 0, height: 0, left: 0, top: 0 });
@@ -38,6 +47,8 @@ export function useResizable<T extends HTMLElement>({ targetRef, enabled = true 
     };
     resizeDir.current = direction;
 
+    if (onResizeStart) onResizeStart();
+
     document.addEventListener('mousemove', resize);
     document.addEventListener('mouseup', stopResize);
   };
@@ -55,7 +66,9 @@ export function useResizable<T extends HTMLElement>({ targetRef, enabled = true 
     }
     if (dir === 'left' || dir === 'bottomLeft' || dir === 'topLeft') {
       el.style.width = `${startDim.current.width - diffX}px`;
-      el.style.left = `${startDim.current.left + diffX}px`;
+      if (modifyLeftOnResize) {
+        el.style.left = `${startDim.current.left + diffX}px`;
+      }
     }
     if (dir === 'bottom' || dir === 'bottomRight' || dir === 'bottomLeft') {
       el.style.height = `${startDim.current.height + diffY}px`;
@@ -68,6 +81,7 @@ export function useResizable<T extends HTMLElement>({ targetRef, enabled = true 
 
   const stopResize = () => {
     isResizingRef.current = false;
+    if (onResizeEnd) onResizeEnd();
     document.removeEventListener('mousemove', resize);
     document.removeEventListener('mouseup', stopResize);
   };
