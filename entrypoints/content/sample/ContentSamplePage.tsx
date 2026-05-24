@@ -3,8 +3,9 @@ import { type ComponentType, useState, useEffect } from 'react';
 import { ContentAiDialogSample } from './ai-dialog/ContentAiDialogSample';
 import { PageExtractionSample } from './page-extraction/PageExtractionSample';
 import { FloatingBallSample } from './floating-ball/FloatingBallSample';
-import { SidebarSample, type SqueezeTarget } from './sidebar/SidebarSample';
-import { SidebarPanel } from './sidebar/SidebarPanel';
+import { SidebarSample } from './sidebar/SidebarSample';
+import { SidebarContainer, type SqueezeTarget } from '@/components/container/SidebarContainer';
+import { SidebarSampleContent } from './sidebar/SidebarSampleContent';
 import RightFloatingBallContainer from '@/components/container/RightFloatingBallContainer';
 
 type ContentSampleKey = 'ai-dialog' | 'page-extraction' | 'floating-ball' | 'sidebar';
@@ -146,13 +147,14 @@ export function ContentSamplesIndexPage() {
       )}
 
       {/* Render the actual full-height sidebar panel outside the small floating card */}
-      <SidebarPanel
+      <SidebarContainer
         isOpen={isSidebarOpen && activeSampleKey === 'sidebar' && isOpen}
-        onClose={() => setIsSidebarOpen(false)}
         width={sidebarWidth}
         squeezeTarget={squeezeTarget}
         speed={transitionSpeed}
-      />
+      >
+        <SidebarSampleContent onClose={() => setIsSidebarOpen(false)} />
+      </SidebarContainer>
     </>
   );
 }

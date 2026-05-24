@@ -1,7 +1,6 @@
 import { Settings2, Columns, HelpCircle } from 'lucide-react';
 import { ToggleLeft, ToggleRight } from 'lucide-react';
-
-export type SqueezeTarget = 'html' | 'body' | 'both';
+import type { SqueezeTarget } from '@/components/container/SidebarContainer';
 
 interface SidebarSampleProps {
   isOpen: boolean;
@@ -76,8 +75,8 @@ export function SidebarSample({
                 <HelpCircle size={14} />
               </span>
             </span>
-            <div className="grid grid-cols-3 gap-1">
-              {(['html', 'body', 'both'] as SqueezeTarget[]).map((target) => (
+            <div className="grid grid-cols-4 gap-1">
+              {(['html', 'body', 'both', 'none'] as SqueezeTarget[]).map((target) => (
                 <button
                   key={target}
                   type="button"
