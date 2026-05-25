@@ -5,6 +5,7 @@ import { sendMessage as sendExtMessage } from '@/lib/messaging';
 import { Play, Settings, PlusSquare, PanelRight, PictureInPicture2, Copy, ArrowUpToLine, ArrowDownToLine, ChevronUp, ChevronDown, Eye, ScanEye, X, RefreshCw, Info } from 'lucide-react';
 import Mustache from 'mustache';
 import { Toaster, toast } from 'sonner';
+import { cn } from '@/lib/utils';
 
 import { useChat } from '@ai-sdk/react';
 import { AiSdkConnectTransport } from '@/lib/ai-sdk-connect-transport';
@@ -241,6 +242,53 @@ export function ContentAppFrame({ onClose, isMain = true, onAdd }: ContentAppFra
     }
   };
 
+  const renderDropdowns = () => (
+    <div className={cn("flex items-center gap-1.5 shrink-0", mode === 'sidebar' ? "w-full justify-between px-6" : "justify-center")}>
+      <div className="relative flex items-center">
+        {(() => {
+          const currentModel = models.find(m => m.id === currentModelId);
+          if (currentModel) {
+            const providerDef = getModelProviderDefinition(currentModel.providerId);
+            return (
+              <img
+                src={browser.runtime.getURL(providerDef.iconPath)}
+                alt={providerDef.label}
+                className="absolute left-2 w-3.5 h-3.5 pointer-events-none object-contain z-10"
+              />
+            );
+          }
+          return null;
+        })()}
+        <select
+          className="appearance-none pl-7 pr-6 py-1 border border-zinc-300 rounded-lg text-xs bg-white outline-none shadow-sm text-zinc-700 font-medium max-w-[120px] truncate"
+          value={currentModelId}
+          onChange={(e) => {
+            setCurrentModelId(e.target.value);
+            console.log('[ContentAppFrame] Switched model to', e.target.value);
+          }}
+        >
+          {models.map(m =>
+            <option key={m.id} value={m.id}>
+              {m.name}</option>)}
+        </select>
+        <ChevronDown size={12} className="absolute right-2 top-1/2 -translate-y-1/2 text-zinc-400 pointer-events-none" />
+      </div>
+      <div className="relative">
+        <select
+          className="appearance-none pl-2 pr-6 py-1 border border-zinc-300 rounded-lg text-xs bg-white outline-none shadow-sm text-zinc-700 font-medium max-w-[120px] truncate"
+          value={currentPromptId}
+          onChange={(e) => {
+            setCurrentPromptId(e.target.value);
+            console.log('[ContentAppFrame] Switched prompt to', e.target.value);
+          }}
+        >
+          {prompts.map(p => <option key={p.id} value={p.id}>{p.name}</option>)}
+        </select>
+        <ChevronDown size={12} className="absolute right-2 top-1/2 -translate-y-1/2 text-zinc-400 pointer-events-none" />
+      </div>
+    </div>
+  );
+
   return (
     <div className="flex flex-col w-full h-full bg-white text-zinc-900 overflow-hidden relative pointer-events-auto">
       <Toaster
@@ -291,50 +339,7 @@ export function ContentAppFrame({ onClose, isMain = true, onAdd }: ContentAppFra
         </div>
 
 
-        <div className="flex items-center justify-center gap-1.5 shrink-0">
-          <div className="relative flex items-center">
-            {(() => {
-              const currentModel = models.find(m => m.id === currentModelId);
-              if (currentModel) {
-                const providerDef = getModelProviderDefinition(currentModel.providerId);
-                return (
-                  <img
-                    src={browser.runtime.getURL(providerDef.iconPath)}
-                    alt={providerDef.label}
-                    className="absolute left-2 w-3.5 h-3.5 pointer-events-none object-contain z-10"
-                  />
-                );
-              }
-              return null;
-            })()}
-            <select
-              className="appearance-none pl-7 pr-6 py-1 border border-zinc-300 rounded-lg text-xs bg-white outline-none shadow-sm text-zinc-700 font-medium max-w-[120px] truncate"
-              value={currentModelId}
-              onChange={(e) => {
-                setCurrentModelId(e.target.value);
-                console.log('[ContentAppFrame] Switched model to', e.target.value);
-              }}
-            >
-              {models.map(m =>
-                <option key={m.id} value={m.id}>
-                  {m.name}</option>)}
-            </select>
-            <ChevronDown size={12} className="absolute right-2 top-1/2 -translate-y-1/2 text-zinc-400 pointer-events-none" />
-          </div>
-          <div className="relative">
-            <select
-              className="appearance-none pl-2 pr-6 py-1 border border-zinc-300 rounded-lg text-xs bg-white outline-none shadow-sm text-zinc-700 font-medium max-w-[120px] truncate"
-              value={currentPromptId}
-              onChange={(e) => {
-                setCurrentPromptId(e.target.value);
-                console.log('[ContentAppFrame] Switched prompt to', e.target.value);
-              }}
-            >
-              {prompts.map(p => <option key={p.id} value={p.id}>{p.name}</option>)}
-            </select>
-            <ChevronDown size={12} className="absolute right-2 top-1/2 -translate-y-1/2 text-zinc-400 pointer-events-none" />
-          </div>
-        </div>
+        {mode !== 'sidebar' ? renderDropdowns() : <div />}
 
         <div className="flex items-center gap-0.5 text-zinc-500 justify-end overflow-hidden h-full">
           <button className="flex items-center justify-center border  rounded size-6 hover:bg-zinc-50 shadow-sm shrink-0" title="Add" onClick={onAdd}>
@@ -361,6 +366,13 @@ export function ContentAppFrame({ onClose, isMain = true, onAdd }: ContentAppFra
           </button>
         </div>
       </header>
+
+      {/* 侧边栏模式下的次级栏 / Secondary Bar for Sidebar Mode */}
+      {mode === 'sidebar' && (
+        <div className="px-2 py-1.5 bg-zinc-50 border-b border-zinc-200 flex w-full items-center shrink-0">
+          {renderDropdowns()}
+        </div>
+      )}
 
       <div className="flex-1 relative min-h-0 flex flex-col">
         {/* 悬浮在右上角的工具栏 */}
