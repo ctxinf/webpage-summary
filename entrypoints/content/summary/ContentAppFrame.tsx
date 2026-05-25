@@ -376,8 +376,8 @@ export function ContentAppFrame({ onClose, isMain = true, onAdd }: ContentAppFra
 
       <div className="flex-1 relative min-h-0 flex flex-col">
         {/* 悬浮在右上角的工具栏 */}
-        <div data-section="top-sticky-line" className="absolute top-1 right-1 flex justify-end flex-row gap-1 z-10 rounded-sm">
-          <div className="flex items-center rounded-lg underline decoration-dashed text-nowrap text-xs font-light bg-background/80 backdrop-blur-sm px-2 py-1">
+        <div data-section="top-sticky-line" className="absolute top-1 left-1 right-3 flex justify-between flex-row z-10 pointer-events-none [&>*]:pointer-events-auto">
+          <div className="flex items-center rounded-lg underline decoration-dashed text-nowrap text-xs font-light bg-white/10 px-2 py-1 text-zinc-500">
             <div title="click the right eye button to View&Change">
               内容字符串长度: <span>{pageContent ? pageContent.textContent.length : 0}</span>
             </div>
@@ -388,13 +388,21 @@ export function ContentAppFrame({ onClose, isMain = true, onAdd }: ContentAppFra
               <ScanEye size={16} strokeWidth={2} />
             </button>
           </div>
-          <button
-            className="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 bg-white/80 backdrop-blur-sm border border-zinc-200 hover:bg-zinc-50 text-zinc-700 w-8 h-8"
-            title="copy all"
-            onClick={handleCopyMessages}
-          >
-            <Copy size={14} />
-          </button>
+          <div className="flex items-center gap-1.5 pointer-events-none [&>*]:pointer-events-auto">
+            {messages.length > 0 && status !== 'streaming' && status !== 'submitted' && (
+              <div className="px-2 py-1 bg-zinc-100/80 backdrop-blur-sm border border-zinc-200/60 rounded-md text-[10px] text-zinc-500 font-mono tracking-tight shadow-sm flex items-center gap-1.5">
+                <span>↑1000 $0.4</span>
+                <span>↓500 $0.1</span>
+              </div>
+            )}
+            <button
+              className="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 bg-white/80 backdrop-blur-sm border border-zinc-200 hover:bg-zinc-50 text-zinc-700 w-8 h-8"
+              title="copy all"
+              onClick={handleCopyMessages}
+            >
+              <Copy size={14} />
+            </button>
+          </div>
         </div>
 
         <Conversation className="relative size-full">
