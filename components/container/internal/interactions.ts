@@ -154,6 +154,7 @@ export function useDraggable<T extends HTMLElement>({
 }: UseDraggableProps<T>) {
   const isDraggingRef = useRef(false);
   const startMouse = useRef({ x: 0, y: 0 });
+  const startPos = useRef({ left: 0, top: 0 });
   const THRESHOLD = 10;
 
   const startDrag = (event: React.MouseEvent<HTMLElement>) => {
@@ -167,6 +168,7 @@ export function useDraggable<T extends HTMLElement>({
     if (controlEl) return;
 
     startMouse.current = { x: event.clientX, y: event.clientY };
+    startPos.current = { left: targetRef.current.offsetLeft, top: targetRef.current.offsetTop };
     isDraggingRef.current = true;
 
     if (onDragStart) onDragStart();
@@ -183,8 +185,8 @@ export function useDraggable<T extends HTMLElement>({
     const clientHeight = document.documentElement.clientHeight;
     const elementWidth = el.clientWidth;
     
-    let newX = el.offsetLeft + (event.clientX - startMouse.current.x);
-    let newY = el.offsetTop + (event.clientY - startMouse.current.y);
+    let newX = startPos.current.left + (event.clientX - startMouse.current.x);
+    let newY = startPos.current.top + (event.clientY - startMouse.current.y);
 
     if (newX < 0) newX = 0;
     else if (newX + elementWidth + THRESHOLD > clientWidth) {
@@ -203,8 +205,6 @@ export function useDraggable<T extends HTMLElement>({
     el.style.left = 'auto';
     el.style.bottom = 'auto';
     el.style.transform = 'none';
-
-    startMouse.current = { x: event.clientX, y: event.clientY };
   };
 
   const endDrag = () => {

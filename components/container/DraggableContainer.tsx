@@ -19,6 +19,7 @@ export const DraggableContainer = React.forwardRef<HTMLDivElement, DraggableCont
   const isDraggingRef = useRef(false);
   
   const initialMousePosition = useRef({ x: 0, y: 0 });
+  const initialElementPosition = useRef({ left: 0, top: 0 });
   const THRESHOLD = 10;
 
   const startDrag = (event: React.MouseEvent<HTMLDivElement>) => {
@@ -36,6 +37,7 @@ export const DraggableContainer = React.forwardRef<HTMLDivElement, DraggableCont
     if (controlEl) return;
 
     initialMousePosition.current = { x: event.clientX, y: event.clientY };
+    initialElementPosition.current = { left: dragContainerRef.current?.offsetLeft || 0, top: dragContainerRef.current?.offsetTop || 0 };
     isDraggingRef.current = true;
     setIsDragging(true);
 
@@ -52,8 +54,8 @@ export const DraggableContainer = React.forwardRef<HTMLDivElement, DraggableCont
 
       const elementWidth = el.clientWidth;
 
-      let newX = el.offsetLeft + (event.clientX - initialMousePosition.current.x);
-      let newY = el.offsetTop + (event.clientY - initialMousePosition.current.y);
+      let newX = initialElementPosition.current.left + (event.clientX - initialMousePosition.current.x);
+      let newY = initialElementPosition.current.top + (event.clientY - initialMousePosition.current.y);
 
       // Keep within bounds
       if (newX < 0) {
@@ -72,8 +74,6 @@ export const DraggableContainer = React.forwardRef<HTMLDivElement, DraggableCont
       el.style.top = `${newY}px`;
       el.style.right = 'auto';
       el.style.bottom = 'auto';
-
-      initialMousePosition.current = { x: event.clientX, y: event.clientY };
     };
 
   const endDrag = () => {

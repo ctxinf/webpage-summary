@@ -256,7 +256,7 @@ export function ContentAppFrame({ onClose, isMain = true, onAdd }: ContentAppFra
         }}
       />
       {/* 顶部栏 / Top Bar */}
-      <header className="px-1 py-1 bg-white border-b border-zinc-300 grid grid-cols-[1fr_auto_1fr] items-center cursor-move whitespace-nowrap gap-2" data-drag-handle>
+      <header className="px-1 py-1 bg-white border-b border-zinc-300 grid grid-cols-[1fr_auto_1fr] items-center cursor-move whitespace-nowrap gap-2 select-none" data-drag-handle>
         {/* ⬇️TODO: 这的改为flex特性的full-height */}
         <div className="flex items-stretch gap-1.5 justify-start overflow-hidden h-full">
           <img src={browser.runtime.getURL('/icon/32.png')} alt="icon" className="size-6 rounded-lg object-contain shrink-0 self-center" />
@@ -431,8 +431,6 @@ export function ContentAppFrame({ onClose, isMain = true, onAdd }: ContentAppFra
           </ConversationContent>
           <ConversationScrollButton />
         </Conversation>
-      </div>
-
       {/* Scroll buttons anchored to the conversation area */}
       <div className="absolute right-4 bottom-4 flex flex-col gap-1.5 z-10 pointer-events-none [&_button]:pointer-events-auto">
         <button
@@ -449,6 +447,7 @@ export function ContentAppFrame({ onClose, isMain = true, onAdd }: ContentAppFra
         >
           <ArrowDownToLine size={14} />
         </button>
+      </div>
       </div>
 
       {/* 底部的对话输入 / Bottom Input Area */}
