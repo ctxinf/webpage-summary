@@ -32,7 +32,7 @@ export function TokenViewerModal({ isOpen, onClose, textContent, maxInputTokens 
         if (!active) return;
         setPieces(res.pieces);
         const realTokens = res.pieces.length;
-        setSliderValue(Math.min(realTokens, maxInputTokens));
+        setSliderValue(maxInputTokens === 0 ? realTokens : Math.min(realTokens, maxInputTokens));
         setLoading(false);
       })
       .catch(e => {
@@ -100,7 +100,7 @@ export function TokenViewerModal({ isOpen, onClose, textContent, maxInputTokens 
             Tokens: <span className="text-emerald-700 font-bold text-sm">{sliderValue}</span> / {realTokens}
           </label>
           <span className="text-xs text-zinc-400 bg-zinc-100 px-1.5 py-0.5 rounded border border-zinc-200">
-            Max Input Limit: {maxInputTokens}
+            Max Input Limit: {maxInputTokens === 0 ? '∞' : maxInputTokens}
           </span>
         </div>
         <div className="relative flex items-center h-4">
