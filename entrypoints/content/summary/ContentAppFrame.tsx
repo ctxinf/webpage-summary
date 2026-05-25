@@ -256,13 +256,13 @@ export function ContentAppFrame({ onClose, isMain = true, onAdd }: ContentAppFra
         }}
       />
       {/* 顶部栏 / Top Bar */}
-      <header className="px-1 py-1 bg-white border-b border-zinc-100 grid grid-cols-[1fr_auto_1fr] items-center cursor-move whitespace-nowrap gap-2" data-drag-handle>
+      <header className="px-1 py-1 bg-white border-b border-zinc-300 grid grid-cols-[1fr_auto_1fr] items-center cursor-move whitespace-nowrap gap-2" data-drag-handle>
         {/* ⬇️TODO: 这的改为flex特性的full-height */}
         <div className="flex items-stretch gap-1.5 justify-start overflow-hidden h-full">
-          <img src={browser.runtime.getURL('/icon/32.png')} alt="icon" className="size-6 rounded-[3px] object-contain shrink-0 self-center" />
+          <img src={browser.runtime.getURL('/icon/32.png')} alt="icon" className="size-6 rounded-lg object-contain shrink-0 self-center" />
 
           <button
-            className="flex items-center gap-1 px-1.5 bg-white border border-zinc-200 rounded text-xs hover:bg-emerald-50 shadow-sm text-zinc-700 shrink-0 transition-colors"
+            className="flex items-center gap-1 px-1.5 bg-white border border-zinc-300 rounded-lg text-xs hover:bg-emerald-50 shadow-sm text-zinc-700 shrink-0 transition-colors"
             onClick={handleSummarize}
             title={messages.length > 0 ? "重新总结" : "总结"}
           >
@@ -307,7 +307,7 @@ export function ContentAppFrame({ onClose, isMain = true, onAdd }: ContentAppFra
               return null;
             })()}
             <select
-              className="appearance-none pl-7 pr-6 py-1 border border-zinc-200 rounded text-xs bg-white outline-none shadow-sm text-zinc-700 font-medium max-w-[120px] truncate"
+              className="appearance-none pl-7 pr-6 py-1 border border-zinc-300 rounded-lg text-xs bg-white outline-none shadow-sm text-zinc-700 font-medium max-w-[120px] truncate"
               value={currentModelId}
               onChange={(e) => {
                 setCurrentModelId(e.target.value);
@@ -322,7 +322,7 @@ export function ContentAppFrame({ onClose, isMain = true, onAdd }: ContentAppFra
           </div>
           <div className="relative">
             <select
-              className="appearance-none pl-2 pr-6 py-1 border border-zinc-200 rounded text-xs bg-white outline-none shadow-sm text-zinc-700 font-medium max-w-[120px] truncate"
+              className="appearance-none pl-2 pr-6 py-1 border border-zinc-300 rounded-lg text-xs bg-white outline-none shadow-sm text-zinc-700 font-medium max-w-[120px] truncate"
               value={currentPromptId}
               onChange={(e) => {
                 setCurrentPromptId(e.target.value);
