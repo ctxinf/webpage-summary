@@ -116,6 +116,7 @@ export function ContentAppFrame({ onClose, isMain = true, onAdd }: ContentAppFra
       setCurrentModelId(modelSettings.defaultModelId || (modelSettings.models[0]?.id ?? ''));
       setCurrentPromptId(promptSettings.defaultPromptId || (promptSettings.prompts[0]?.id ?? ''));
       setSettings(generalSettings);
+      setShowBottom(generalSettings.enableChatInputBox);
 
       console.log('[ContentAppFrame] Extracting page content...');
       const extracted = parsePageContent(generalSettings.pageTextExtractMethod, document);
@@ -450,6 +451,17 @@ export function ContentAppFrame({ onClose, isMain = true, onAdd }: ContentAppFra
       </div>
       </div>
 
+      {/* 底部折叠/展开按钮 (可关闭) / Bottom Collapse Toggle */}
+      <div className={showBottom ? "flex justify-center -my-3 z-20 relative pointer-events-none" : "absolute bottom-1.5 left-1/2 -translate-x-1/2 z-20 pointer-events-none"}>
+        <button
+          onClick={() => setShowBottom(!showBottom)}
+          className="bg-white/90 backdrop-blur-sm border border-zinc-200 rounded-full p-1 text-zinc-400 hover:text-zinc-600 shadow-sm flex items-center justify-center transition-colors pointer-events-auto"
+          title={showBottom ? 'Close input' : 'Open input'}
+        >
+          {showBottom ? <ChevronUp size={14} /> : <ChevronDown size={14} />}
+        </button>
+      </div>
+
       {/* 底部的对话输入 / Bottom Input Area */}
       {showBottom && (
         <div className="flex-none p-1  relative cursor-auto">
@@ -469,17 +481,6 @@ export function ContentAppFrame({ onClose, isMain = true, onAdd }: ContentAppFra
           </PromptInput>
         </div>
       )}
-
-      {/* 底部折叠/展开按钮 (可关闭) / Bottom Collapse Toggle */}
-      <div className="absolute bottom-0 left-1/2 -translate-x-1/2 translate-y-full z-10 cursor-auto">
-        <button
-          onClick={() => setShowBottom(!showBottom)}
-          className="bg-white border border-t-0 border-zinc-200 rounded-b-md px-3 py-0.5 text-zinc-400 hover:text-zinc-600 shadow-[0_4px_6px_-1px_rgba(0,0,0,0.1)] flex items-center justify-center transition-colors pointer-events-auto"
-          title={showBottom ? 'Close input' : 'Open input'}
-        >
-          {showBottom ? <ChevronUp size={14} /> : <ChevronDown size={14} />}
-        </button>
-      </div>
 
       {pageContent && (
         <TokenViewerModal 
