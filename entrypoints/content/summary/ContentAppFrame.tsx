@@ -16,7 +16,7 @@ import { parsePageContent, type WebpageContent } from '@/lib/page-extraction';
 import { getModelProviderDefinition, type ModelConfigItem } from '@/constants/model-settings';
 import type { PromptConfigItem } from '@/constants/prompt-settings';
 import type { GeneralSettings } from '@/constants/general-settings';
-import { truncateByTokens } from '@/lib/token-count';
+import { countInputTokens, truncateByTokens } from '@/lib/token-count';
 // import {
 //   Conversation,
 //   ConversationContent,
@@ -107,6 +107,7 @@ export function ContentAppFrame({ onClose, isMain = true, onAdd }: ContentAppFra
   const [currentPromptId, setCurrentPromptId] = useState<string>('');
   const [settings, setSettings] = useState<GeneralSettings | null>(null);
   const [pageContent, setPageContent] = useState<WebpageContent | null>(null);
+  const [pageContentTokenCount, setPageContentTokenCount] = useState<number | null>(null);
   const [inputText, setInputText] = useState('');
   const [isTokenViewerOpen, setIsTokenViewerOpen] = useState(false);
   const scrollRef = useRef<HTMLDivElement>(null);
@@ -159,7 +160,9 @@ export function ContentAppFrame({ onClose, isMain = true, onAdd }: ContentAppFra
 
         // TODO: 在这里根据model的maxoutputTokens,进行截断, 
         setPageContent(extracted);
-
+        countInputTokens(extracted.textContent).then(count => {
+          if (active) setPageContentTokenCount(count);
+        }).catch(e => console.error('Failed to count tokens', e));
 
       }
 
@@ -413,7 +416,7 @@ export function ContentAppFrame({ onClose, isMain = true, onAdd }: ContentAppFra
         <div data-section="top-sticky-line" className="absolute top-1 left-1 right-3 flex justify-between flex-row z-10 pointer-events-none [&>*]:pointer-events-auto">
           <div className="flex items-center rounded-lg underline decoration-dashed text-nowrap text-xs font-light bg-white/10 px-2 py-1 text-zinc-500">
             <div title="click the right eye button to View&Change">
-              内容字符串长度: <span>{pageContent ? pageContent.textContent.length : 0}</span>
+              内容 Token 数: <span>{pageContentTokenCount !== null ? pageContentTokenCount : '计算中...'}</span>
             </div>
             <button 
               className="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 hover:bg-zinc-100 hover:text-zinc-900 w-6 h-6 text-zinc-500 ml-1"
