@@ -9,11 +9,12 @@ interface PanelContainerProps {
   children: React.ReactNode;
   defaultMode?: PanelMode;
   storageKey?: string | null;
+  initialOffset?: { x: number; y: number };
 }
 
 type FloatingState = { width: number; height: number; left: string; top: string; right: string; bottom: string };
 
-function UnifiedPanelRenderer({ children, storageKey }: { children: React.ReactNode, storageKey?: string | null }) {
+function UnifiedPanelRenderer({ children, storageKey, initialOffset }: { children: React.ReactNode, storageKey?: string | null, initialOffset?: { x: number; y: number } }) {
   const { mode } = usePanel();
   const containerRef = useRef<HTMLDivElement>(null);
   const isResizingRef = useRef(false);
@@ -136,8 +137,13 @@ function UnifiedPanelRenderer({ children, storageKey }: { children: React.ReactN
         el.style.width = '30em';
         el.style.height = '36em';
         el.style.left = '';
-        el.style.top = '4em';
-        el.style.right = '4em';
+        if (initialOffset) {
+          el.style.top = `clamp(16px, calc(4em + ${initialOffset.y}px), calc(100vh - 37em))`;
+          el.style.right = `clamp(16px, calc(4em + ${initialOffset.x}px), calc(100vw - 31em))`;
+        } else {
+          el.style.top = '4em';
+          el.style.right = '4em';
+        }
         el.style.bottom = '';
       }
       el.style.transform = 'none';
@@ -189,10 +195,10 @@ function UnifiedPanelRenderer({ children, storageKey }: { children: React.ReactN
   );
 }
 
-export function PanelContainer({ children, defaultMode = 'floating', storageKey }: PanelContainerProps) {
+export function PanelContainer({ children, defaultMode = 'floating', storageKey, initialOffset }: PanelContainerProps) {
   return (
     <PanelProvider defaultMode={defaultMode}>
-      <UnifiedPanelRenderer storageKey={storageKey}>
+      <UnifiedPanelRenderer storageKey={storageKey} initialOffset={initialOffset}>
         {children}
       </UnifiedPanelRenderer>
     </PanelProvider>

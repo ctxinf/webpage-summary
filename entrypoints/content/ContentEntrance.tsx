@@ -45,15 +45,23 @@ export function ContentEntrance() {
       }
 
       {/* Render dynamic floating panel copies */}
-      {copies.map(copyId => (
-        <PanelContainer key={copyId} defaultMode="floating" storageKey={null}>
-          <ContentAppFrame 
-            isMain={false} 
-            onClose={() => handleCloseCopy(copyId)} 
-            onAdd={handleAddCopy}
-          />
-        </PanelContainer>
-      ))}
+      {copies.map((copyId, index) => {
+        const step = (index % 10) + 1;
+        return (
+          <PanelContainer 
+            key={copyId} 
+            defaultMode="floating" 
+            storageKey={null}
+            initialOffset={{ x: step * 20, y: -step * 20 }}
+          >
+            <ContentAppFrame 
+              isMain={false} 
+              onClose={() => handleCloseCopy(copyId)} 
+              onAdd={handleAddCopy}
+            />
+          </PanelContainer>
+        );
+      })}
 
       {/* Floating Ball Trigger — shown only when main panel is closed */}
       {enableFloatingBall && !mainPanelOpen && (

@@ -168,7 +168,8 @@ export function useDraggable<T extends HTMLElement>({
     if (controlEl) return;
 
     startMouse.current = { x: event.clientX, y: event.clientY };
-    startPos.current = { left: targetRef.current.offsetLeft, top: targetRef.current.offsetTop };
+    const rect = targetRef.current.getBoundingClientRect();
+    startPos.current = { left: rect.left, top: rect.top };
     isDraggingRef.current = true;
 
     if (onDragStart) onDragStart();
@@ -193,9 +194,10 @@ export function useDraggable<T extends HTMLElement>({
       newX = clientWidth - elementWidth - THRESHOLD;
     }
 
+    const HEADER_HEIGHT = 50; // Ensure header is visible
     if (newY < 0) newY = 0;
-    else if (newY + THRESHOLD > clientHeight) {
-      newY = clientHeight - THRESHOLD;
+    else if (newY + HEADER_HEIGHT > clientHeight) {
+      newY = clientHeight - HEADER_HEIGHT;
     }
 
     const newRight = clientWidth - (newX + elementWidth);
