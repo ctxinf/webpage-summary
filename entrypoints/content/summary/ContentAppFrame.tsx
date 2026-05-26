@@ -63,6 +63,40 @@ interface ContentAppFrameProps {
   onAdd?: () => void;
 }
 
+function UsageDisplay({ messages, currentModel }: { messages: any[], currentModel?: ModelConfigItem }) {
+  const lastAssistantMessage = [...messages].reverse().find(m => m.role === 'assistant');
+  const usage = (lastAssistantMessage?.metadata as any)?.usage;
+  
+  if (!usage) return <span>Ready</span>;
+  
+  const input = usage.inputTokens ?? usage.promptTokens ?? 0;
+  const output = usage.outputTokens ?? usage.completionTokens ?? 0;
+  const cached = usage.cachedInputTokens ?? usage.promptTokensDetails?.cachedTokens ?? usage.cachedTokens ?? 0;
+  
+  const billedInput = input - cached + (cached / 10);
+  
+  const priceUnit = currentModel?.priceUnit || '$';
+  const inputCost = currentModel ? (billedInput * currentModel.inputTokenPrice) / 1_000_000 : 0;
+  const outputCost = currentModel ? (output * currentModel.outputTokenPrice) / 1_000_000 : 0;
+
+  const formatCost = (cost: number) => {
+    if (!cost) return '';
+    if (cost < 0.00001) return ` <${priceUnit}0.00001`;
+    return ` ${priceUnit}${parseFloat(cost.toPrecision(3))}`;
+  };
+  
+  return (
+    <>
+      <span title={`Raw Input: ${input}, Cached: ${cached}`}>
+        ↑{Math.ceil(billedInput)}{formatCost(inputCost)}
+      </span>
+      <span title={`Output: ${output}`}>
+        ↓{output}{formatCost(outputCost)}
+      </span>
+    </>
+  );
+}
+
 export function ContentAppFrame({ onClose, isMain = true, onAdd }: ContentAppFrameProps) {
   const { mode, setMode } = usePanel();
   const [showBottom, setShowBottom] = useState(true);
@@ -390,9 +424,8 @@ export function ContentAppFrame({ onClose, isMain = true, onAdd }: ContentAppFra
           </div>
           <div className="flex items-center gap-1.5 pointer-events-none [&>*]:pointer-events-auto">
             {messages.length > 0 && status !== 'streaming' && status !== 'submitted' && (
-              <div className="px-2 py-1 bg-zinc-100/80 backdrop-blur-sm border border-zinc-200/60 rounded-md text-[10px] text-zinc-500 font-mono tracking-tight shadow-sm flex items-center gap-1.5">
-                <span>↑1000 $0.4</span>
-                <span>↓500 $0.1</span>
+              <div className="px-2 py-1 bg-zinc-300/80 backdrop-blur-md rounded-md text-xs text-zinc-600 font-mono tracking-tight flex items-center gap-1.5">
+                <UsageDisplay messages={messages} currentModel={models.find(m => m.id === currentModelId)} />
               </div>
             )}
             <button

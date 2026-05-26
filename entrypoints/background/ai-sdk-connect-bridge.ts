@@ -92,7 +92,17 @@ async function streamMessages(
       system: request.system,
     });
 
-    for await (const chunk of result.toUIMessageStream()) {
+    for await (const chunk of result.toUIMessageStream({
+      sendReasoning: true,
+      messageMetadata: ({ part }) => {
+        if (part.type === 'finish') {
+          return {
+            usage: (part as any).usage || (part as any).totalUsage || null,
+          };
+        }
+        return undefined;
+      }
+    })) {
       postMessage({
         type: 'chunk',
         chunk: chunk as UIMessageChunk,
