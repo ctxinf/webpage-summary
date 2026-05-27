@@ -9,42 +9,49 @@ export const MODEL_API_MODES = ['chat', 'responses'] as const;
 export type ModelApiMode = (typeof MODEL_API_MODES)[number];
 
 export const AVAILABLE_ICONS = [
-  '/llm-icons/aliyun.svg',
+  // 御四家
+  '/llm-icons/openai.svg',
   '/llm-icons/anthropic.svg',
+  '/llm-icons/gemini.svg',
+  '/llm-icons/xAI.svg',
+
+  // 中转站第二梯队
+  '/llm-icons/openrouter.svg',
+  '/llm-icons/vercel.svg',
+  '/llm-icons/groq.svg',
+  '/llm-icons/cerebras.svg',
+
+  // 模型商
+  '/llm-icons/minimax.svg',
+  '/llm-icons/zai.svg',
+  '/llm-icons/zhipu.svg',
+  '/llm-icons/kimi-web.svg',
+  '/llm-icons/mistral.svg',
+  '/llm-icons/stepfun.svg',
+  '/llm-icons/xiaomimimo.svg',
+  '/llm-icons/aliyun.svg',
+  '/llm-icons/volcengine.svg',
+
+  // 剩余的
   '/llm-icons/baidu.svg',
   '/llm-icons/byteplus.svg',
-  '/llm-icons/cerebras.svg',
   '/llm-icons/cohere.svg',
   '/llm-icons/deepinfra.svg',
   '/llm-icons/deepseek.svg',
   '/llm-icons/fireworks.svg',
-  '/llm-icons/gemini.svg',
   '/llm-icons/google.svg',
-  '/llm-icons/groq.svg',
   '/llm-icons/huggingface.svg',
   '/llm-icons/kilocode.svg',
-  '/llm-icons/kimi-web.svg',
   '/llm-icons/lmstudio.svg',
-  '/llm-icons/minimax.svg',
-  '/llm-icons/mistral.svg',
   '/llm-icons/nvidia.svg',
   '/llm-icons/ollama.svg',
   '/llm-icons/openai-comp.svg',
-  '/llm-icons/openai.svg',
   '/llm-icons/openresponses.svg',
-  '/llm-icons/openrouter.svg',
   '/llm-icons/perplexity.svg',
   '/llm-icons/qwen.svg',
   '/llm-icons/siliconflow.svg',
-  '/llm-icons/stepfun.svg',
   '/llm-icons/together.svg',
   '/llm-icons/venice.svg',
-  '/llm-icons/vercel.svg',
-  '/llm-icons/volcengine.svg',
-  '/llm-icons/xAI.svg',
-  '/llm-icons/xiaomimimo.svg',
-  '/llm-icons/zai.svg',
-  '/llm-icons/zhipu.svg',
 ];
 
 export type BaseURLPreset = {
@@ -70,11 +77,25 @@ export const MODEL_PROVIDER_DEFINITIONS: {
 }[] = [
   {
     baseURLPresets: [
+      // 御四家排名前4
+      { label: 'xAI Grok', url: 'https://api.x.ai/v1', iconPath: '/llm-icons/xAI.svg' },
+
+      // 中转站第二梯队
       { label: 'OpenRouter', url: 'https://openrouter.ai/api/v1', iconPath: '/llm-icons/openrouter.svg' },
       { label: 'Vercel AI Gateway', url: 'https://ai-gateway.vercel.sh/v1', iconPath: '/llm-icons/vercel.svg' },
-      { label: 'DeepSeek', url: 'https://api.deepseek.com', iconPath: '/llm-icons/deepseek.svg' },
-      { label: 'xAI Grok', url: 'https://api.x.ai/v1', iconPath: '/llm-icons/xAI.svg' },
-      
+      { label: 'Groq', url: 'https://api.groq.com/openai/v1', iconPath: '/llm-icons/groq.svg' },
+      { label: 'Cerebras', url: 'https://api.cerebras.ai/v1', iconPath: '/llm-icons/cerebras.svg' },
+
+      // 模型商
+      { label: 'MiniMax Global', url: 'https://api.minimax.io/v1', iconPath: '/llm-icons/minimax.svg' },
+      { label: 'MiniMax China', url: 'https://api.minimaxi.com/v1', iconPath: '/llm-icons/minimax.svg' },
+      { label: 'Z.AI GLM', url: 'https://api.z.ai/api/paas/v4', iconPath: '/llm-icons/zai.svg' },
+      { label: 'Zhipu BigModel', url: 'https://open.bigmodel.cn/api/paas/v4', iconPath: '/llm-icons/zhipu.svg' },
+      { label: 'Kimi Global', url: 'https://api.moonshot.ai/v1', iconPath: '/llm-icons/kimi-web.svg' },
+      { label: 'Kimi China', url: 'https://api.moonshot.cn/v1', iconPath: '/llm-icons/kimi-web.svg' },
+      { label: 'Mistral', url: 'https://api.mistral.ai/v1', iconPath: '/llm-icons/mistral.svg' },
+      { label: 'StepFun', url: 'https://api.stepfun.ai/v1', iconPath: '/llm-icons/stepfun.svg' },
+      { label: 'Xiaomi MiMo', url: 'https://api.xiaomimimo.com/v1', iconPath: '/llm-icons/xiaomimimo.svg' },
       {
         label: 'DashScope',
         url: 'https://dashscope.aliyuncs.com/compatible-mode/v1',
@@ -85,28 +106,20 @@ export const MODEL_PROVIDER_DEFINITIONS: {
         url: 'https://dashscope-intl.aliyuncs.com/compatible-mode/v1',
         iconPath: '/llm-icons/aliyun.svg'
       },
-      { label: 'Z.AI GLM', url: 'https://api.z.ai/api/paas/v4', iconPath: '/llm-icons/zai.svg' },
-      { label: 'Zhipu BigModel', url: 'https://open.bigmodel.cn/api/paas/v4', iconPath: '/llm-icons/zhipu.svg' },
-      { label: 'Kimi Global', url: 'https://api.moonshot.ai/v1', iconPath: '/llm-icons/kimi-web.svg' },
-      { label: 'Kimi China', url: 'https://api.moonshot.cn/v1', iconPath: '/llm-icons/kimi-web.svg' },
-      { label: 'MiniMax Global', url: 'https://api.minimax.io/v1', iconPath: '/llm-icons/minimax.svg' },
-      { label: 'MiniMax China', url: 'https://api.minimaxi.com/v1', iconPath: '/llm-icons/minimax.svg' },
-      { label: 'StepFun', url: 'https://api.stepfun.ai/v1', iconPath: '/llm-icons/stepfun.svg' },
-      { label: 'Xiaomi MiMo', url: 'https://api.xiaomimimo.com/v1', iconPath: '/llm-icons/xiaomimimo.svg' },
+      { label: 'Volcengine Ark', url: 'https://ark.cn-beijing.volces.com/api/v3', iconPath: '/llm-icons/volcengine.svg' },
+
+      // 剩余的保持原顺序
+      { label: 'DeepSeek', url: 'https://api.deepseek.com', iconPath: '/llm-icons/deepseek.svg' },
       {
         label: 'BytePlus ModelArk',
         url: 'https://ark.ap-southeast.bytepluses.com/api/v3',
         iconPath: '/llm-icons/byteplus.svg'
       },
-      { label: 'Volcengine Ark', url: 'https://ark.cn-beijing.volces.com/api/v3', iconPath: '/llm-icons/volcengine.svg' },
       { label: 'Qianfan', url: 'https://qianfan.baidubce.com/v2', iconPath: '/llm-icons/baidu.svg' },
       { label: 'SiliconFlow', url: 'https://api.siliconflow.cn/v1', iconPath: '/llm-icons/siliconflow.svg' },
       { label: 'NVIDIA NIM', url: 'https://integrate.api.nvidia.com/v1', iconPath: '/llm-icons/nvidia.svg' },
-      { label: 'Groq', url: 'https://api.groq.com/openai/v1', iconPath: '/llm-icons/groq.svg' },
       { label: 'Perplexity', url: 'https://api.perplexity.ai/v1', iconPath: '/llm-icons/perplexity.svg' },
       { label: 'DeepInfra', url: 'https://api.deepinfra.com/v1/openai', iconPath: '/llm-icons/deepinfra.svg' },
-      { label: 'Mistral', url: 'https://api.mistral.ai/v1', iconPath: '/llm-icons/mistral.svg' },
-      { label: 'Cerebras', url: 'https://api.cerebras.ai/v1', iconPath: '/llm-icons/cerebras.svg' },
       { label: 'Hugging Face', url: 'https://router.huggingface.co/v1', iconPath: '/llm-icons/huggingface.svg' },
       { label: 'Fireworks', url: 'https://api.fireworks.ai/inference/v1', iconPath: '/llm-icons/fireworks.svg' },
       { label: 'Together AI', url: 'https://api.together.xyz/v1', iconPath: '/llm-icons/together.svg' },
