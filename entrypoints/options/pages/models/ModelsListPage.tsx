@@ -5,6 +5,7 @@ import { toast } from 'sonner';
 import { Button } from '@/components/ui/button';
 import {
   getModelProviderDefinition,
+  getModelDisplayIcon,
   type ModelConfigItem,
 } from '@/constants/model-settings';
 import { getUiMessages } from '@/lib/i18n';
@@ -171,7 +172,7 @@ export function ModelsListPage() {
                     <img
                       alt=""
                       className="size-5 shrink-0 object-contain"
-                      src={provider.iconPath}
+                      src={getModelDisplayIcon(model)}
                       title={provider.label}
                     />
                     <span className="min-w-0 text-base font-semibold">

@@ -13,7 +13,7 @@ import { loadModelSettings } from '@/lib/model-settings-storage';
 import { loadPromptSettings, seedDefaultPromptIfNeeded } from '@/lib/prompt-settings-storage';
 import { loadGeneralSettings } from '@/lib/general-settings-storage';
 import { parsePageContent, type WebpageContent } from '@/lib/page-extraction';
-import { getModelProviderDefinition, type ModelConfigItem } from '@/constants/model-settings';
+import { getModelProviderDefinition, getModelDisplayIcon, type ModelConfigItem } from '@/constants/model-settings';
 import type { PromptConfigItem } from '@/constants/prompt-settings';
 import type { GeneralSettings } from '@/constants/general-settings';
 import { countInputTokens, truncateByTokens } from '@/lib/token-count';
@@ -284,16 +284,21 @@ export function ContentAppFrame({ onClose, isMain = true, onAdd }: ContentAppFra
       <div className="relative flex items-center">
         {(() => {
           const currentModel = models.find(m => m.id === currentModelId);
-          if (currentModel) {
-            const providerDef = getModelProviderDefinition(currentModel.providerId);
-            return (
-              <img
-                src={browser.runtime.getURL(providerDef.iconPath)}
-                alt={providerDef.label}
-                className="absolute left-2 w-3.5 h-3.5 pointer-events-none object-contain z-10"
-              />
-            );
-          }
+            if (currentModel) {
+              const providerDef = getModelProviderDefinition(currentModel.providerId);
+              const iconUrl = getModelDisplayIcon(currentModel);
+              const src = iconUrl.startsWith('http') || iconUrl.startsWith('data:') 
+                ? iconUrl 
+                : browser.runtime.getURL(iconUrl as any);
+
+              return (
+                <img
+                  src={src}
+                  alt={providerDef.label}
+                  className="absolute left-2 w-3.5 h-3.5 pointer-events-none object-contain z-10"
+                />
+              );
+            }
           return null;
         })()}
         <select

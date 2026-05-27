@@ -8,50 +8,112 @@ export const DEFAULT_MODEL_ID_V2_STORAGE_KEY: StorageItemKey =
 export const MODEL_API_MODES = ['chat', 'responses'] as const;
 export type ModelApiMode = (typeof MODEL_API_MODES)[number];
 
-export const MODEL_PROVIDER_DEFINITIONS = [
+export const AVAILABLE_ICONS = [
+  '/llm-icons/aliyun.svg',
+  '/llm-icons/anthropic.svg',
+  '/llm-icons/baidu.svg',
+  '/llm-icons/byteplus.svg',
+  '/llm-icons/cerebras.svg',
+  '/llm-icons/cohere.svg',
+  '/llm-icons/deepinfra.svg',
+  '/llm-icons/deepseek.svg',
+  '/llm-icons/fireworks.svg',
+  '/llm-icons/gemini.svg',
+  '/llm-icons/google.svg',
+  '/llm-icons/groq.svg',
+  '/llm-icons/huggingface.svg',
+  '/llm-icons/kilocode.svg',
+  '/llm-icons/kimi-web.svg',
+  '/llm-icons/lmstudio.svg',
+  '/llm-icons/minimax.svg',
+  '/llm-icons/mistral.svg',
+  '/llm-icons/nvidia.svg',
+  '/llm-icons/ollama.svg',
+  '/llm-icons/openai-comp.svg',
+  '/llm-icons/openai.svg',
+  '/llm-icons/openresponses.svg',
+  '/llm-icons/openrouter.svg',
+  '/llm-icons/perplexity.svg',
+  '/llm-icons/qwen.svg',
+  '/llm-icons/siliconflow.svg',
+  '/llm-icons/stepfun.svg',
+  '/llm-icons/together.svg',
+  '/llm-icons/venice.svg',
+  '/llm-icons/vercel.svg',
+  '/llm-icons/volcengine.svg',
+  '/llm-icons/xAI.svg',
+  '/llm-icons/xiaomimimo.svg',
+  '/llm-icons/zai.svg',
+  '/llm-icons/zhipu.svg',
+];
+
+export type BaseURLPreset = {
+  label: string;
+  url: string;
+  iconPath?: string;
+};
+
+export const MODEL_PROVIDER_DEFINITIONS: {
+  baseURLPresets: BaseURLPreset[];
+  defaultBaseURL: string;
+  defaultModelId: string;
+  desc: string;
+  docsUrl: string;
+  iconPath: string;
+  id: string;
+  label: string;
+  modelsPath: string;
+  requiresApiKey: boolean;
+  supportsApiMode: boolean;
+  supportsBaseURL: boolean;
+  supportsModelFetch: boolean;
+}[] = [
   {
     baseURLPresets: [
-      { label: 'OpenRouter', url: 'https://openrouter.ai/api/v1' },
-      { label: 'Vercel AI Gateway', url: 'https://ai-gateway.vercel.sh/v1' },
-      { label: 'DeepSeek', url: 'https://api.deepseek.com' },
-      { label: 'xAI Grok', url: 'https://api.x.ai/v1' },
+      { label: 'OpenRouter', url: 'https://openrouter.ai/api/v1', iconPath: '/llm-icons/openrouter.svg' },
+      { label: 'Vercel AI Gateway', url: 'https://ai-gateway.vercel.sh/v1', iconPath: '/llm-icons/vercel.svg' },
+      { label: 'DeepSeek', url: 'https://api.deepseek.com', iconPath: '/llm-icons/deepseek.svg' },
+      { label: 'xAI Grok', url: 'https://api.x.ai/v1', iconPath: '/llm-icons/xAI.svg' },
       
       {
         label: 'DashScope',
         url: 'https://dashscope.aliyuncs.com/compatible-mode/v1',
+        iconPath: '/llm-icons/aliyun.svg'
       },
       {
         label: 'DashScope Intl',
         url: 'https://dashscope-intl.aliyuncs.com/compatible-mode/v1',
+        iconPath: '/llm-icons/aliyun.svg'
       },
-      { label: 'Z.AI GLM', url: 'https://api.z.ai/api/paas/v4' },
-      { label: 'Zhipu BigModel', url: 'https://open.bigmodel.cn/api/paas/v4' },
-      { label: 'Kimi Global', url: 'https://api.moonshot.ai/v1' },
-      { label: 'Kimi China', url: 'https://api.moonshot.cn/v1' },
-      { label: 'MiniMax Global', url: 'https://api.minimax.io/v1' },
-      { label: 'MiniMax China', url: 'https://api.minimaxi.com/v1' },
-      { label: 'StepFun', url: 'https://api.stepfun.ai/v1' },
-      { label: 'Xiaomi MiMo', url: 'https://api.xiaomimimo.com/v1' },
+      { label: 'Z.AI GLM', url: 'https://api.z.ai/api/paas/v4', iconPath: '/llm-icons/zai.svg' },
+      { label: 'Zhipu BigModel', url: 'https://open.bigmodel.cn/api/paas/v4', iconPath: '/llm-icons/zhipu.svg' },
+      { label: 'Kimi Global', url: 'https://api.moonshot.ai/v1', iconPath: '/llm-icons/kimi-web.svg' },
+      { label: 'Kimi China', url: 'https://api.moonshot.cn/v1', iconPath: '/llm-icons/kimi-web.svg' },
+      { label: 'MiniMax Global', url: 'https://api.minimax.io/v1', iconPath: '/llm-icons/minimax.svg' },
+      { label: 'MiniMax China', url: 'https://api.minimaxi.com/v1', iconPath: '/llm-icons/minimax.svg' },
+      { label: 'StepFun', url: 'https://api.stepfun.ai/v1', iconPath: '/llm-icons/stepfun.svg' },
+      { label: 'Xiaomi MiMo', url: 'https://api.xiaomimimo.com/v1', iconPath: '/llm-icons/xiaomimimo.svg' },
       {
         label: 'BytePlus ModelArk',
         url: 'https://ark.ap-southeast.bytepluses.com/api/v3',
+        iconPath: '/llm-icons/byteplus.svg'
       },
-      { label: 'Volcengine Ark', url: 'https://ark.cn-beijing.volces.com/api/v3' },
-      { label: 'Qianfan', url: 'https://qianfan.baidubce.com/v2' },
-      { label: 'SiliconFlow', url: 'https://api.siliconflow.cn/v1' },
-      { label: 'NVIDIA NIM', url: 'https://integrate.api.nvidia.com/v1' },
-      { label: 'Groq', url: 'https://api.groq.com/openai/v1' },
-      { label: 'Perplexity', url: 'https://api.perplexity.ai/v1' },
-      { label: 'DeepInfra', url: 'https://api.deepinfra.com/v1/openai' },
-      { label: 'Mistral', url: 'https://api.mistral.ai/v1' },
-      { label: 'Cerebras', url: 'https://api.cerebras.ai/v1' },
-      { label: 'Hugging Face', url: 'https://router.huggingface.co/v1' },
-      { label: 'Fireworks', url: 'https://api.fireworks.ai/inference/v1' },
-      { label: 'Together AI', url: 'https://api.together.xyz/v1' },
-      { label: 'Venice AI', url: 'https://api.venice.ai/api/v1' },
-      { label: 'Kilo Gateway', url: 'https://api.kilo.ai/api/gateway' },
-      { label: 'LM Studio', url: 'http://localhost:1234/v1' },
-      { label: 'Ollama OpenAI', url: 'http://localhost:11434/v1' },
+      { label: 'Volcengine Ark', url: 'https://ark.cn-beijing.volces.com/api/v3', iconPath: '/llm-icons/volcengine.svg' },
+      { label: 'Qianfan', url: 'https://qianfan.baidubce.com/v2', iconPath: '/llm-icons/baidu.svg' },
+      { label: 'SiliconFlow', url: 'https://api.siliconflow.cn/v1', iconPath: '/llm-icons/siliconflow.svg' },
+      { label: 'NVIDIA NIM', url: 'https://integrate.api.nvidia.com/v1', iconPath: '/llm-icons/nvidia.svg' },
+      { label: 'Groq', url: 'https://api.groq.com/openai/v1', iconPath: '/llm-icons/groq.svg' },
+      { label: 'Perplexity', url: 'https://api.perplexity.ai/v1', iconPath: '/llm-icons/perplexity.svg' },
+      { label: 'DeepInfra', url: 'https://api.deepinfra.com/v1/openai', iconPath: '/llm-icons/deepinfra.svg' },
+      { label: 'Mistral', url: 'https://api.mistral.ai/v1', iconPath: '/llm-icons/mistral.svg' },
+      { label: 'Cerebras', url: 'https://api.cerebras.ai/v1', iconPath: '/llm-icons/cerebras.svg' },
+      { label: 'Hugging Face', url: 'https://router.huggingface.co/v1', iconPath: '/llm-icons/huggingface.svg' },
+      { label: 'Fireworks', url: 'https://api.fireworks.ai/inference/v1', iconPath: '/llm-icons/fireworks.svg' },
+      { label: 'Together AI', url: 'https://api.together.xyz/v1', iconPath: '/llm-icons/together.svg' },
+      { label: 'Venice AI', url: 'https://api.venice.ai/api/v1', iconPath: '/llm-icons/venice.svg' },
+      { label: 'Kilo Gateway', url: 'https://api.kilo.ai/api/gateway', iconPath: '/llm-icons/kilocode.svg' },
+      { label: 'LM Studio', url: 'http://localhost:1234/v1', iconPath: '/llm-icons/lmstudio.svg' },
+      { label: 'Ollama OpenAI', url: 'http://localhost:11434/v1', iconPath: '/llm-icons/ollama.svg' },
     ],
     defaultBaseURL: 'https://dashscope.aliyuncs.com/compatible-mode/v1',
     defaultModelId: 'qwen-plus',
@@ -68,7 +130,7 @@ export const MODEL_PROVIDER_DEFINITIONS = [
   },
   {
     baseURLPresets: [
-      { label: 'OpenAI', url: 'https://api.openai.com/v1' },
+      { label: 'OpenAI', url: 'https://api.openai.com/v1', iconPath: '/llm-icons/openai.svg' },
     ],
     defaultBaseURL: 'https://api.openai.com/v1',
     defaultModelId: 'gpt-4.1-mini',
@@ -85,7 +147,7 @@ export const MODEL_PROVIDER_DEFINITIONS = [
   },
   {
     baseURLPresets: [
-      { label: 'Anthropic', url: 'https://api.anthropic.com/v1' },
+      { label: 'Anthropic', url: 'https://api.anthropic.com/v1', iconPath: '/llm-icons/anthropic.svg' },
     ],
     defaultBaseURL: 'https://api.anthropic.com/v1',
     defaultModelId: 'claude-3-5-sonnet-latest',
@@ -105,6 +167,7 @@ export const MODEL_PROVIDER_DEFINITIONS = [
       {
         label: 'Google',
         url: 'https://generativelanguage.googleapis.com/v1beta',
+        iconPath: '/llm-icons/google.svg'
       },
     ],
     defaultBaseURL: 'https://generativelanguage.googleapis.com/v1beta',
@@ -122,7 +185,7 @@ export const MODEL_PROVIDER_DEFINITIONS = [
   },
   {
     baseURLPresets: [
-      { label: 'Ollama Native', url: 'http://localhost:11434/api' },
+      { label: 'Ollama Native', url: 'http://localhost:11434/api', iconPath: '/llm-icons/ollama.svg' },
     ],
     defaultBaseURL: 'http://localhost:11434/api',
     defaultModelId: 'llama3.2',
@@ -185,6 +248,7 @@ export type ModelConfigItem = {
   baseURL: string;
   extraBody: Record<string, unknown>;
   headers: Record<string, string>;
+  iconPath?: string;
   id: string;
   inputTokenPrice: number;
   maxInputTokens: number;
@@ -223,6 +287,7 @@ export function createDefaultModelDraft(
     baseURL: provider.defaultBaseURL,
     extraBody: {},
     headers: {},
+    iconPath: '',
     inputTokenPrice: 0,
     maxInputTokens: 0,
     modelId: provider.defaultModelId,
@@ -231,4 +296,19 @@ export function createDefaultModelDraft(
     priceUnit: '$',
     providerId,
   };
+}
+
+export function getModelDisplayIcon(model: Pick<ModelConfigItem, 'iconPath' | 'baseURL' | 'providerId'>): string {
+  if (model.iconPath) {
+    return model.iconPath;
+  }
+
+  const provider = getModelProviderDefinition(model.providerId);
+  const preset = provider.baseURLPresets?.find((p) => p.url === model.baseURL);
+  
+  if (preset?.iconPath) {
+    return preset.iconPath;
+  }
+
+  return provider.iconPath;
 }

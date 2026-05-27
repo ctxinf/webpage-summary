@@ -12,8 +12,17 @@ import { useEffect, useMemo, useState, type FormEvent } from 'react';
 import { toast } from 'sonner';
 import { Button } from '@/components/ui/button';
 import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from '@/components/ui/dialog';
+import {
+  AVAILABLE_ICONS,
   MODEL_PROVIDER_DEFINITIONS,
   createDefaultModelDraft,
+  getModelDisplayIcon,
   getModelProviderDefinition,
   type ModelDraft,
   type ModelProviderId,
@@ -217,7 +226,7 @@ export function ModelEditor({
               <img
                 alt=""
                 className="max-h-7 max-w-24 shrink-0 object-contain"
-                src={provider.iconPath}
+                src={getModelDisplayIcon(draft)}
                 title={provider.desc}
               />
               <span className="min-w-0 text-lg font-semibold leading-7">
@@ -237,19 +246,71 @@ export function ModelEditor({
             <p className="text-muted-foreground">{provider.desc}</p>
           </div>
 
-          <label className="grid max-w-2xl gap-2" htmlFor="model-name">
-            <FieldLabel required>Config Name</FieldLabel>
-            <input
-              autoFocus
-              className="h-9 rounded-md border bg-background px-3 text-sm shadow-sm outline-none focus-visible:ring-1 focus-visible:ring-ring"
-              id="model-name"
-              onChange={(event) => updateDraft('name', event.currentTarget.value)}
-              placeholder="DashScope Qwen"
-              required
-              spellCheck={false}
-              value={draft.name}
-            />
-          </label>
+          <div className="grid max-w-2xl gap-2">
+            <label htmlFor="model-name"><FieldLabel required>Config Name</FieldLabel></label>
+            <div className="flex items-center gap-3">
+              <Dialog>
+                <DialogTrigger asChild>
+                  <button
+                    type="button"
+                    title="Select model icon"
+                    className="flex size-9 shrink-0 items-center justify-center rounded-md border bg-background hover:bg-accent transition-colors overflow-hidden"
+                  >
+                    <img
+                      alt=""
+                      className="size-5 object-contain"
+                      src={getModelDisplayIcon(draft)}
+                    />
+                  </button>
+                </DialogTrigger>
+                <DialogContent className="max-w-md">
+                  <DialogHeader>
+                    <DialogTitle>Select Model Icon</DialogTitle>
+                  </DialogHeader>
+                  <div className="grid gap-4 py-4">
+                    <div className="flex flex-wrap gap-2">
+                      <button
+                        className={cn(
+                          'flex h-9 px-3 items-center justify-center rounded-md border text-xs transition-colors hover:bg-accent',
+                          !draft.iconPath ? 'border-primary bg-primary/10 text-primary font-medium' : 'bg-background text-muted-foreground',
+                        )}
+                        onClick={() => updateDraft('iconPath', '')}
+                        title="Use default icon"
+                        type="button"
+                      >
+                        Auto (Default)
+                      </button>
+                      {AVAILABLE_ICONS.map((icon) => (
+                        <button
+                          className={cn(
+                            'flex size-9 items-center justify-center rounded-md border p-1.5 transition-colors hover:bg-accent',
+                            draft.iconPath === icon ? 'border-primary bg-primary/10' : 'bg-background',
+                          )}
+                          key={icon}
+                          onClick={() => updateDraft('iconPath', icon)}
+                          title={icon}
+                          type="button"
+                        >
+                          <img alt="" className="size-full object-contain" src={icon} />
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                </DialogContent>
+              </Dialog>
+
+              <input
+                autoFocus
+                className="h-9 flex-1 rounded-md border bg-background px-3 text-sm shadow-sm outline-none focus-visible:ring-1 focus-visible:ring-ring"
+                id="model-name"
+                onChange={(event) => updateDraft('name', event.currentTarget.value)}
+                placeholder="DashScope Qwen"
+                required
+                spellCheck={false}
+                value={draft.name}
+              />
+            </div>
+          </div>
         </section>
 
         <section className="grid gap-4 border-b pb-7">
@@ -279,7 +340,7 @@ export function ModelEditor({
                     {provider.baseURLPresets.map((preset) => (
                       <button
                         className={cn(
-                          'shrink-0 whitespace-nowrap rounded-md border px-2.5 py-1.5 text-xs transition-colors hover:bg-accent',
+                          'flex items-center gap-1.5 shrink-0 whitespace-nowrap rounded-md border px-2.5 py-1.5 text-xs transition-colors hover:bg-accent',
                           draft.baseURL === preset.url
                             ? 'border-primary bg-primary/10 text-primary'
                             : 'bg-background text-muted-foreground',
@@ -288,6 +349,16 @@ export function ModelEditor({
                         onClick={() => updateDraft('baseURL', preset.url)}
                         type="button"
                       >
+                        {preset.iconPath && (
+                          <img
+                            alt=""
+                            className={cn(
+                              'size-3.5 shrink-0 object-contain',
+                              draft.baseURL !== preset.url && 'opacity-60 grayscale'
+                            )}
+                            src={preset.iconPath}
+                          />
+                        )}
                         {preset.label}
                       </button>
                     ))}
