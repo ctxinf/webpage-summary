@@ -85,6 +85,48 @@ function FloatingBallPreview() {
   );
 }
 
+function ChatInputPreview() {
+  return (
+    <div className="relative h-32 w-48 rounded-md border-0 bg-gray-100 p-2 shadow-sm flex overflow-hidden">
+      {/* Browser chrome simulation */}
+      <div className="absolute top-0 left-0 right-0 h-4 bg-gray-300 flex items-center px-1 space-x-1">
+        <div className="size-1.5 rounded-full bg-gray-500" />
+        <div className="size-1.5 rounded-full bg-gray-500" />
+        <div className="size-1.5 rounded-full bg-gray-500" />
+      </div>
+      
+      {/* Content simulation */}
+      <div className="mt-4 flex-1 rounded-sm bg-white border border-gray-200 p-2 relative">
+        <div className="h-2 w-full rounded bg-gray-300 mb-2" />
+        <div className="h-2 w-5/6 rounded bg-gray-300 mb-2" />
+        <div className="h-2 w-4/5 rounded bg-gray-300" />
+      </div>
+
+      {/* The Dialog Panel simulation */}
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 h-20 w-28 rounded-md shadow-lg bg-white border border-gray-300 flex flex-col overflow-hidden z-10">
+        {/* Header */}
+        <div className="h-3 bg-gray-100 border-b border-gray-200 flex items-center px-1.5">
+          <div className="h-1 w-8 rounded bg-gray-300" />
+        </div>
+        
+        {/* Conversations */}
+        <div className="flex-1 flex flex-col gap-1.5 p-1.5 bg-green-50/50">
+          <div className="h-1.5 w-16 bg-green-200 rounded-sm self-end" />
+          <div className="h-1.5 w-20 bg-gray-200 rounded-sm self-start" />
+        </div>
+
+        {/* Input with send button */}
+        <div className="h-5 border-t border-gray-200 bg-white flex items-center px-1 gap-1">
+          <div className="h-3 flex-1 bg-gray-100 border border-green-500 rounded-sm" />
+          <div className="size-3 bg-green-600 rounded-sm flex items-center justify-center shrink-0">
+            <div className="size-1 bg-white rounded-[1px]" />
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 export function InterfacePage() {
   const messages = getUiMessages();
   const [settings, setSettings] = useState<GeneralSettings | null>(null);
@@ -230,28 +272,53 @@ export function InterfacePage() {
             </RadioGroup>
           </section>
 
-          {/* Floating Ball */}
-          <section className="w-fit rounded-xl border bg-card p-6 shadow-sm">
-            <div className="mb-6 flex justify-center">
-              <FloatingBallPreview />
-            </div>
-            <div className="flex items-center justify-between gap-4">
-              <div>
-                <h2 className="text-base font-semibold text-foreground">
-                  {messages.interface.floatingBall.title}
-                </h2>
-                <p className="mt-1 text-sm text-muted-foreground">
-                  {messages.interface.floatingBall.description}
-                </p>
+          <div className="flex flex-col gap-6">
+            {/* Floating Ball */}
+            <section className="rounded-xl border bg-card p-6 shadow-sm">
+              <div className="mb-6 flex justify-center">
+                <FloatingBallPreview />
               </div>
-              <Switch
-                checked={settings.enableFloatingBall}
-                onCheckedChange={(checked) =>
-                  updateSetting('enableFloatingBall', checked)
-                }
-              />
-            </div>
-          </section>
+              <div className="flex items-center justify-between gap-4">
+                <div>
+                  <h2 className="text-base font-semibold text-foreground">
+                    {messages.interface.floatingBall.title}
+                  </h2>
+                  <p className="mt-1 text-sm text-muted-foreground">
+                    {messages.interface.floatingBall.description}
+                  </p>
+                </div>
+                <Switch
+                  checked={settings.enableFloatingBall}
+                  onCheckedChange={(checked) =>
+                    updateSetting('enableFloatingBall', checked)
+                  }
+                />
+              </div>
+            </section>
+
+            {/* Chat Input Box */}
+            <section className="rounded-xl border bg-card p-6 shadow-sm">
+              <div className="mb-6 flex justify-center">
+                <ChatInputPreview />
+              </div>
+              <div className="flex items-center justify-between gap-4">
+                <div>
+                  <h2 className="text-base font-semibold text-foreground">
+                    {messages.interface.chatInputBox.title}
+                  </h2>
+                  <p className="mt-1 text-sm text-muted-foreground">
+                    {messages.interface.chatInputBox.description}
+                  </p>
+                </div>
+                <Switch
+                  checked={settings.enableChatInputBox}
+                  onCheckedChange={(checked) =>
+                    updateSetting('enableChatInputBox', checked)
+                  }
+                />
+              </div>
+            </section>
+          </div>
 
         </div>
 

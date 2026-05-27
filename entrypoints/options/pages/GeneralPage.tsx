@@ -23,7 +23,6 @@ type BooleanSettingKey = Exclude<
 const BOOLEAN_SETTING_SECTIONS = [
   {
     fields: [
-      'enableChatInputBox',
       'enablePopupClickTrigger',
       'enableSummaryWindowDefault',
     ],

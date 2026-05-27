@@ -88,6 +88,10 @@ type UiMessages = {
     navigationLabel: string;
   };
   interface: {
+    chatInputBox: {
+      description: string;
+      title: string;
+    };
     floatingBall: {
       description: string;
       title: string;
@@ -312,6 +316,10 @@ const UI_MESSAGES: Record<UiLocale, UiMessages> = {
       navigationLabel: 'Options',
     },
     interface: {
+      chatInputBox: {
+        description: 'Show the chat input box at the bottom of the summary panel by default.',
+        title: 'Enable chat input box by default',
+      },
       floatingBall: {
         description: 'Show a page control for opening the summary panel.',
         title: 'Floating button',
@@ -543,6 +551,10 @@ const UI_MESSAGES: Record<UiLocale, UiMessages> = {
       navigationLabel: '选项',
     },
     interface: {
+      chatInputBox: {
+        description: '默认在总结面板底部展示对话输入框，你可以随时输入新的提问或指令。',
+        title: '默认开启对话输入框',
+      },
       floatingBall: {
         description: '在网页中显示一个可以随时打开总结面板的悬浮控制球。',
         title: '悬浮球',
