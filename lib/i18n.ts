@@ -78,6 +78,7 @@ type UiMessages = {
       | 'appearance'
       | 'exportImport'
       | 'general'
+      | 'interface'
       | 'models'
       | 'pageExtraction'
       | 'prompts'
@@ -85,6 +86,24 @@ type UiMessages = {
       string
     >;
     navigationLabel: string;
+  };
+  interface: {
+    floatingBall: {
+      description: string;
+      title: string;
+    };
+    panelLayout: {
+      description: string;
+      dialog: string;
+      sidebar: string;
+      title: string;
+    };
+    shortcuts: {
+      model: string;
+      prompt: string;
+      title: string;
+    };
+    title: string;
   };
   pageExtraction: {
     defaultReadability: string;
@@ -149,6 +168,7 @@ type UiMessages = {
     editModel: string;
     editPrompt: string;
     exportImport: string;
+    interface: string;
     models: string;
     prompts: string;
     siteCustomization: string;
@@ -283,12 +303,31 @@ const UI_MESSAGES: Record<UiLocale, UiMessages> = {
         appearance: 'Appearance',
         exportImport: 'Export Import',
         general: 'General',
+        interface: 'Interface',
         models: 'Models',
         pageExtraction: 'Page Extraction',
         prompts: 'Prompts',
         siteCustomization: 'Site Customization',
       },
       navigationLabel: 'Options',
+    },
+    interface: {
+      floatingBall: {
+        description: 'Show a page control for opening the summary panel.',
+        title: 'Floating button',
+      },
+      panelLayout: {
+        description: 'Choose the default layout form for the summary panel.',
+        dialog: 'Floating Panel',
+        sidebar: 'Sidebar',
+        title: 'Panel layout mode',
+      },
+      shortcuts: {
+        model: 'Model settings',
+        prompt: 'Prompt settings',
+        title: 'Shortcuts',
+      },
+      title: 'Interface',
     },
     pageExtraction: {
       defaultReadability: 'Default readability',
@@ -366,6 +405,7 @@ const UI_MESSAGES: Record<UiLocale, UiMessages> = {
       editModel: 'Edit Model',
       editPrompt: 'Edit Prompt',
       exportImport: 'Export Import',
+      interface: 'Interface',
       models: 'Models',
       prompts: 'Prompts',
       siteCustomization: 'Site Customization',
@@ -494,12 +534,31 @@ const UI_MESSAGES: Record<UiLocale, UiMessages> = {
         appearance: '外观',
         exportImport: '导入导出',
         general: '通用',
+        interface: '界面',
         models: '模型',
         pageExtraction: '页面提取',
         prompts: '提示词',
         siteCustomization: '站点定制',
       },
       navigationLabel: '选项',
+    },
+    interface: {
+      floatingBall: {
+        description: '在网页中显示一个可以随时打开总结面板的悬浮控制球。',
+        title: '悬浮球',
+      },
+      panelLayout: {
+        description: '选择总结面板默认在页面中展开的交互形式。',
+        dialog: '悬浮面板',
+        sidebar: '侧边栏',
+        title: '默认面板形式',
+      },
+      shortcuts: {
+        model: '模型设置',
+        prompt: '提示词设置',
+        title: '快捷跳转',
+      },
+      title: '界面',
     },
     pageExtraction: {
       defaultReadability: '恢复默认 Readability',
@@ -571,6 +630,7 @@ const UI_MESSAGES: Record<UiLocale, UiMessages> = {
       editModel: '编辑模型',
       editPrompt: '编辑提示词',
       exportImport: '导入导出',
+      interface: '界面',
       models: '模型',
       prompts: '提示词',
       siteCustomization: '站点定制',

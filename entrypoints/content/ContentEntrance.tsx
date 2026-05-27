@@ -16,6 +16,13 @@ export function ContentEntrance() {
     true
   );
 
+  const [panelLayoutMode] = useWxtStorage<string>(
+    'local:panel-layout-mode',
+    'dialog'
+  );
+
+  const defaultMode = panelLayoutMode === 'sidebar' ? 'sidebar' : 'floating';
+
   const [mainPanelOpen, setMainPanelOpen] = useState(false);
   const [copies, setCopies] = useState<string[]>([]);
 
@@ -34,7 +41,7 @@ export function ContentEntrance() {
       {/* Switchable summary panel layout — controller is shared from parent */}
       {
         mainPanelOpen && (
-          <PanelContainer defaultMode="floating">
+          <PanelContainer defaultMode={defaultMode}>
             <ContentAppFrame 
               isMain={true} 
               onClose={() => setMainPanelOpen(false)} 

@@ -49,6 +49,7 @@ export function OptionsLayout() {
   const messages = getUiMessages();
   const currentLocale = getUiLocale();
   const primaryLinks: SidebarLink[] = [
+    { label: messages.options.navigation.interface, to: '/interface' },
     { label: messages.options.navigation.general, to: '/general' },
     {
       label: messages.options.navigation.pageExtraction,

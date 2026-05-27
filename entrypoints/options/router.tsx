@@ -3,6 +3,7 @@ import { OptionsLayout } from './layout/OptionsLayout';
 import { AppearancePage } from './pages/AppearancePage';
 import { ExportImportPage } from './pages/ExportImportPage';
 import { GeneralPage } from './pages/GeneralPage';
+import { InterfacePage } from './pages/InterfacePage';
 import { CreateModelPage } from './pages/models/CreateModelPage';
 import { EditModelPage } from './pages/models/EditModelPage';
 import { ModelsListPage } from './pages/models/ModelsListPage';
@@ -22,7 +23,11 @@ const optionsRouter = createHashRouter([
     children: [
       {
         index: true,
-        element: <Navigate to="/general" replace />,
+        element: <Navigate to="/interface" replace />,
+      },
+      {
+        path: 'interface',
+        Component: InterfacePage,
       },
       {
         path: 'general',
@@ -86,11 +91,11 @@ const optionsRouter = createHashRouter([
       },
       {
         path: 'p1',
-        element: <Navigate to="/general" replace />,
+        element: <Navigate to="/interface" replace />,
       },
       {
         path: 'p2',
-        element: <Navigate to="/general" replace />,
+        element: <Navigate to="/interface" replace />,
       },
     ],
   },

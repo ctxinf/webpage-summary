@@ -24,7 +24,6 @@ const BOOLEAN_SETTING_SECTIONS = [
   {
     fields: [
       'enableChatInputBox',
-      'enableFloatingBall',
       'enablePopupClickTrigger',
       'enableSummaryWindowDefault',
     ],
