@@ -175,8 +175,13 @@ export function ModelsListPage() {
                       src={getModelDisplayIcon(model)}
                       title={provider.label}
                     />
-                    <span className="min-w-0 text-base font-semibold">
-                      {model.name}
+                    <span className="flex min-w-0 items-baseline gap-2">
+                      <span className="truncate text-base font-semibold">
+                        {model.name}
+                      </span>
+                      <span className="truncate font-mono text-sm font-semibold text-muted-foreground">
+                        {model.modelId}
+                      </span>
                     </span>
                     {isDefault ? (
                       <span className="rounded-sm bg-primary px-2 py-0.5 text-xs font-medium text-primary-foreground">
@@ -191,14 +196,6 @@ export function ModelsListPage() {
                         Provider
                       </dt>
                       <dd className="mt-1 break-words">{provider.label}</dd>
-                    </div>
-                    <div className="min-w-0">
-                      <dt className="text-xs font-medium uppercase text-muted-foreground">
-                        Model
-                      </dt>
-                      <dd className="mt-1 break-words font-mono text-xs">
-                        {model.modelId}
-                      </dd>
                     </div>
                     {provider.supportsBaseURL ? (
                       <div className="min-w-0 lg:col-span-2">
