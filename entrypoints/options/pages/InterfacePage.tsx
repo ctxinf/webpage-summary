@@ -216,16 +216,17 @@ export function InterfacePage() {
         {/* Left: Main Settings */}
         <div className="space-y-8">
           
-          {/* Panel Layout Mode */}
-          <section className="mb-6">
-            <header className="mb-6">
-              <h2 className="text-lg font-semibold text-foreground">
-                {messages.interface.panelLayout.title}
-              </h2>
-              <p className="mt-1 text-sm text-muted-foreground">
-                {messages.interface.panelLayout.description}
-              </p>
-            </header>
+          <div className="flex flex-col gap-6">
+            {/* Panel Layout Mode */}
+            <section className="rounded-xl border bg-card p-6 shadow-sm">
+              <header className="mb-6">
+                <h2 className="text-base font-semibold text-foreground">
+                  {messages.interface.panelLayout.title}
+                </h2>
+                <p className="mt-1 text-sm text-muted-foreground">
+                  {messages.interface.panelLayout.description}
+                </p>
+              </header>
 
             <RadioGroup
               className="grid gap-6 sm:grid-cols-2"
@@ -272,8 +273,7 @@ export function InterfacePage() {
             </RadioGroup>
           </section>
 
-          <div className="flex flex-col gap-6">
-            {/* Floating Ball */}
+          {/* Floating Ball */}
             <section className="rounded-xl border bg-card p-6 shadow-sm">
               <div className="mb-6 flex justify-center">
                 <FloatingBallPreview />
