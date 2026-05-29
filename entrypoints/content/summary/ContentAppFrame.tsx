@@ -2,7 +2,7 @@ import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { browser } from 'wxt/browser';
 import { usePanel } from '@/components/container/PanelContext';
 import { sendMessage as sendExtMessage } from '@/lib/messaging';
-import { Play, Settings, PlusSquare, PanelRight, PictureInPicture2, Copy, ArrowUpToLine, ArrowDownToLine, ChevronUp, ChevronDown, Eye, ScanEye, X, RefreshCw, Info } from 'lucide-react';
+import { Play, Settings, PlusSquare, PanelRight, PictureInPicture2, Copy, ArrowUpToLine, ArrowDownToLine, ChevronUp, ChevronDown, Eye, ScanEye, X, RefreshCw, Info, PlusCircleIcon } from 'lucide-react';
 import Mustache from 'mustache';
 import { Toaster, toast } from 'sonner';
 import { cn } from '@/lib/utils';
@@ -279,8 +279,8 @@ export function ContentAppFrame({ onClose, isMain = true, onAdd }: ContentAppFra
     }
   };
 
-  const renderDropdowns = () => (
-    <div className={cn("flex items-center gap-1.5 shrink-0", mode === 'sidebar' ? "w-full justify-between px-6" : "justify-center")}>
+  const renderDropdowns = (isFloating: boolean) => (
+    <div className={cn("flex items-center shrink-0", isFloating ? "justify-center gap-1.5" : "gap-1.5 justify-start")}>
       <div className="relative flex items-center">
         {(() => {
           const currentModel = models.find(m => m.id === currentModelId);
@@ -295,14 +295,19 @@ export function ContentAppFrame({ onClose, isMain = true, onAdd }: ContentAppFra
                 <img
                   src={src}
                   alt={providerDef.label}
-                  className="absolute left-2 w-3.5 h-3.5 pointer-events-none object-contain z-10"
+                  className={cn("absolute w-3.5 h-3.5 pointer-events-none object-contain z-10", isFloating ? "left-2" : "left-2")}
                 />
               );
             }
           return null;
         })()}
         <select
-          className="appearance-none pl-7 pr-6 py-1 border border-zinc-300 rounded-lg text-xs bg-white outline-none shadow-sm text-zinc-700 font-medium max-w-[120px] truncate"
+          className={cn(
+            "appearance-none pr-6 py-1 outline-none font-medium max-w-[120px] truncate cursor-pointer transition-colors",
+            isFloating 
+              ? "pl-7 border border-zinc-300 rounded-lg text-xs bg-white shadow-sm text-zinc-700"
+              : "pl-7 border border-zinc-300 rounded-full text-xs bg-white/90 backdrop-blur shadow-sm hover:bg-zinc-50 text-zinc-700"
+          )}
           value={currentModelId}
           onChange={(e) => {
             setCurrentModelId(e.target.value);
@@ -313,11 +318,16 @@ export function ContentAppFrame({ onClose, isMain = true, onAdd }: ContentAppFra
             <option key={m.id} value={m.id}>
               {m.name}</option>)}
         </select>
-        <ChevronDown size={12} className="absolute right-2 top-1/2 -translate-y-1/2 text-zinc-400 pointer-events-none" />
+        <ChevronDown size={12} className={cn("absolute top-1/2 -translate-y-1/2 text-zinc-400 pointer-events-none", isFloating ? "right-2" : "right-2")} />
       </div>
       <div className="relative">
         <select
-          className="appearance-none pl-2 pr-6 py-1 border border-zinc-300 rounded-lg text-xs bg-white outline-none shadow-sm text-zinc-700 font-medium max-w-[120px] truncate"
+          className={cn(
+            "appearance-none pl-2 pr-6 py-1 outline-none font-medium max-w-[120px] truncate cursor-pointer transition-colors",
+            isFloating 
+              ? "border border-zinc-300 rounded-lg text-xs bg-white shadow-sm text-zinc-700"
+              : "border border-zinc-300 rounded-full text-xs bg-white/90 backdrop-blur shadow-sm hover:bg-zinc-50 text-zinc-700"
+          )}
           value={currentPromptId}
           onChange={(e) => {
             setCurrentPromptId(e.target.value);
@@ -326,7 +336,7 @@ export function ContentAppFrame({ onClose, isMain = true, onAdd }: ContentAppFra
         >
           {prompts.map(p => <option key={p.id} value={p.id}>{p.name}</option>)}
         </select>
-        <ChevronDown size={12} className="absolute right-2 top-1/2 -translate-y-1/2 text-zinc-400 pointer-events-none" />
+        <ChevronDown size={12} className={cn("absolute top-1/2 -translate-y-1/2 text-zinc-400 pointer-events-none", isFloating ? "right-2" : "right-2")} />
       </div>
     </div>
   );
@@ -381,7 +391,7 @@ export function ContentAppFrame({ onClose, isMain = true, onAdd }: ContentAppFra
         </div>
 
 
-        {mode !== 'sidebar' ? renderDropdowns() : <div />}
+        {mode !== 'sidebar' ? renderDropdowns(true) : <div />}
 
         <div className="flex items-center gap-0.5 text-zinc-500 justify-end overflow-hidden h-full">
           <button className="flex items-center justify-center border  rounded size-6 hover:bg-zinc-50 shadow-sm shrink-0" title="Add" onClick={onAdd}>
@@ -409,12 +419,6 @@ export function ContentAppFrame({ onClose, isMain = true, onAdd }: ContentAppFra
         </div>
       </header>
 
-      {/* 侧边栏模式下的次级栏 / Secondary Bar for Sidebar Mode */}
-      {mode === 'sidebar' && (
-        <div className="px-2 py-1.5 bg-zinc-50 border-b border-zinc-200 flex w-full items-center shrink-0">
-          {renderDropdowns()}
-        </div>
-      )}
 
       <div className="flex-1 relative min-h-0 flex flex-col">
         {/* 悬浮在右上角的工具栏 */}
@@ -494,7 +498,7 @@ export function ContentAppFrame({ onClose, isMain = true, onAdd }: ContentAppFra
           <ConversationScrollButton />
         </Conversation>
       {/* Scroll buttons anchored to the conversation area */}
-      <div className="absolute right-4 bottom-4 flex flex-col gap-1.5 z-10 pointer-events-none [&_button]:pointer-events-auto">
+      <div className={cn("absolute right-4 flex flex-col gap-1.5 z-10 pointer-events-none [&_button]:pointer-events-auto", showBottom ? "bottom-4" : "bottom-10")}>
         <button
           className="p-1.5 rounded-full border border-zinc-200 text-zinc-400 hover:text-zinc-600 shadow-sm bg-white/90 backdrop-blur"
           onClick={scrollToTop}
@@ -510,23 +514,29 @@ export function ContentAppFrame({ onClose, isMain = true, onAdd }: ContentAppFra
           <ArrowDownToLine size={14} />
         </button>
       </div>
+      {/* Dropdowns anchored to the bottom-left of the conversation area */}
+      {mode === 'sidebar' && (
+        <div className={cn("absolute left-1 z-10 pointer-events-none [&_select]:pointer-events-auto", showBottom ? "bottom-0" : "bottom-6")}>
+          {renderDropdowns(false)}
+        </div>
+      )}
       </div>
 
       {/* 底部折叠/展开按钮 (可关闭) / Bottom Collapse Toggle */}
-      <div className={showBottom ? "flex justify-center -my-3 z-20 relative pointer-events-none" : "absolute bottom-1.5 left-1/2 -translate-x-1/2 z-20 pointer-events-none"}>
+      <div className={showBottom ? "flex justify-center -my-3 translate-y-2 z-20 relative pointer-events-none" : "absolute bottom-1.5 left-1/2 -translate-x-1/2 z-20 pointer-events-none"}>
         <button
           onClick={() => setShowBottom(!showBottom)}
-          className="bg-white/90 backdrop-blur-sm border border-zinc-200 rounded-full p-1 text-zinc-400 hover:text-zinc-600 shadow-sm flex items-center justify-center transition-colors pointer-events-auto"
+          className="bg-white/30 backdrop-blur-sm border border-zinc-200/50 rounded-full p-1 text-zinc-400/70 hover:bg-white/90 hover:border-zinc-300 hover:text-zinc-700 hover:shadow-md shadow-sm flex items-center justify-center transition-all pointer-events-auto"
           title={showBottom ? 'Close input' : 'Open input'}
         >
-          {showBottom ? <ChevronUp size={14} /> : <ChevronDown size={14} />}
+          {showBottom ? <ChevronUp size={14} /> : <PlusCircleIcon size={14} />}
         </button>
       </div>
 
       {/* 底部的对话输入 / Bottom Input Area */}
       {showBottom && (
         <div className="flex-none p-1  relative cursor-auto">
-          <PromptInput onSubmit={handleMessageSubmit} className="mt-2">
+          <PromptInput onSubmit={handleMessageSubmit} className="mt-1">
             <PromptInputBody>
               <PromptInputTextarea
                 onChange={(e) => setInputText(e.target.value)}
