@@ -10,7 +10,6 @@ const UI_LOCALE_OVERRIDE_STORAGE_KEY = 'webpage-summary-ui-locale';
 type GeneralBooleanSettingMessageKey =
   | 'enableChatInputBox'
   | 'enableFloatingBall'
-  | 'enablePopupClickTrigger'
   | 'enableSummaryWindowDefault'
   | 'enableAutoBeginSummary'
   | 'enableAutoBeginSummaryByActionOrContextTrigger'
@@ -271,11 +270,6 @@ const UI_MESSAGES: Record<UiLocale, UiMessages> = {
           description: 'Show a page control for opening the summary panel.',
           label: 'Floating button',
         },
-        enablePopupClickTrigger: {
-          description:
-            'Use the extension action click as a summary trigger instead of the popup panel.',
-          label: 'Popup click opens summary',
-        },
         enableSummaryWindowDefault: {
           caution: 'This changes the default behavior on every matching page.',
           description: 'Open the summary panel as a page starts.',
@@ -506,10 +500,6 @@ const UI_MESSAGES: Record<UiLocale, UiMessages> = {
         enableFloatingBall: {
           description: '显示用于打开总结面板的页面控件。',
           label: '悬浮按钮',
-        },
-        enablePopupClickTrigger: {
-          description: '将扩展按钮点击作为总结触发器，而不是打开弹窗面板。',
-          label: '点击扩展按钮打开总结',
         },
         enableSummaryWindowDefault: {
           caution: '这会改变每个匹配页面的默认行为。',

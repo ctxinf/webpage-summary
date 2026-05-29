@@ -55,7 +55,6 @@ export const GENERAL_SETTING_DEFINITIONS = {
   ),
   enableChatInputBox: booleanSetting('local:enable-chat-input-box', true),
   enableFloatingBall: booleanSetting('local:enable-floating-ball', true),
-  enablePopupClickTrigger: booleanSetting('local:popup-click-trigger', false),
   enableSummaryWindowDefault: booleanSetting(
     'local:enable-summary-window-default',
     false,
