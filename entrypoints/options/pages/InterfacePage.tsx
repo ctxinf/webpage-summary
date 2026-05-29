@@ -127,6 +127,46 @@ function ChatInputPreview() {
   );
 }
 
+function TokenUsagePreview() {
+  return (
+    <div className="relative h-32 w-48 rounded-md border-0 bg-gray-100 p-2 shadow-sm flex overflow-hidden">
+      {/* Browser chrome simulation */}
+      <div className="absolute top-0 left-0 right-0 h-4 bg-gray-300 flex items-center px-1 space-x-1">
+        <div className="size-1.5 rounded-full bg-gray-500" />
+        <div className="size-1.5 rounded-full bg-gray-500" />
+        <div className="size-1.5 rounded-full bg-gray-500" />
+      </div>
+      
+      {/* Content simulation */}
+      <div className="mt-4 flex-1 rounded-sm bg-white border border-gray-200 p-2 relative">
+        <div className="h-2 w-full rounded bg-gray-300 mb-2" />
+        <div className="h-2 w-5/6 rounded bg-gray-300 mb-2" />
+        <div className="h-2 w-4/5 rounded bg-gray-300" />
+      </div>
+
+      {/* The Dialog Panel simulation */}
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 h-20 w-28 rounded-md shadow-lg bg-white border border-gray-300 flex flex-col overflow-hidden z-10">
+        {/* Header */}
+        <div className="h-4 bg-gray-100 border-b border-gray-200 flex items-center justify-between px-1.5">
+          <div className="h-1.5 w-6 rounded bg-gray-400" />
+          {/* Token Usage Badge */}
+          <div className="flex items-center gap-0.5 px-1 py-[1px] rounded-[2px] bg-blue-50 border border-blue-200">
+            <div className="size-1 rounded-full bg-blue-500" />
+            <div className="h-1 w-3 rounded bg-blue-600/70" />
+          </div>
+        </div>
+        
+        {/* Content */}
+        <div className="flex-1 flex flex-col gap-1 p-1.5 bg-white">
+          <div className="h-1 w-full bg-gray-200 rounded-sm" />
+          <div className="h-1 w-3/4 bg-gray-200 rounded-sm" />
+          <div className="h-1 w-5/6 bg-gray-200 rounded-sm" />
+        </div>
+      </div>
+    </div>
+  );
+}
+
 export function InterfacePage() {
   const messages = getUiMessages();
   const [settings, setSettings] = useState<GeneralSettings | null>(null);
@@ -318,6 +358,7 @@ export function InterfacePage() {
                 />
               </div>
             </section>
+
           </div>
 
         </div>
@@ -403,6 +444,46 @@ export function InterfacePage() {
               <ExternalLink className="size-4" />
             </Link>
           </div>
+          
+          <hr className="border-border my-2" />
+
+          {/* Auto Begin Summary */}
+          <div className="flex items-center justify-between gap-4">
+            <span className="text-sm font-medium text-foreground">
+              {messages.general.settings.enableAutoBeginSummary.label}
+            </span>
+            <Switch
+              checked={settings.enableAutoBeginSummary}
+              onCheckedChange={(checked) =>
+                updateSetting('enableAutoBeginSummary', checked)
+              }
+            />
+          </div>
+
+          <hr className="border-border my-2" />
+
+          {/* Token Usage View */}
+          <section className="rounded-xl border bg-card p-6 shadow-sm">
+            <div className="mb-6 flex justify-center">
+              <TokenUsagePreview />
+            </div>
+            <div className="flex items-center justify-between gap-4">
+              <div>
+                <h2 className="text-base font-semibold text-foreground">
+                  {messages.general.settings.enableTokenUsageView.label}
+                </h2>
+                <p className="mt-1 text-sm text-muted-foreground">
+                  {messages.general.settings.enableTokenUsageView.description}
+                </p>
+              </div>
+              <Switch
+                checked={settings.enableTokenUsageView}
+                onCheckedChange={(checked) =>
+                  updateSetting('enableTokenUsageView', checked)
+                }
+              />
+            </div>
+          </section>
 
         </aside>
       </div>

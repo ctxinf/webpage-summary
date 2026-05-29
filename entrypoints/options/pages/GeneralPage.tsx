@@ -30,14 +30,13 @@ const BOOLEAN_SETTING_SECTIONS = [
   },
   {
     fields: [
-      'enableAutoBeginSummary',
       'enableAutoBeginSummaryByActionOrContextTrigger',
       'enableAutoBeginChatForAddSelectionToChat',
     ],
     key: 'triggers',
   },
   {
-    fields: ['enableTokenUsageView', 'enableCreateNewPanelButton'],
+    fields: ['enableCreateNewPanelButton'],
     key: 'display',
   },
   {
