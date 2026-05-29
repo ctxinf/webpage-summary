@@ -3,11 +3,13 @@ import { useEffect, useState } from 'react';
 import { Link } from 'react-router';
 import { toast } from 'sonner';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Switch } from '@/components/ui/switch';
 import {
   type GeneralSettingKey,
   type GeneralSettings,
 } from '@/constants/general-settings';
+import { getModelDisplayIcon } from '@/constants/model-settings';
 import {
   loadGeneralSettings,
   saveGeneralSettings,
@@ -370,79 +372,92 @@ export function InterfacePage() {
         <aside className="space-y-6 pt-2">
           
           {/* Model Shortcut */}
-          <div className="flex items-center gap-2">
+          <div className="flex items-center justify-between gap-2">
             <span className="text-sm font-medium text-foreground shrink-0">
               {messages.interface.shortcuts.model}:
             </span>
-            {modelSettings ? (
-              <select
-                aria-label={messages.interface.shortcuts.model}
-                className="h-8 flex-1 min-w-0 rounded-md border border-input bg-transparent px-2 py-1 text-xs shadow-sm focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
-                onChange={async (e) => {
-                  const id = e.target.value;
-                  if (id) {
-                    await setDefaultModelConfig(id);
-                    setModelSettings(await loadModelSettings());
-                  }
-                }}
-                value={modelSettings.defaultModelId ?? ''}
+            <div className="flex items-center gap-2">
+              {modelSettings ? (
+                <Select
+                  value={modelSettings.defaultModelId ?? undefined}
+                  onValueChange={async (value) => {
+                    if (value) {
+                      await setDefaultModelConfig(value);
+                      setModelSettings(await loadModelSettings());
+                    }
+                  }}
+                >
+                  <SelectTrigger className="w-[180px] h-8 text-xs bg-transparent shadow-sm">
+                    <SelectValue placeholder={`-- ${messages.options.header.defaultModel} --`} />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {modelSettings.models.map((m) => (
+                      <SelectItem key={m.id} value={m.id}>
+                        <div className="flex items-center gap-2">
+                          <img
+                            alt=""
+                            className="size-4 shrink-0 object-contain"
+                            src={getModelDisplayIcon(m)}
+                          />
+                          <span className="truncate">{m.name}</span>
+                        </div>
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              ) : (
+                <div className="h-8 w-[180px] rounded-md bg-muted animate-pulse" />
+              )}
+              <Link
+                to="/models"
+                title={messages.interface.shortcuts.model}
+                className="shrink-0 text-muted-foreground hover:text-primary transition-colors"
               >
-                <option value="" disabled>-- {messages.options.header.defaultModel} --</option>
-                {modelSettings.models.map((m) => (
-                  <option key={m.id} value={m.id}>
-                    {m.name}
-                  </option>
-                ))}
-              </select>
-            ) : (
-              <div className="h-8 flex-1 rounded-md bg-muted animate-pulse" />
-            )}
-            <Link
-              to="/models"
-              title={messages.interface.shortcuts.model}
-              className="shrink-0 text-muted-foreground hover:text-primary transition-colors"
-            >
-              <ExternalLink className="size-4" />
-            </Link>
+                <ExternalLink className="size-4" />
+              </Link>
+            </div>
           </div>
           
           <hr className="border-border my-2" />
           
           {/* Prompt Shortcut */}
-          <div className="flex items-center gap-2">
+          <div className="flex items-center justify-between gap-2">
             <span className="text-sm font-medium text-foreground shrink-0">
               {messages.interface.shortcuts.prompt}:
             </span>
-            {promptSettings ? (
-              <select
-                aria-label={messages.interface.shortcuts.prompt}
-                className="h-8 flex-1 min-w-0 rounded-md border border-input bg-transparent px-2 py-1 text-xs shadow-sm focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
-                onChange={async (e) => {
-                  const id = e.target.value;
-                  if (id) {
-                    await setDefaultPrompt(id);
-                    setPromptSettings(await loadPromptSettings());
-                  }
-                }}
-                value={promptSettings.defaultPromptId ?? ''}
+            <div className="flex items-center gap-2">
+              {promptSettings ? (
+                <Select
+                  value={promptSettings.defaultPromptId ?? undefined}
+                  onValueChange={async (value) => {
+                    if (value) {
+                      await setDefaultPrompt(value);
+                      setPromptSettings(await loadPromptSettings());
+                    }
+                  }}
+                >
+                  <SelectTrigger className="w-[180px] h-8 text-xs bg-transparent shadow-sm">
+                    <SelectValue placeholder={`-- ${messages.options.header.defaultPrompt} --`} />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {promptSettings.prompts.map((p) => (
+                      <SelectItem key={p.id} value={p.id}>
+                        <span className="truncate">{p.name}</span>
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              ) : (
+                <div className="h-8 w-[180px] rounded-md bg-muted animate-pulse" />
+              )}
+              <Link
+                to="/prompts"
+                title={messages.interface.shortcuts.prompt}
+                className="shrink-0 text-muted-foreground hover:text-primary transition-colors"
               >
-                <option value="" disabled>-- {messages.options.header.defaultPrompt} --</option>
-                {promptSettings.prompts.map((p) => (
-                  <option key={p.id} value={p.id}>
-                    {p.name}
-                  </option>
-                ))}
-              </select>
-            ) : (
-              <div className="h-8 flex-1 rounded-md bg-muted animate-pulse" />
-            )}
-            <Link
-              to="/prompts"
-              title={messages.interface.shortcuts.prompt}
-              className="shrink-0 text-muted-foreground hover:text-primary transition-colors"
-            >
-              <ExternalLink className="size-4" />
-            </Link>
+                <ExternalLink className="size-4" />
+              </Link>
+            </div>
           </div>
           
           <hr className="border-border my-2" />

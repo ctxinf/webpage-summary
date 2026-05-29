@@ -1,4 +1,5 @@
-import { Edit3, Plus, Trash2 } from 'lucide-react';
+import { ArrowDown, ArrowUp, Copy, Edit3, Plus, Trash2 } from 'lucide-react';
+import { motion } from 'motion/react';
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router';
 import { toast } from 'sonner';
@@ -10,11 +11,14 @@ import {
 } from '@/constants/model-settings';
 import { getUiMessages } from '@/lib/i18n';
 import {
+  createModelConfig,
   deleteModelConfig,
   loadModelSettings,
+  moveModelConfig,
   setDefaultModelConfig,
   type ModelSettings,
 } from '@/lib/model-settings-storage';
+import { cn } from '@/lib/utils';
 import { OptionsPageTitle } from '../OptionsPageTitle';
 
 export function ModelsListPage() {
@@ -95,6 +99,30 @@ export function ModelsListPage() {
     );
   }
 
+  function handleDuplicate(model: ModelConfigItem) {
+    runModelAction(
+      model.id,
+      async () => {
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        const { id, at, ...draft } = model;
+        const newDraft = { ...draft, name: `${model.name} (Copy)` };
+        
+        const created = await createModelConfig(newDraft);
+
+        if (created) {
+          toast.success('Model duplicated.');
+          setTimeout(() => {
+            window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
+          }, 100);
+          return true;
+        }
+
+        return false;
+      },
+      'Model could not be duplicated.',
+    );
+  }
+
   if (loadError) {
     return (
       <>
@@ -110,13 +138,23 @@ export function ModelsListPage() {
     <div className="grid max-w-5xl gap-7 pb-16">
       <OptionsPageTitle>{messages.pageTitles.models}</OptionsPageTitle>
 
-      <section className="flex flex-wrap items-end justify-between gap-3 border-b pb-7">
-        <Button asChild>
-          <Link to="/models/create">
-            <Plus />
-            Create model
-          </Link>
-        </Button>
+      <section className="flex flex-wrap items-center justify-between gap-3 border-b pb-7">
+        <div className="flex items-center gap-4">
+          <Button asChild>
+            <Link to="/models/create">
+              <Plus />
+              Create Model Config
+            </Link>
+          </Button>
+          {settings?.defaultModelId ? (() => {
+            const defaultModel = settings.models.find(m => m.id === settings.defaultModelId);
+            return defaultModel ? (
+              <div className="text-sm font-bold text-primary">
+                Default: {defaultModel.name}
+              </div>
+            ) : null;
+          })() : null}
+        </div>
       </section>
 
       {!settings ? (
@@ -134,7 +172,7 @@ export function ModelsListPage() {
           <Button asChild className="justify-self-start">
             <Link to="/models/create">
               <Plus />
-              Create model
+              Create Model Config
             </Link>
           </Button>
         </section>
@@ -142,14 +180,21 @@ export function ModelsListPage() {
 
       {settings && settings.models.length > 0 ? (
         <section className="grid gap-3" aria-label="Model configs">
-          {settings.models.map((model) => {
+          {settings.models.map((model, index) => {
             const provider = getModelProviderDefinition(model.providerId);
             const isDefault = settings.defaultModelId === model.id;
             const isBusy = busyModelId === model.id;
 
             return (
-              <article
-                className="grid gap-4 rounded-md border p-4 shadow-sm sm:grid-cols-[minmax(0,1fr)_auto]"
+              <motion.article
+                layout
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -20 }}
+                className={cn(
+                  "grid gap-4 rounded-md border p-4 shadow-sm sm:grid-cols-[minmax(0,1fr)_auto] transition-colors",
+                  isDefault ? "border-primary/30 bg-primary/5" : "bg-card"
+                )}
                 key={model.id}
               >
                 <div className="min-w-0">
@@ -238,7 +283,53 @@ export function ModelsListPage() {
                   </dl>
                 </div>
 
-                <div className="flex flex-wrap items-start gap-2 sm:w-[90px] sm:justify-end">
+                <div className="group flex items-start gap-2 sm:justify-end">
+                  <Button
+                    aria-label={`Move up ${model.name}`}
+                    disabled={isBusy || index === 0}
+                    onClick={() =>
+                      runModelAction(
+                        model.id,
+                        () => moveModelConfig(model.id, 'up'),
+                        'Model could not be moved.',
+                      )
+                    }
+                    size="icon"
+                    title={`Move up ${model.name}`}
+                    type="button"
+                    variant="outline"
+                  >
+                    <ArrowUp className="size-4" />
+                  </Button>
+                  <Button
+                    aria-label={`Move down ${model.name}`}
+                    disabled={isBusy || index === settings.models.length - 1}
+                    onClick={() =>
+                      runModelAction(
+                        model.id,
+                        () => moveModelConfig(model.id, 'down'),
+                        'Model could not be moved.',
+                      )
+                    }
+                    size="icon"
+                    title={`Move down ${model.name}`}
+                    type="button"
+                    variant="outline"
+                  >
+                    <ArrowDown className="size-4" />
+                  </Button>
+                  <Button
+                    aria-label={`Duplicate ${model.name}`}
+                    className="opacity-0 group-hover:opacity-100 focus-visible:opacity-100 transition-opacity"
+                    disabled={isBusy}
+                    onClick={() => handleDuplicate(model)}
+                    size="icon"
+                    title={`Duplicate ${model.name}`}
+                    type="button"
+                    variant="outline"
+                  >
+                    <Copy className="size-4" />
+                  </Button>
                   <Button
                     aria-label={`Edit ${model.name}`}
                     asChild
@@ -248,7 +339,7 @@ export function ModelsListPage() {
                     variant="outline"
                   >
                     <Link to={`/models/edit?id=${model.id}`}>
-                      <Edit3 />
+                      <Edit3 className="size-4" />
                     </Link>
                   </Button>
                   <Button
@@ -260,10 +351,10 @@ export function ModelsListPage() {
                     type="button"
                     variant="destructive"
                   >
-                    <Trash2 />
+                    <Trash2 className="size-4" />
                   </Button>
                 </div>
-              </article>
+              </motion.article>
             );
           })}
         </section>

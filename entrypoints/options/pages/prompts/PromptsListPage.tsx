@@ -6,6 +6,7 @@ import {
   Plus,
   Trash2,
 } from 'lucide-react';
+import { motion } from 'motion/react';
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router';
 import { toast } from 'sonner';
@@ -23,6 +24,7 @@ import {
   setDefaultPrompt,
   type PromptSettings,
 } from '@/lib/prompt-settings-storage';
+import { cn } from '@/lib/utils';
 import { OptionsPageTitle } from '../OptionsPageTitle';
 
 const TEMPLATE_VARIABLE_PATTERN = /(\{\{[^}]*\}\})/g;
@@ -146,16 +148,26 @@ export function PromptsListPage() {
     <div className="grid max-w-5xl gap-7 pb-16">
       <OptionsPageTitle>{messages.pageTitles.prompts}</OptionsPageTitle>
 
-      <section className="flex flex-wrap items-end justify-between gap-3 border-b pb-7">
-        <Button asChild>
-          <Link to="/prompts/create">
-            <Plus />
-            {messages.prompts.create}
-          </Link>
-        </Button>
+      <section className="flex flex-wrap items-center justify-between gap-3 border-b pb-7">
+        <div className="flex items-center gap-4">
+          <Button asChild>
+            <Link to="/prompts/create">
+              <Plus />
+              {messages.prompts.create}
+            </Link>
+          </Button>
+          {settings?.defaultPromptId ? (() => {
+            const defaultPrompt = settings.prompts.find(p => p.id === settings.defaultPromptId);
+            return defaultPrompt ? (
+              <div className="text-sm font-bold text-primary">
+                Default: {defaultPrompt.name}
+              </div>
+            ) : null;
+          })() : null}
+        </div>
 
-        <div className="flex flex-wrap items-end justify-end gap-2">
-          <span className="pb-1 text-sm text-muted-foreground">
+        <div className="flex flex-wrap items-center justify-end gap-2">
+          <span className="text-sm text-muted-foreground">
             {messages.prompts.createFromPreset}
           </span>
           {presets.map((preset) => (
@@ -197,8 +209,15 @@ export function PromptsListPage() {
             const isBusy = busyPromptId === prompt.id;
 
             return (
-              <article
-                className="grid gap-4 rounded-md border p-4 shadow-sm sm:grid-cols-[minmax(0,1fr)_auto]"
+              <motion.article
+                layout
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -20 }}
+                className={cn(
+                  "grid gap-4 rounded-md border p-4 shadow-sm sm:grid-cols-[minmax(0,1fr)_auto] transition-colors",
+                  isDefault ? "border-primary/30 bg-primary/5" : "bg-card"
+                )}
                 key={prompt.id}
               >
                 <div className="min-w-0">
@@ -244,7 +263,7 @@ export function PromptsListPage() {
                   </div>
                 </div>
 
-                <div className="flex flex-wrap items-start gap-2 sm:w-[90px] sm:justify-end">
+                <div className="flex items-start gap-2 sm:justify-end">
                   <Button
                     aria-label={messages.prompts.moveUp(prompt.name)}
                     disabled={isBusy || index === 0}
@@ -303,7 +322,7 @@ export function PromptsListPage() {
                     <Trash2 />
                   </Button>
                 </div>
-              </article>
+              </motion.article>
             );
           })}
         </section>

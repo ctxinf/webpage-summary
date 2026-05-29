@@ -16,6 +16,8 @@ export type ModelSettings = {
   models: ModelConfigItem[];
 };
 
+export type ModelMoveDirection = 'down' | 'up';
+
 export type RemoteModelInfo = {
   id: string;
   label: string;
@@ -294,6 +296,30 @@ export async function deleteModelConfig(id: string) {
   await writeModelSettings({
     defaultModelId:
       settings.defaultModelId === id ? models[0]?.id ?? null : settings.defaultModelId,
+    models,
+  });
+
+  return true;
+}
+
+export async function moveModelConfig(id: string, direction: ModelMoveDirection) {
+  const settings = await loadModelSettings();
+  const index = settings.models.findIndex((model) => model.id === id);
+  const nextIndex = direction === 'up' ? index - 1 : index + 1;
+
+  if (
+    index === -1 ||
+    nextIndex < 0 ||
+    nextIndex >= settings.models.length
+  ) {
+    return false;
+  }
+
+  const models = [...settings.models];
+  [models[index], models[nextIndex]] = [models[nextIndex], models[index]];
+
+  await writeModelSettings({
+    defaultModelId: settings.defaultModelId,
     models,
   });
 
