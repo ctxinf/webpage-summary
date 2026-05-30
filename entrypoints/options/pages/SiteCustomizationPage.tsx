@@ -1,21 +1,5 @@
-import {
-  ChevronDown,
-  ChevronRight,
-  Globe,
-  Layers,
-  Plus,
-  RotateCcw,
-  Save,
-  Shield,
-  ShieldOff,
-  Trash2,
-} from 'lucide-react';
-import {
-  useCallback,
-  useEffect,
-  useMemo,
-  useState,
-} from 'react';
+import { ChevronDown, Globe, Plus, RotateCcw, Save, Trash2 } from 'lucide-react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { toast } from 'sonner';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -70,231 +54,9 @@ function rulesEqual(a: DraftState, b: DraftState) {
   return JSON.stringify(a) === JSON.stringify(b);
 }
 
-type PatternListEditorProps = {
-  description: string;
-  enable: boolean;
-  Icon: typeof Shield;
-  onChange: (next: { enable: boolean; patterns: string[] }) => void;
-  patterns: string[];
-  placeholder?: string;
-  title: string;
-  tone: 'positive' | 'negative';
-};
-
-function PatternListEditor({
-  description,
-  enable,
-  Icon,
-  onChange,
-  patterns,
-  placeholder,
-  title,
-  tone,
-}: PatternListEditorProps) {
-  const accent =
-    tone === 'positive'
-      ? 'text-emerald-600 dark:text-emerald-400'
-      : 'text-rose-600 dark:text-rose-400';
-
-  return (
-    <section
-      className={cn(
-        'rounded-lg border bg-card p-5 shadow-sm transition-opacity',
-        !enable && 'opacity-70',
-      )}
-    >
-      <header className="flex items-start justify-between gap-4">
-        <div className="flex items-start gap-3">
-          <span
-            className={cn(
-              'mt-0.5 inline-flex size-9 items-center justify-center rounded-md border bg-background',
-              accent,
-            )}
-          >
-            <Icon className="size-4" />
-          </span>
-          <div>
-            <h3 className="text-base font-semibold">{title}</h3>
-            <p className="mt-1 text-sm leading-6 text-muted-foreground">
-              {description}
-            </p>
-          </div>
-        </div>
-        <Switch
-          checked={enable}
-          onCheckedChange={(checked) =>
-            onChange({ enable: Boolean(checked), patterns })
-          }
-        />
-      </header>
-
-      <Textarea
-        className="mt-4 font-mono text-xs leading-6"
-        disabled={!enable}
-        onChange={(event) =>
-          onChange({ enable, patterns: textToList(event.currentTarget.value) })
-        }
-        placeholder={
-          placeholder ??
-          'one pattern per line, e.g.\nwww.reddit.com\n*.reddit.com\nexample.com/blog/**'
-        }
-        rows={5}
-        spellCheck={false}
-        value={listToText(patterns)}
-      />
-    </section>
-  );
-}
-
-type CustomizationCardProps = {
-  expanded: boolean;
-  index: number;
-  item: SiteCustomizationItem;
-  onChange: (next: SiteCustomizationItem) => void;
-  onRemove: () => void;
-  onToggleExpanded: () => void;
-};
-
-function CustomizationCard({
-  expanded,
-  index,
-  item,
-  onChange,
-  onRemove,
-  onToggleExpanded,
-}: CustomizationCardProps) {
-  const headerLabel = item.pattern.trim() || `Rule #${index + 1}`;
-
-  return (
-    <article
-      className={cn(
-        'rounded-lg border bg-card shadow-sm',
-        !item.enable && 'opacity-70',
-      )}
-    >
-      <header className="flex items-center gap-2 border-b px-4 py-2.5">
-        <button
-          aria-label={expanded ? 'Collapse rule' : 'Expand rule'}
-          className="grid size-6 place-items-center rounded text-muted-foreground hover:text-foreground"
-          onClick={onToggleExpanded}
-          type="button"
-        >
-          {expanded ? (
-            <ChevronDown className="size-4" />
-          ) : (
-            <ChevronRight className="size-4" />
-          )}
-        </button>
-        <span className="truncate font-mono text-sm font-medium">
-          {headerLabel}
-        </span>
-        <span className="ml-auto inline-flex items-center gap-2">
-          <Switch
-            checked={item.enable}
-            onCheckedChange={(checked) =>
-              onChange({ ...item, enable: Boolean(checked) })
-            }
-          />
-          <Button
-            aria-label="Remove rule"
-            onClick={onRemove}
-            size="icon"
-            type="button"
-            variant="ghost"
-          >
-            <Trash2 className="size-4" />
-          </Button>
-        </span>
-      </header>
-
-      {expanded ? (
-        <div className="grid gap-4 p-4">
-          <label className="grid gap-1.5">
-            <span className="text-xs font-medium uppercase tracking-wide text-muted-foreground">
-              URL pattern
-            </span>
-            <Input
-              className="font-mono"
-              onChange={(event) =>
-                onChange({ ...item, pattern: event.currentTarget.value })
-              }
-              placeholder="e.g. www.reddit.com, *.reddit.com, example.com/blog/**"
-              spellCheck={false}
-              value={item.pattern}
-            />
-            <span className="text-xs text-muted-foreground">
-              Matches against <code>hostname</code> and{' '}
-              <code>hostname + pathname</code>. Uses modern glob syntax
-              (picomatch).
-            </span>
-          </label>
-
-          <label className="grid gap-1.5">
-            <span className="text-xs font-medium uppercase tracking-wide text-muted-foreground">
-              CSS selectors
-            </span>
-            <Textarea
-              className="font-mono text-xs leading-6"
-              onChange={(event) =>
-                onChange({
-                  ...item,
-                  selectors: textToList(event.currentTarget.value),
-                })
-              }
-              placeholder={'one selector per line, e.g.\n.article-body\n#main-content'}
-              rows={3}
-              spellCheck={false}
-              value={listToText(item.selectors)}
-            />
-          </label>
-
-          <div className="flex items-center justify-between rounded-md border bg-muted/30 px-3 py-2">
-            <div className="flex items-center gap-2 text-sm">
-              <Layers className="size-4 text-muted-foreground" />
-              <span>Drill into Shadow DOM</span>
-            </div>
-            <Switch
-              checked={Boolean(item.useShadowRoot)}
-              onCheckedChange={(checked) =>
-                onChange({ ...item, useShadowRoot: Boolean(checked) })
-              }
-            />
-          </div>
-
-          {item.useShadowRoot ? (
-            <label className="grid gap-1.5">
-              <span className="text-xs font-medium uppercase tracking-wide text-muted-foreground">
-                Shadow root selectors
-              </span>
-              <Textarea
-                className="font-mono text-xs leading-6"
-                onChange={(event) =>
-                  onChange({
-                    ...item,
-                    shadowRootSelectors: textToList(event.currentTarget.value),
-                  })
-                }
-                placeholder={
-                  'selectors applied inside each host\'s shadow root, one per line'
-                }
-                rows={3}
-                spellCheck={false}
-                value={listToText(item.shadowRootSelectors)}
-              />
-              <span className="text-xs text-muted-foreground">
-                For each element matched by the CSS selectors above, these
-                selectors are queried inside <code>element.shadowRoot</code>.
-              </span>
-            </label>
-          ) : null}
-        </div>
-      ) : null}
-    </article>
-  );
-}
-
 export function SiteCustomizationPage() {
   const messages = getUiMessages();
+  const m = messages.siteCustomization;
 
   const [draft, setDraft] = useState<DraftState | null>(null);
   const [saved, setSaved] = useState<DraftState | null>(null);
@@ -382,15 +144,6 @@ export function SiteCustomizationPage() {
     });
   }, []);
 
-  const toggleExpanded = useCallback((index: number) => {
-    setExpanded((prev) => {
-      const next = new Set(prev);
-      if (next.has(index)) next.delete(index);
-      else next.add(index);
-      return next;
-    });
-  }, []);
-
   function resetDraftToDefaults() {
     setDraft({
       whitelist: { ...DEFAULT_WHITELIST },
@@ -417,7 +170,7 @@ export function SiteCustomizationPage() {
       const next: DraftState = { ...draft, customization: sanitizedCustomization };
       setDraft(next);
       setSaved(next);
-      toast.success('Site rules saved.');
+      toast.success(messages.common.saved);
     } catch (error) {
       toast.error(
         error instanceof Error ? error.message : 'Failed to save site rules.',
@@ -450,90 +203,275 @@ export function SiteCustomizationPage() {
   }
 
   return (
-    <form className="grid max-w-4xl gap-7 pb-24" onSubmit={handleSubmit}>
+    <form className="grid max-w-5xl pb-24" onSubmit={handleSubmit}>
       <OptionsPageTitle>{messages.pageTitles.siteCustomization}</OptionsPageTitle>
 
-      <section className="grid gap-3">
-        <header className="border-b pb-2">
-          <h2 className="text-xl font-extrabold text-primary">Site filters</h2>
-          <p className="mt-1 max-w-2xl text-sm leading-6 text-muted-foreground">
-            Control where the extension auto-injects. Whitelist takes
-            precedence when both are enabled. Patterns are matched against{' '}
-            <code>hostname</code> and <code>hostname + pathname</code>.
-          </p>
-        </header>
-
-        <div className="grid gap-4">
-          <PatternListEditor
-            description="Only run on sites whose hostname or path matches a pattern."
-            enable={draft.whitelist.enable}
-            Icon={Shield}
-            onChange={updateWhitelist}
-            patterns={draft.whitelist.patterns}
-            title="Whitelist"
-            tone="positive"
-          />
-          <PatternListEditor
-            description="Block the extension on sites whose hostname or path matches a pattern."
-            enable={draft.blacklist.enable}
-            Icon={ShieldOff}
-            onChange={updateBlacklist}
-            patterns={draft.blacklist.patterns}
-            title="Blacklist"
-            tone="negative"
-          />
-        </div>
-      </section>
-
-      <section className="grid gap-3">
-        <header className="flex flex-wrap items-end justify-between gap-2 border-b pb-2">
-          <div>
-            <h2 className="text-xl font-extrabold text-primary">
-              Selector overrides
-            </h2>
-            <p className="mt-1 max-w-2xl text-sm leading-6 text-muted-foreground">
-              For sites where the default extractor fails, pin the page content
-              to specific CSS selectors. Each rule binds a URL pattern to a list
-              of selectors (with optional Shadow DOM drill-down).
-            </p>
+      <div className="my-6 grid grid-cols-[auto,1fr] items-baseline gap-y-2 rounded-xl bg-gradient-to-r from-lime-100 to-blue-200 p-4 dark:from-lime-900/30 dark:to-blue-900/30">
+        <h2 className="col-span-2 mb-2 border-b border-black/10 pb-2 text-sm font-semibold dark:border-white/10">
+          {m.examplesTitle}
+        </h2>
+        {m.examples.map((variable) => (
+          <div className="col-span-2 grid grid-cols-[auto,1fr] gap-4" key={variable.key}>
+            <span className="font-mono text-sm font-medium">{variable.key}</span>
+            <span className="text-sm text-foreground/80">{variable.description}</span>
           </div>
-          <Button
-            onClick={addCustomization}
-            size="sm"
-            type="button"
-            variant="outline"
-          >
-            <Plus className="size-4" />
-            Add rule
-          </Button>
-        </header>
+        ))}
+      </div>
 
-        {draft.customization.length === 0 ? (
-          <div className="grid place-items-center gap-2 rounded-lg border border-dashed bg-muted/20 px-6 py-10 text-center">
-            <Globe className="size-6 text-muted-foreground" />
-            <p className="text-sm font-medium">No selector overrides yet</p>
-            <p className="max-w-md text-xs text-muted-foreground">
-              Add a rule when a site's content lives inside unusual structures
-              (e.g. Shadow DOM, framework runtimes) that the default extractor
-              can't read cleanly.
-            </p>
-          </div>
-        ) : (
-          <div className="grid gap-3">
-            {draft.customization.map((item, index) => (
-              <CustomizationCard
-                expanded={expanded.has(index)}
-                index={index}
-                item={item}
-                key={index}
-                onChange={(next) => updateCustomization(index, next)}
-                onRemove={() => removeCustomization(index)}
-                onToggleExpanded={() => toggleExpanded(index)}
+      <div className="grid grid-cols-1 items-start gap-6 lg:grid-cols-2">
+        <details
+          className="group overflow-hidden rounded-lg border bg-card shadow-sm open:pb-4"
+          open
+        >
+          <summary className="flex cursor-pointer list-none items-center justify-between border-b border-transparent p-4 transition-colors hover:bg-muted/50 group-open:border-border [&::-webkit-details-marker]:hidden">
+            <div className="flex items-center gap-3">
+              <Switch
+                checked={draft.whitelist.enable}
+                onCheckedChange={(checked) => {
+                  const enable = Boolean(checked);
+                  updateWhitelist({ ...draft.whitelist, enable });
+                  if (enable) updateBlacklist({ ...draft.blacklist, enable: false });
+                }}
+                onClick={(e) => e.stopPropagation()}
               />
-            ))}
+              <span className="font-semibold">{m.whitelist}</span>
+            </div>
+            <ChevronDown className="size-5 text-muted-foreground transition-transform group-open:rotate-180" />
+          </summary>
+          <div className="grid gap-4 px-4 pt-4">
+            <label className="text-sm text-muted-foreground">{m.whitelistDescription}</label>
+            <label className="grid gap-2">
+              <span className="text-sm font-medium text-foreground">
+                {m.patternsLabel} ({m.onePerLine})
+              </span>
+              <Textarea
+                className="font-mono text-sm leading-6"
+                onChange={(e) =>
+                  updateWhitelist({ ...draft.whitelist, patterns: textToList(e.currentTarget.value) })
+                }
+                placeholder={m.whitelistPlaceholder}
+                rows={8}
+                spellCheck={false}
+                value={listToText(draft.whitelist.patterns)}
+              />
+            </label>
           </div>
-        )}
-      </section>
+        </details>
+
+        <details
+          className="group overflow-hidden rounded-lg border bg-card shadow-sm open:pb-4"
+          open
+        >
+          <summary className="flex cursor-pointer list-none items-center justify-between border-b border-transparent p-4 transition-colors hover:bg-muted/50 group-open:border-border [&::-webkit-details-marker]:hidden">
+            <div className="flex items-center gap-3">
+              <Switch
+                checked={draft.blacklist.enable}
+                onCheckedChange={(checked) => {
+                  const enable = Boolean(checked);
+                  updateBlacklist({ ...draft.blacklist, enable });
+                  if (enable) updateWhitelist({ ...draft.whitelist, enable: false });
+                }}
+                onClick={(e) => e.stopPropagation()}
+              />
+              <span className="font-semibold">{m.blacklist}</span>
+            </div>
+            <ChevronDown className="size-5 text-muted-foreground transition-transform group-open:rotate-180" />
+          </summary>
+          <div className="grid gap-4 px-4 pt-4">
+            <label className="text-sm text-muted-foreground">{m.blacklistDescription}</label>
+            <label className="grid gap-2">
+              <span className="text-sm font-medium text-foreground">
+                {m.patternsLabel} ({m.onePerLine})
+              </span>
+              <Textarea
+                className="font-mono text-sm leading-6"
+                onChange={(e) =>
+                  updateBlacklist({ ...draft.blacklist, patterns: textToList(e.currentTarget.value) })
+                }
+                placeholder={m.blacklistPlaceholder}
+                rows={8}
+                spellCheck={false}
+                value={listToText(draft.blacklist.patterns)}
+              />
+            </label>
+          </div>
+        </details>
+      </div>
+
+      <details
+        className="group mt-6 overflow-hidden rounded-lg border bg-card shadow-sm open:pb-4"
+        open
+      >
+        <summary className="flex cursor-pointer list-none items-center justify-between border-b border-transparent p-4 transition-colors hover:bg-muted/50 group-open:border-border [&::-webkit-details-marker]:hidden">
+          <div className="flex items-center gap-2">
+            <h2 className="text-lg font-semibold">{m.customizationTitle}</h2>
+          </div>
+          <div className="flex items-center gap-3">
+            <Button
+              onClick={(e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                addCustomization();
+              }}
+              size="sm"
+              type="button"
+              className="h-8 gap-1"
+            >
+              <Plus className="size-4" />
+              {m.addRule}
+            </Button>
+            <ChevronDown className="size-5 text-muted-foreground transition-transform group-open:rotate-180" />
+          </div>
+        </summary>
+
+        <div className="grid gap-4 px-4 pt-4">
+          <p className="text-sm text-muted-foreground">{m.customizationDescription}</p>
+
+          {draft.customization.length === 0 ? (
+            <div className="grid place-items-center gap-2 rounded-lg border border-dashed bg-muted/20 px-6 py-10 text-center">
+              <Globe className="size-6 text-muted-foreground" />
+              <p className="text-sm font-medium">{m.noRules}</p>
+              <p className="max-w-md text-xs text-muted-foreground">{m.noRulesDescription}</p>
+            </div>
+          ) : (
+            <div className="grid gap-4">
+              {draft.customization.map((item, index) => (
+                <details
+                  className="group/rule overflow-hidden rounded-md border bg-muted/30 open:pb-4"
+                  key={index}
+                  open={expanded.has(index)}
+                  onToggle={(e) => {
+                    const isOpen = e.currentTarget.open;
+                    setExpanded((prev) => {
+                      const next = new Set(prev);
+                      if (isOpen) next.add(index);
+                      else next.delete(index);
+                      return next;
+                    });
+                  }}
+                >
+                  <summary className="flex cursor-pointer list-none items-center justify-between border-b border-transparent p-3 transition-colors hover:bg-muted/50 group-open/rule:border-border [&::-webkit-details-marker]:hidden">
+                    <div className="flex min-w-0 flex-1 items-center gap-3">
+                      <Switch
+                        checked={item.enable}
+                        onCheckedChange={(checked) =>
+                          updateCustomization(index, { ...item, enable: Boolean(checked) })
+                        }
+                        onClick={(e) => e.stopPropagation()}
+                      />
+                      <span
+                        className={cn(
+                          'truncate font-medium',
+                          !item.pattern && 'text-muted-foreground',
+                        )}
+                      >
+                        {item.pattern || m.newRuleFallback}
+                      </span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <Button
+                        onClick={(e) => {
+                          e.preventDefault();
+                          e.stopPropagation();
+                          removeCustomization(index);
+                        }}
+                        size="icon"
+                        type="button"
+                        variant="ghost"
+                        className="size-8 text-destructive hover:bg-destructive/10 hover:text-destructive"
+                      >
+                        <Trash2 className="size-4" />
+                      </Button>
+                      <ChevronDown className="size-5 text-muted-foreground transition-transform group-open/rule:rotate-180" />
+                    </div>
+                  </summary>
+
+                  <div className="grid gap-4 px-4 pt-4">
+                    <div className="flex flex-wrap items-end gap-4 lg:flex-nowrap">
+                      <div className="flex-1">
+                        <label className="grid gap-2">
+                          <span className="text-sm font-medium">{m.matchPattern}</span>
+                          <Input
+                            className="font-mono"
+                            onChange={(e) =>
+                              updateCustomization(index, { ...item, pattern: e.currentTarget.value })
+                            }
+                            placeholder={m.matchPatternPlaceholder}
+                            spellCheck={false}
+                            value={item.pattern}
+                          />
+                        </label>
+                      </div>
+                      <div className="flex shrink-0 items-center gap-2 pb-2">
+                        <Switch
+                          checked={Boolean(item.useShadowRoot)}
+                          onCheckedChange={(checked) =>
+                            updateCustomization(index, { ...item, useShadowRoot: Boolean(checked) })
+                          }
+                          id={`shadow-switch-${index}`}
+                        />
+                        <label
+                          className="cursor-pointer text-sm font-medium text-foreground"
+                          htmlFor={`shadow-switch-${index}`}
+                        >
+                          {m.useShadowRoot}
+                        </label>
+                      </div>
+                    </div>
+
+                    <div className="grid gap-4 lg:grid-cols-2">
+                      <label className="grid gap-2">
+                        <span className="text-sm font-medium">
+                          {item.useShadowRoot ? m.selectorsHost : m.selectorsNormal} ({m.onePerLine})
+                        </span>
+                        <Textarea
+                          className="font-mono text-sm leading-6"
+                          onChange={(e) =>
+                            updateCustomization(index, {
+                              ...item,
+                              selectors: textToList(e.currentTarget.value),
+                            })
+                          }
+                          placeholder={
+                            item.useShadowRoot
+                              ? m.selectorsPlaceholderHost
+                              : m.selectorsPlaceholderNormal
+                          }
+                          rows={5}
+                          spellCheck={false}
+                          value={listToText(item.selectors)}
+                        />
+                      </label>
+
+                      {item.useShadowRoot && (
+                        <label className="grid gap-2">
+                          <span className="text-sm font-medium">
+                            {m.shadowRootSelectors} ({m.onePerLine})
+                          </span>
+                          <Textarea
+                            className="font-mono text-sm leading-6"
+                            onChange={(e) =>
+                              updateCustomization(index, {
+                                ...item,
+                                shadowRootSelectors: textToList(e.currentTarget.value),
+                              })
+                            }
+                            placeholder={m.shadowRootSelectorsPlaceholder}
+                            rows={5}
+                            spellCheck={false}
+                            value={listToText(item.shadowRootSelectors)}
+                          />
+                          <span className="text-xs text-muted-foreground">{m.shadowRootTip}</span>
+                        </label>
+                      )}
+                    </div>
+                  </div>
+                </details>
+              ))}
+            </div>
+          )}
+        </div>
+      </details>
 
       <footer
         className={cn(
@@ -553,11 +491,11 @@ export function SiteCustomizationPage() {
             type="button"
             variant="outline"
           >
-            <RotateCcw />
+            <RotateCcw className="mr-2 size-4" />
             {messages.general.restoreDefaults}
           </Button>
           <Button disabled={!isDirty || isSaving} type="submit">
-            <Save />
+            <Save className="mr-2 size-4" />
             {isSaving ? messages.common.saving : messages.common.save}
           </Button>
         </div>

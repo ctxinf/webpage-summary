@@ -29,6 +29,7 @@ type UiMessages = {
     save: string;
     saved: string;
     saving: string;
+    success: string;
     unsavedChanges: string;
   };
   content: {
@@ -188,6 +189,35 @@ type UiMessages = {
     textLength: string;
     unsupportedPage: string;
   };
+  siteCustomization: {
+    examplesTitle: string;
+    examplesDescription: string;
+    examples: { key: string; description: string }[];
+    whitelist: string;
+    blacklist: string;
+    whitelistDescription: string;
+    blacklistDescription: string;
+    patternsLabel: string;
+    onePerLine: string;
+    whitelistPlaceholder: string;
+    blacklistPlaceholder: string;
+    customizationTitle: string;
+    customizationDescription: string;
+    addRule: string;
+    noRules: string;
+    noRulesDescription: string;
+    newRuleFallback: string;
+    matchPattern: string;
+    matchPatternPlaceholder: string;
+    useShadowRoot: string;
+    selectorsNormal: string;
+    selectorsHost: string;
+    selectorsPlaceholderNormal: string;
+    selectorsPlaceholderHost: string;
+    shadowRootSelectors: string;
+    shadowRootSelectorsPlaceholder: string;
+    shadowRootTip: string;
+  };
 };
 
 const UI_MESSAGES: Record<UiLocale, UiMessages> = {
@@ -201,6 +231,7 @@ const UI_MESSAGES: Record<UiLocale, UiMessages> = {
       save: 'Save',
       saved: 'Saved',
       saving: 'Saving',
+      success: 'Success',
       unsavedChanges: 'Unsaved changes',
     },
     content: {
@@ -415,6 +446,52 @@ const UI_MESSAGES: Record<UiLocale, UiMessages> = {
       textLength: 'Text length',
       unsupportedPage: 'This page does not support injection yet',
     },
+    siteCustomization: {
+      examplesTitle: 'Match Pattern Examples',
+      examplesDescription: 'Supports modern glob syntax (picomatch).',
+      examples: [
+        { key: 'example.com', description: 'example.com' },
+        { key: '*.example.com', description: 'a.example.com, b.example.com' },
+        {
+          key: '**.example.com',
+          description: 'a.example.com, b.example.com, a.b.example.com',
+        },
+        {
+          key: 'example.com/articles/*',
+          description: 'example.com/articles/1, example.com/articles/2',
+        },
+      ],
+      whitelist: 'Whitelist',
+      blacklist: 'Blacklist',
+      whitelistDescription:
+        'When enabled, the extension will only be injected into pages matching these patterns.',
+      blacklistDescription:
+        'When enabled, the extension will NOT be injected into pages matching these patterns.',
+      patternsLabel: 'URL Patterns',
+      onePerLine: 'one per line',
+      whitelistPlaceholder:
+        'e.g. \nwww.reddit.com\nwww.reddit.com/r/**/comments/**\n*.news.com\n**.quora.com',
+      blacklistPlaceholder: 'e.g. \nwww.bing.com\n*.visa.com\n**.google.com',
+      customizationTitle: 'Selector Overrides',
+      customizationDescription:
+        'For sites where the default extractor fails, pin the page content to specific CSS selectors.',
+      addRule: 'Add rule',
+      noRules: 'No selector overrides yet',
+      noRulesDescription:
+        "Add a rule when a site's content lives inside unusual structures (e.g. Shadow DOM) that the default extractor can't read cleanly.",
+      newRuleFallback: 'New Rule',
+      matchPattern: 'Match Pattern',
+      matchPatternPlaceholder: 'minimatch pattern, e.g. www.reddit.com, *.reddit.com',
+      useShadowRoot: 'Drill into Shadow DOM',
+      selectorsNormal: 'CSS selectors',
+      selectorsHost: 'Host selectors',
+      selectorsPlaceholderNormal: 'e.g. \n.text-neutral-content\n#comment-tree',
+      selectorsPlaceholderHost: 'e.g. \n#app > div\n.shadow-host-element',
+      shadowRootSelectors: 'Shadow root selectors',
+      shadowRootSelectorsPlaceholder: 'e.g. \n#content\n.article-body',
+      shadowRootTip:
+        'For each element matched by the CSS selectors above, these selectors are queried inside element.shadowRoot.',
+    },
   },
   'zh-CN': {
     common: {
@@ -426,6 +503,7 @@ const UI_MESSAGES: Record<UiLocale, UiMessages> = {
       save: '保存',
       saved: '已保存',
       saving: '保存中',
+      success: '成功',
       unsavedChanges: '有未保存的更改',
     },
     content: {
@@ -629,6 +707,50 @@ const UI_MESSAGES: Record<UiLocale, UiMessages> = {
       pageUrlFallback: '打开任意网页后查看注入状态',
       textLength: '文本长度',
       unsupportedPage: '当前页面暂不支持注入',
+    },
+    siteCustomization: {
+      examplesTitle: '匹配规则示例',
+      examplesDescription: '支持现代 glob 语法 (picomatch)。',
+      examples: [
+        { key: 'example.com', description: '匹配 example.com' },
+        { key: '*.example.com', description: '匹配 a.example.com, b.example.com' },
+        {
+          key: '**.example.com',
+          description: '匹配 a.example.com, b.example.com, a.b.example.com',
+        },
+        {
+          key: 'example.com/articles/*',
+          description: '匹配 example.com/articles/1, example.com/articles/2',
+        },
+      ],
+      whitelist: '白名单',
+      blacklist: '黑名单',
+      whitelistDescription: '开启后，插件只会注入到白名单内的网页中。',
+      blacklistDescription: '开启后，插件不会注入到黑名单内的网页中。',
+      patternsLabel: '匹配规则',
+      onePerLine: '每行一个',
+      whitelistPlaceholder:
+        '例如：\nwww.reddit.com\nwww.reddit.com/r/**/comments/**\n*.news.com\n**.quora.com',
+      blacklistPlaceholder: '例如：\nwww.bing.com\n*.visa.com\n**.google.com',
+      customizationTitle: '站点定制',
+      customizationDescription:
+        '由于各网站结构不同，自动提取正文有时会失败。您可以在这里为特定站点设置 CSS 选择器，以便插件更准确地获取内容。',
+      addRule: '添加规则',
+      noRules: '暂无站点定制规则',
+      noRulesDescription:
+        '为那些自动提取内容失败的站点（如内容被 Shadow DOM 包裹的站点）添加选择器规则。',
+      newRuleFallback: '新规则',
+      matchPattern: '匹配规则',
+      matchPatternPlaceholder: '支持 minimatch 语法，如 www.reddit.com, *.reddit.com',
+      useShadowRoot: '穿透 Shadow DOM',
+      selectorsNormal: 'CSS 选择器',
+      selectorsHost: '宿主选择器',
+      selectorsPlaceholderNormal: '例如：\n.text-neutral-content\n#comment-tree',
+      selectorsPlaceholderHost: '例如：\n#app > div\n.shadow-host-element',
+      shadowRootSelectors: 'Shadow Root 内部选择器',
+      shadowRootSelectorsPlaceholder: '例如：\n#content\n.article-body',
+      shadowRootTip:
+        '从上述选择器匹配到的元素内部进入 shadowRoot 并应用这些选择器。',
     },
   },
 };
