@@ -44,7 +44,9 @@ export async function activePageAndInvokeSummary(tab: Browser.tabs.Tab) {
   }
 
   if (shadowRootExist) {
-    sendMessage('invokeSummary', undefined, { tabId: tab.id });
+    sendMessage('invokeSummary', undefined, { tabId: tab.id }).catch(e => {
+      console.warn('[activePageAndInvokeSummary] sendMessage failed', e);
+    });
   } else {
     console.error("Cannot find webpage-summary-entrance shadow root, check if extension is enabled on this page.");
   }
@@ -94,7 +96,9 @@ export function initializeControlHandlers() {
     }
 
     if (info.menuItemId === 'add-to-chat' && tab?.id) {
-      sendMessage('addContentToChatDialog', info.selectionText ?? '', tab.id);
+      sendMessage('addContentToChatDialog', info.selectionText ?? '', { tabId: tab.id }).catch(e => {
+        console.warn('[contextMenu] addContentToChatDialog failed', e);
+      });
     }
   });
 
@@ -103,7 +107,9 @@ export function initializeControlHandlers() {
     if (command === 'COMMAND_INVOKE_SUMMARY' && tab) {
       activePageAndInvokeSummary(tab);
     } else if (command === 'COMMAND_ADD_SELECTION' && tab?.id) {
-      sendMessage('addContentToChatDialog', '', tab.id);
+      sendMessage('addContentToChatDialog', '', { tabId: tab.id }).catch(e => {
+        console.warn('[command] COMMAND_ADD_SELECTION failed', e);
+      });
     }
   });
 }

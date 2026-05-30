@@ -36,6 +36,27 @@ export function ContentEntrance() {
 
   const messages = getUiMessages();
 
+  useEffect(() => {
+    const unbindInvoke = onMessage('invokeSummary', () => {
+      setMainPanelOpen(true);
+    });
+
+    const unbindAdd = onMessage('addContentToChatDialog', (msg) => {
+      setMainPanelOpen(true);
+      // Delay the event slightly to ensure ContentAppFrame has mounted and registered its event listener
+      if (msg.data) {
+        setTimeout(() => {
+          window.dispatchEvent(new CustomEvent('WEBPAGE_SUMMARY_ADD_TEXT', { detail: msg.data }));
+        }, 150);
+      }
+    });
+
+    return () => {
+      unbindInvoke();
+      unbindAdd();
+    };
+  }, []);
+
   return (
     <>
       {/* Switchable summary panel layout — controller is shared from parent */}

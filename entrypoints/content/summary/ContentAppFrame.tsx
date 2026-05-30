@@ -110,6 +110,7 @@ export function ContentAppFrame({ onClose, isMain = true, onAdd }: ContentAppFra
   const [pageContentTokenCount, setPageContentTokenCount] = useState<number | null>(null);
   const [inputText, setInputText] = useState('');
   const [isTokenViewerOpen, setIsTokenViewerOpen] = useState(false);
+  const [autoSummarizePending, setAutoSummarizePending] = useState(false);
   const scrollRef = useRef<HTMLDivElement>(null);
 
   const modelConfigIdRef = useRef<string | null>(null);
@@ -173,12 +174,43 @@ export function ContentAppFrame({ onClose, isMain = true, onAdd }: ContentAppFra
       });
 
       if (generalSettings.enableAutoBeginSummary) {
-        console.log('[ContentAppFrame] Auto trigger summarize by settings is enabled (to be implemented)');
+        console.log('[ContentAppFrame] Auto trigger summarize by settings is enabled');
+        setAutoSummarizePending(true);
       }
     }
     init();
     return () => { active = false; };
   }, []);
+
+  useEffect(() => {
+    const handleAddText = (e: Event) => {
+      const customEvent = e as CustomEvent<string>;
+      if (customEvent.detail) {
+        setInputText(prev => {
+          if (prev) {
+            return prev + '\n' + customEvent.detail;
+          }
+          return customEvent.detail;
+        });
+        if (!showBottom) {
+          setShowBottom(true);
+        }
+      }
+    };
+    window.addEventListener('WEBPAGE_SUMMARY_ADD_TEXT', handleAddText);
+    return () => {
+      window.removeEventListener('WEBPAGE_SUMMARY_ADD_TEXT', handleAddText);
+    };
+  }, [showBottom]);
+
+  // Handle auto summarization once data is fully loaded
+  useEffect(() => {
+    if (autoSummarizePending && pageContent && settings && prompts.length > 0 && currentModelId && currentPromptId) {
+      setAutoSummarizePending(false);
+      handleSummarize();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [autoSummarizePending, pageContent, settings, prompts, currentModelId, currentPromptId]);
 
   const getContextMessageTexts = async () => {
     const prompt = prompts.find(p => p.id === currentPromptId);
