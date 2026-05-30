@@ -64,22 +64,30 @@ interface ContentAppFrameProps {
 }
 
 function UsageDisplay({ messages, currentModel }: { messages: any[], currentModel?: ModelConfigItem }) {
-  const lastAssistantMessage = [...messages].reverse().find(m => m.role === 'assistant');
-  const usage = (lastAssistantMessage?.metadata as any)?.usage;
+  let totalInput = 0;
+  let totalOutput = 0;
+  let totalCached = 0;
+
+  for (const m of messages) {
+    if (m.role === 'assistant') {
+      const usage = (m.metadata as any)?.usage;
+      if (usage) {
+        totalInput += usage.inputTokens ?? usage.promptTokens ?? 0;
+        totalOutput += usage.outputTokens ?? usage.completionTokens ?? 0;
+        totalCached += usage.cachedInputTokens ?? usage.promptTokensDetails?.cachedTokens ?? usage.cachedTokens ?? 0;
+      }
+    }
+  }
+
+  if (totalInput === 0 && totalOutput === 0) return <span>Ready</span>;
   
-  if (!usage) return <span>Ready</span>;
-  
-  const input = usage.inputTokens ?? usage.promptTokens ?? 0;
-  const output = usage.outputTokens ?? usage.completionTokens ?? 0;
-  const cached = usage.cachedInputTokens ?? usage.promptTokensDetails?.cachedTokens ?? usage.cachedTokens ?? 0;
-  
-  const rawInput = input - cached;
+  const rawInput = totalInput - totalCached;
   
   const priceUnit = currentModel?.priceUnit || '$';
   
   const rawInputCost = currentModel ? (rawInput * currentModel.inputTokenPrice) / 1_000_000 : 0;
-  const cachedCost = currentModel ? (cached * (currentModel.inputTokenPrice / 10)) / 1_000_000 : 0;
-  const outputCost = currentModel ? (output * currentModel.outputTokenPrice) / 1_000_000 : 0;
+  const cachedCost = currentModel ? (totalCached * (currentModel.inputTokenPrice / 10)) / 1_000_000 : 0;
+  const outputCost = currentModel ? (totalOutput * currentModel.outputTokenPrice) / 1_000_000 : 0;
   
   const totalCost = rawInputCost + cachedCost + outputCost;
 
@@ -90,13 +98,13 @@ function UsageDisplay({ messages, currentModel }: { messages: any[], currentMode
   };
   
   const hoverText = `↑in: ${rawInput} ${priceUnit}${formatCost(rawInputCost)}` +
-    (cached > 0 ? ` (cached: ${cached} ${priceUnit}${formatCost(cachedCost)})` : '') +
-    `    ↓out: ${output} ${priceUnit}${formatCost(outputCost)}`;
+    (totalCached > 0 ? ` (cached: ${totalCached} ${priceUnit}${formatCost(cachedCost)})` : '') +
+    `    ↓out: ${totalOutput} ${priceUnit}${formatCost(outputCost)}`;
 
   return (
     <span title={hoverText} className="cursor-help flex items-center gap-1.5">
-      <span>↑{input}</span>
-      <span>↓{output}</span>
+      <span>↑{totalInput}</span>
+      <span>↓{totalOutput}</span>
       {totalCost > 0 && <span>{priceUnit}{formatCost(totalCost)}</span>}
     </span>
   );
@@ -287,10 +295,9 @@ export function ContentAppFrame({ onClose, isMain = true, onAdd }: ContentAppFra
   const handleMessageSubmit = async (message: {text?:string}) => {
     if (!message.text) return;
 
-    await initContextMessage();
-
-    await sendMessage({ text: message.text });
     setInputText('');
+    await initContextMessage();
+    await sendMessage({ text: message.text });
   };
 
   const handleCopyMessages = async () => {
