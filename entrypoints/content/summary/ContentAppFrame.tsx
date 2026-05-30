@@ -426,9 +426,11 @@ export function ContentAppFrame({ onClose, isMain = true, onAdd }: ContentAppFra
         {mode !== 'sidebar' ? renderDropdowns(true) : <div />}
 
         <div className="flex items-center gap-0.5 text-zinc-500 justify-end overflow-hidden h-full">
-          <button className="flex items-center justify-center border  rounded size-6 hover:bg-zinc-50 shadow-sm shrink-0" title="Add" onClick={onAdd}>
-            <PlusSquare size={14} />
-          </button>
+          {mode !== 'sidebar' && (
+            <button className="flex items-center justify-center border  rounded size-6 hover:bg-zinc-50 shadow-sm shrink-0" title="Add" onClick={onAdd}>
+              <PlusSquare size={14} />
+            </button>
+          )}
           {isMain && (
             <button
               className="flex items-center justify-center aspect-square border size-6  border-zinc-200 rounded hover:bg-zinc-50 shadow-sm shrink-0"
