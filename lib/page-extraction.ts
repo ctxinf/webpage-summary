@@ -1,5 +1,9 @@
 import { Readability } from '@mozilla/readability';
 import type { PageTextExtractMethod } from '@/constants/page-extraction';
+import {
+  findMatchingCustomization,
+  loadSiteCustomization,
+} from '@/lib/site-rules-storage';
 
 export {
   PAGE_TEXT_EXTRACT_METHODS,
@@ -400,6 +404,35 @@ export function parsePageContent(
     default:
       return readabilityParseRead(sourceDocument);
   }
+}
+
+/**
+ * Extract page content honoring user-configured site customization rules.
+ *
+ * If the current URL matches a customization rule's pattern, content is
+ * pulled from the rule's CSS selectors (with optional Shadow DOM drill-down).
+ * Otherwise falls back to the user's chosen extraction method.
+ */
+export async function extractWebpageContent(
+  extractMethod: PageTextExtractMethod = 'readability',
+  sourceDocument: Document = document,
+): Promise<WebpageContent | undefined> {
+  const customizations = await loadSiteCustomization();
+  const url = sourceDocument.location ?? location;
+  const matchedRule = findMatchingCustomization(url, customizations);
+  // console.debug('site custom:',url,matchedRule)s
+
+  if (matchedRule) {
+    return textsBySelectors(
+      matchedRule.selectors,
+      {
+        shadowRootSelectors: matchedRule.shadowRootSelectors,
+        useShadowRoot: matchedRule.useShadowRoot,
+      },
+      sourceDocument,
+    );
+  }
+  return parsePageContent(extractMethod, sourceDocument);
 }
 
 export function textsBySelectors(

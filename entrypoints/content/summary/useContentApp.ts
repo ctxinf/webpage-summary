@@ -7,7 +7,7 @@ import { AiSdkConnectTransport } from '@/lib/ai-sdk-connect-transport';
 import { loadModelSettings } from '@/lib/model-settings-storage';
 import { loadPromptSettings, seedDefaultPromptIfNeeded } from '@/lib/prompt-settings-storage';
 import { loadGeneralSettings } from '@/lib/general-settings-storage';
-import { parsePageContent, type WebpageContent } from '@/lib/page-extraction';
+import { extractWebpageContent, type WebpageContent } from '@/lib/page-extraction';
 import { countInputTokens, truncateByTokens } from '@/lib/token-count';
 import type { ModelConfigItem } from '@/constants/model-settings';
 import type { PromptConfigItem } from '@/constants/prompt-settings';
@@ -74,7 +74,8 @@ export function useContentApp() {
       setShowBottom(generalSettings.enableChatInputBox);
 
       console.log('[useContentApp] Extracting page content...');
-      const extracted = parsePageContent(generalSettings.pageTextExtractMethod, document);
+      const extracted = await extractWebpageContent(generalSettings.pageTextExtractMethod, document);
+      if (!active) return;
       if (extracted) {
         setPageContent(extracted);
         countInputTokens(extracted.textContent)

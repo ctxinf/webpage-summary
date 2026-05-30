@@ -3,7 +3,12 @@ import { createRoot, type Root } from 'react-dom/client';
 import type { ContentScriptContext } from 'wxt/utils/content-script-context';
 import { getUiMessages } from '@/lib/i18n';
 import { loadGeneralSettings } from '@/lib/general-settings-storage';
-import { parsePageContent } from '@/lib/page-extraction';
+import { parsePageContent, textsBySelectors } from '@/lib/page-extraction';
+import {
+  findMatchingCustomization,
+  isUrlAllowed,
+  loadSiteRules,
+} from '@/lib/site-rules-storage';
 import { ContentEntrance } from './ContentEntrance';
 
 type PingMessage = {
@@ -54,7 +59,14 @@ async function mountSummaryBadge(ctx: ContentScriptContext) {
 export async function mountContentScope(ctx: ContentScriptContext) {
   console.log('[ContentScope] mountContentScope called');
   const messages = getUiMessages();
-  await mountSummaryBadge(ctx);
+
+  const { whitelist, blacklist } = await loadSiteRules();
+  const urlAllowed = isUrlAllowed(location, whitelist, blacklist);
+  if (urlAllowed) {
+    await mountSummaryBadge(ctx);
+  } else {
+    console.log('[ContentScope] site rules blocked UI mount for', location.hostname);
+  }
 
   browser.runtime.onMessage.addListener((message: IncomingMessage) => {
     if (message?.type === 'WEBPAGE_SUMMARY_PING') {
@@ -69,8 +81,24 @@ export async function mountContentScope(ctx: ContentScriptContext) {
     if (message?.type === 'WEBPAGE_SUMMARY_EXTRACT_TEXT') {
       return (async () => {
         try {
-          const settings = await loadGeneralSettings();
-          const extracted = parsePageContent(settings.pageTextExtractMethod, document);
+          const [settings, { siteCustomization }] = await Promise.all([
+            loadGeneralSettings(),
+            loadSiteRules(),
+          ]);
+
+          const matchedRule = findMatchingCustomization(location, siteCustomization);
+          console.log('matchedRule',matchedRule)
+          const extracted = matchedRule
+            ? textsBySelectors(
+                matchedRule.selectors,
+                {
+                  shadowRootSelectors: matchedRule.shadowRootSelectors,
+                  useShadowRoot: matchedRule.useShadowRoot,
+                },
+                document,
+              )
+            : parsePageContent(settings.pageTextExtractMethod, document);
+
           return {
             ok: true,
             title: document.title || messages.content.untitledPage,
