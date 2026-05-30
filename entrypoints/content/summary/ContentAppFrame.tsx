@@ -111,6 +111,7 @@ export function ContentAppFrame({ onClose, isMain = true, onAdd }: ContentAppFra
   const [inputText, setInputText] = useState('');
   const [isTokenViewerOpen, setIsTokenViewerOpen] = useState(false);
   const [autoSummarizePending, setAutoSummarizePending] = useState(false);
+  const [autoSubmitTextPending, setAutoSubmitTextPending] = useState<string | null>(null);
   const scrollRef = useRef<HTMLDivElement>(null);
 
   const modelConfigIdRef = useRef<string | null>(null);
@@ -187,10 +188,12 @@ export function ContentAppFrame({ onClose, isMain = true, onAdd }: ContentAppFra
       const customEvent = e as CustomEvent<string>;
       if (customEvent.detail) {
         setInputText(prev => {
-          if (prev) {
-            return prev + '\n' + customEvent.detail;
+          const newText = prev ? prev + '\n' + customEvent.detail : customEvent.detail;
+          if (settings?.enableAutoBeginChatForAddSelectionToChat) {
+            setAutoSubmitTextPending(newText);
+            return '';
           }
-          return customEvent.detail;
+          return newText;
         });
         if (!showBottom) {
           setShowBottom(true);
@@ -201,7 +204,7 @@ export function ContentAppFrame({ onClose, isMain = true, onAdd }: ContentAppFra
     return () => {
       window.removeEventListener('WEBPAGE_SUMMARY_ADD_TEXT', handleAddText);
     };
-  }, [showBottom]);
+  }, [showBottom, settings?.enableAutoBeginChatForAddSelectionToChat]);
 
   // Handle auto summarization once data is fully loaded
   useEffect(() => {
@@ -211,6 +214,16 @@ export function ContentAppFrame({ onClose, isMain = true, onAdd }: ContentAppFra
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [autoSummarizePending, pageContent, settings, prompts, currentModelId, currentPromptId]);
+
+  // Handle auto submit text
+  useEffect(() => {
+    if (autoSubmitTextPending && pageContent && settings && prompts.length > 0 && currentModelId && currentPromptId) {
+      const textToSubmit = autoSubmitTextPending;
+      setAutoSubmitTextPending(null);
+      handleMessageSubmit({ text: textToSubmit});
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [autoSubmitTextPending, pageContent, settings, prompts, currentModelId, currentPromptId]);
 
   const getContextMessageTexts = async () => {
     const prompt = prompts.find(p => p.id === currentPromptId);
@@ -266,7 +279,7 @@ export function ContentAppFrame({ onClose, isMain = true, onAdd }: ContentAppFra
     await sendMessage({ text: texts.userMessageText });
   };
 
-  const handleMessageSubmit = async (message: PromptInputMessage) => {
+  const handleMessageSubmit = async (message: {text?:string}) => {
     if (!message.text) return;
 
     await initContextMessage();

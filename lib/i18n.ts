@@ -470,8 +470,8 @@ const UI_MESSAGES: Record<UiLocale, UiMessages> = {
       },
       settings: {
         enableAutoBeginChatForAddSelectionToChat: {
-          description: '选中的页面文本加入对话后自动开始聊天。',
-          label: '加入选中文本后发送',
+          description: '添加选中文本后立即发送。',
+          label: '添加选中文本后立即发送',
         },
         enableAutoBeginSummary: {
           description: '总结面板打开后立即开始总结。',
