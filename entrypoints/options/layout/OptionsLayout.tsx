@@ -51,10 +51,7 @@ export function OptionsLayout() {
   const primaryLinks: SidebarLink[] = [
     { label: messages.options.navigation.interface, to: '/interface' },
     { label: messages.options.navigation.general, to: '/general' },
-    {
-      label: messages.options.navigation.pageExtraction,
-      to: '/page-extraction',
-    },
+
     { label: messages.options.navigation.models, to: '/models' },
     { label: messages.options.navigation.prompts, to: '/prompts' },
     {

@@ -13,7 +13,13 @@ import {
 } from '@/lib/general-settings-storage';
 import { getUiMessages } from '@/lib/i18n';
 import { cn } from '@/lib/utils';
+import type { PageTextExtractMethod } from '@/lib/page-extraction';
 import { OptionsPageTitle } from './OptionsPageTitle';
+
+const EXTRACT_METHOD_OPTIONS: PageTextExtractMethod[] = [
+  'readability',
+  'dom-heuristic',
+];
 
 type BooleanSettingKey = Exclude<
   GeneralSettingKey,
@@ -248,6 +254,47 @@ export function GeneralPage() {
           </section>
         );
       })}
+
+      <section className="grid gap-3 border-b pb-7">
+        <header className="mb-4 border-b pb-2">
+          <h2 className="text-xl font-extrabold text-primary">
+            {messages.pageExtraction.method.title}
+          </h2>
+          <p className="mt-1 max-w-2xl text-sm leading-6 text-muted-foreground">
+            {messages.pageExtraction.method.description}
+          </p>
+        </header>
+
+        <div className="grid max-w-2xl gap-3">
+          {EXTRACT_METHOD_OPTIONS.map((method) => {
+            const methodMessage = messages.pageExtraction.methods[method];
+
+            return (
+              <label
+                className="grid cursor-pointer grid-cols-[16px_minmax(0,1fr)] gap-3 rounded-md border p-4 transition-colors has-[:checked]:border-primary has-[:checked]:bg-muted/60"
+                key={method}
+              >
+                <input
+                  checked={settings.pageTextExtractMethod === method}
+                  className="mt-1 size-4 accent-primary"
+                  name="page-text-extract-method"
+                  onChange={() => updateSetting('pageTextExtractMethod', method)}
+                  type="radio"
+                  value={method}
+                />
+                <span>
+                  <span className="block text-sm font-medium">
+                    {methodMessage.label}
+                  </span>
+                  <span className="mt-1 block text-sm leading-6 text-muted-foreground">
+                    {methodMessage.description}
+                  </span>
+                </span>
+              </label>
+            );
+          })}
+        </div>
+      </section>
 
       <footer
         className={cn(

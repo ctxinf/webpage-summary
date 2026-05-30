@@ -8,7 +8,6 @@ import { CreateModelPage } from './pages/models/CreateModelPage';
 import { EditModelPage } from './pages/models/EditModelPage';
 import { ModelsListPage } from './pages/models/ModelsListPage';
 import { ModelsPage } from './pages/models/ModelsPage';
-import { PageExtractionPage } from './pages/PageExtractionPage';
 import { CreatePromptPage } from './pages/prompts/CreatePromptPage';
 import { EditPromptPage } from './pages/prompts/EditPromptPage';
 import { PromptsListPage } from './pages/prompts/PromptsListPage';
@@ -32,10 +31,6 @@ const optionsRouter = createHashRouter([
       {
         path: 'general',
         Component: GeneralPage,
-      },
-      {
-        path: 'page-extraction',
-        Component: PageExtractionPage,
       },
       {
         path: 'models',

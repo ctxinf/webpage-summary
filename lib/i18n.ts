@@ -42,7 +42,7 @@ type UiMessages = {
     saveFailed: string;
     savedToast: string;
     sections: Record<
-      'contextMenu' | 'display' | 'panel' | 'triggers',
+      'contextMenu' | 'triggers',
       {
         description: string;
         title: string;
@@ -79,7 +79,6 @@ type UiMessages = {
       | 'general'
       | 'interface'
       | 'models'
-      | 'pageExtraction'
       | 'prompts'
       | 'siteCustomization',
       string
@@ -297,7 +296,6 @@ const UI_MESSAGES: Record<UiLocale, UiMessages> = {
         general: 'General',
         interface: 'Interface',
         models: 'Models',
-        pageExtraction: 'Page Extraction',
         prompts: 'Prompts',
         siteCustomization: 'Site Customization',
       },
@@ -521,7 +519,6 @@ const UI_MESSAGES: Record<UiLocale, UiMessages> = {
         general: '通用',
         interface: '界面',
         models: '模型',
-        pageExtraction: '页面提取',
         prompts: '提示词',
         siteCustomization: '站点定制',
       },
@@ -553,8 +550,8 @@ const UI_MESSAGES: Record<UiLocale, UiMessages> = {
       defaultReadability: '恢复默认 Readability',
       loadFailed: '页面提取设置加载失败。',
       method: {
-        description: '选择组装总结输入前使用的通用页面提取路径。',
-        title: '文本提取方式',
+        description: '获取页面内容的算法',
+        title: '页面内容提取方式',
       },
       methods: {
         'dom-heuristic': {
