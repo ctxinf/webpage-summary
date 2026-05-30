@@ -73,27 +73,32 @@ function UsageDisplay({ messages, currentModel }: { messages: any[], currentMode
   const output = usage.outputTokens ?? usage.completionTokens ?? 0;
   const cached = usage.cachedInputTokens ?? usage.promptTokensDetails?.cachedTokens ?? usage.cachedTokens ?? 0;
   
-  const billedInput = input - cached + (cached / 10);
+  const rawInput = input - cached;
   
   const priceUnit = currentModel?.priceUnit || '$';
-  const inputCost = currentModel ? (billedInput * currentModel.inputTokenPrice) / 1_000_000 : 0;
+  
+  const rawInputCost = currentModel ? (rawInput * currentModel.inputTokenPrice) / 1_000_000 : 0;
+  const cachedCost = currentModel ? (cached * (currentModel.inputTokenPrice / 10)) / 1_000_000 : 0;
   const outputCost = currentModel ? (output * currentModel.outputTokenPrice) / 1_000_000 : 0;
+  
+  const totalCost = rawInputCost + cachedCost + outputCost;
 
   const formatCost = (cost: number) => {
-    if (!cost) return '';
-    if (cost < 0.00001) return ` <${priceUnit}0.00001`;
-    return ` ${priceUnit}${parseFloat(cost.toPrecision(3))}`;
+    if (!cost) return '0';
+    if (cost < 0.000001) return '<0.000001';
+    return parseFloat(cost.toFixed(6)).toString();
   };
   
+  const hoverText = `↑in: ${rawInput} ${priceUnit}${formatCost(rawInputCost)}` +
+    (cached > 0 ? ` (cached: ${cached} ${priceUnit}${formatCost(cachedCost)})` : '') +
+    `    ↓out: ${output} ${priceUnit}${formatCost(outputCost)}`;
+
   return (
-    <>
-      <span title={`Raw Input: ${input}, Cached: ${cached}`}>
-        ↑{Math.ceil(billedInput)}{formatCost(inputCost)}
-      </span>
-      <span title={`Output: ${output}`}>
-        ↓{output}{formatCost(outputCost)}
-      </span>
-    </>
+    <span title={hoverText} className="cursor-help flex items-center gap-1.5">
+      <span>↑{input}</span>
+      <span>↓{output}</span>
+      {totalCost > 0 && <span>{priceUnit}{formatCost(totalCost)}</span>}
+    </span>
   );
 }
 
