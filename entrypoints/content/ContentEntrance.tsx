@@ -21,6 +21,11 @@ export function ContentEntrance() {
     'dialog'
   );
 
+  const [enableSummaryWindowDefault] = useWxtStorage<boolean>(
+    'local:enable-summary-window-default',
+    false
+  );
+
   const defaultMode = panelLayoutMode === 'sidebar' ? 'sidebar' : 'floating';
 
   const [mainPanelOpen, setMainPanelOpen] = useState(false);
@@ -35,6 +40,12 @@ export function ContentEntrance() {
   };
 
   const messages = getUiMessages();
+
+  useEffect(() => {
+    if (enableSummaryWindowDefault) {
+      setMainPanelOpen(true);
+    }
+  }, [enableSummaryWindowDefault]);
 
   useEffect(() => {
     const unbindInvoke = onMessage('invokeSummary', () => {
