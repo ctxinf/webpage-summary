@@ -24,19 +24,10 @@ const BOOLEAN_SETTING_SECTIONS = [
   {
     fields: [
       'enableSummaryWindowDefault',
-    ],
-    key: 'panel',
-  },
-  {
-    fields: [
       'enableAutoBeginSummaryByActionOrContextTrigger',
       'enableAutoBeginChatForAddSelectionToChat',
     ],
     key: 'triggers',
-  },
-  {
-    fields: ['enableCreateNewPanelButton'],
-    key: 'display',
   },
   {
     fields: [
@@ -47,7 +38,7 @@ const BOOLEAN_SETTING_SECTIONS = [
   },
 ] satisfies Array<{
   fields: BooleanSettingKey[];
-  key: 'contextMenu' | 'display' | 'panel' | 'triggers';
+  key: 'contextMenu' | 'triggers';
 }>;
 
 function settingsMatch(left: GeneralSettings, right: GeneralSettings) {
@@ -230,8 +221,8 @@ export function GeneralPage() {
 
         return (
           <section key={section.key} aria-label={sectionMessage.title}>
-            <header className="mb-1">
-              <h2 className="text-base font-semibold">
+            <header className="mb-4 border-b pb-2">
+              <h2 className="text-xl font-extrabold text-primary">
                 {sectionMessage.title}
               </h2>
               <p className="mt-1 max-w-2xl text-sm leading-6 text-muted-foreground">

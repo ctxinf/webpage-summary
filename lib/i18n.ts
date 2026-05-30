@@ -221,16 +221,9 @@ const UI_MESSAGES: Record<UiLocale, UiMessages> = {
           description: 'Choose which page menu entries the extension exposes.',
           title: 'Context Menu',
         },
-        display: {
-          description: 'Keep the summary panel focused on the controls you use.',
-          title: 'Display',
-        },
-        panel: {
-          description: 'Choose how summary controls appear inside the page.',
-          title: 'Panel',
-        },
+
         triggers: {
-          description: 'Control when an open panel starts work automatically.',
+          description: 'Control default behavior of the panel and when it starts work automatically.',
           title: 'Triggers',
         },
       },
@@ -259,12 +252,13 @@ const UI_MESSAGES: Record<UiLocale, UiMessages> = {
           label: 'Add selection to chat',
         },
         enableContextMenuSummarizeThisPage: {
-          description: 'Show the context menu item for summarizing the page.',
+          description:
+            'Show the context menu item for summarizing the page.',
           label: 'Summarize this page',
         },
         enableCreateNewPanelButton: {
-          description: 'Show the control for creating another summary panel.',
-          label: 'New panel button',
+          description: 'Show a button to create an additional summary panel.',
+          label: 'Allow new panels',
         },
         enableFloatingBall: {
           description: 'Show a page control for opening the summary panel.',
@@ -455,17 +449,10 @@ const UI_MESSAGES: Record<UiLocale, UiMessages> = {
           description: '选择扩展在页面菜单中提供哪些入口。',
           title: '右键菜单',
         },
-        display: {
-          description: '保留你会使用的总结面板控件。',
-          title: '显示',
-        },
-        panel: {
-          description: '选择总结控件在页面中的呈现方式。',
-          title: '面板',
-        },
+
         triggers: {
-          description: '控制面板打开后何时自动开始工作。',
-          title: '触发方式',
+          description: '控制面板的默认行为以及何时自动开始工作。',
+          title: '触发',
         },
       },
       settings: {
@@ -494,8 +481,8 @@ const UI_MESSAGES: Record<UiLocale, UiMessages> = {
           label: '总结当前页面',
         },
         enableCreateNewPanelButton: {
-          description: '显示新建另一个总结面板的控件。',
-          label: '新面板按钮',
+          description: '显示新建额外的另一个总结面板的按钮。',
+          label: '允许新建面板',
         },
         enableFloatingBall: {
           description: '显示用于打开总结面板的页面控件。',

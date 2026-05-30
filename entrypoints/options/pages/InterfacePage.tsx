@@ -361,6 +361,26 @@ export function InterfacePage() {
               </div>
             </section>
 
+            {/* Create New Panel Button */}
+            <section className="rounded-xl border bg-card p-6 shadow-sm">
+              <div className="flex items-center justify-between gap-4">
+                <div>
+                  <h2 className="text-base font-semibold text-foreground">
+                    {messages.general.settings.enableCreateNewPanelButton.label}
+                  </h2>
+                  <p className="mt-1 text-sm text-muted-foreground">
+                    {messages.general.settings.enableCreateNewPanelButton.description}
+                  </p>
+                </div>
+                <Switch
+                  checked={settings.enableCreateNewPanelButton}
+                  onCheckedChange={(checked) =>
+                    updateSetting('enableCreateNewPanelButton', checked)
+                  }
+                />
+              </div>
+            </section>
+
           </div>
 
         </div>
