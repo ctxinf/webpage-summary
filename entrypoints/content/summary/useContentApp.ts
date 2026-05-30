@@ -101,6 +101,18 @@ export function useContentApp() {
     };
   }, []);
 
+  // External trigger (e.g. popup "summarize" button)
+  useEffect(() => {
+    const handleBegin = () => {
+      console.log('[useContentApp] External WEBPAGE_SUMMARY_BEGIN received');
+      setAutoSummarizePending(true);
+    };
+    window.addEventListener('WEBPAGE_SUMMARY_BEGIN', handleBegin);
+    return () => {
+      window.removeEventListener('WEBPAGE_SUMMARY_BEGIN', handleBegin);
+    };
+  }, []);
+
   // External text injection (e.g. context menu "add selection to chat")
   useEffect(() => {
     const handleAddText = (e: Event) => {

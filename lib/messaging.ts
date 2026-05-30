@@ -8,7 +8,7 @@ export interface ProtocolMap {
   openPopupPage(input: { query: string }): Promise<void>;
   
   /** Instructs the content script summary panel to toggle or begin summarizing */
-  invokeSummary(): void;
+  invokeSummary(payload?: { beginSummary?: boolean }): void;
 
   /** Passes text selection from a context menu action to the content chat input */
   addContentToChatDialog(content: string): void;

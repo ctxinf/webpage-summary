@@ -48,8 +48,13 @@ export function ContentEntrance() {
   }, [enableSummaryWindowDefault]);
 
   useEffect(() => {
-    const unbindInvoke = onMessage('invokeSummary', () => {
+    const unbindInvoke = onMessage('invokeSummary', (msg) => {
       setMainPanelOpen(true);
+      if (msg.data?.beginSummary) {
+        setTimeout(() => {
+          window.dispatchEvent(new CustomEvent('WEBPAGE_SUMMARY_BEGIN'));
+        }, 150);
+      }
     });
 
     const unbindAdd = onMessage('addContentToChatDialog', (msg) => {

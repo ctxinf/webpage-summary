@@ -2,11 +2,19 @@ import { createElement } from 'react';
 import { createRoot, type Root } from 'react-dom/client';
 import type { ContentScriptContext } from 'wxt/utils/content-script-context';
 import { getUiMessages } from '@/lib/i18n';
+import { loadGeneralSettings } from '@/lib/general-settings-storage';
+import { parsePageContent } from '@/lib/page-extraction';
 import { ContentEntrance } from './ContentEntrance';
 
 type PingMessage = {
   type: 'WEBPAGE_SUMMARY_PING';
 };
+
+type ExtractMessage = {
+  type: 'WEBPAGE_SUMMARY_EXTRACT_TEXT';
+};
+
+type IncomingMessage = PingMessage | ExtractMessage;
 
 function collectPageTextLength() {
   return document.body?.innerText.trim().length ?? 0;
@@ -48,14 +56,33 @@ export async function mountContentScope(ctx: ContentScriptContext) {
   const messages = getUiMessages();
   await mountSummaryBadge(ctx);
 
-  browser.runtime.onMessage.addListener((message: PingMessage) => {
-    if (message?.type !== 'WEBPAGE_SUMMARY_PING') return;
+  browser.runtime.onMessage.addListener((message: IncomingMessage) => {
+    if (message?.type === 'WEBPAGE_SUMMARY_PING') {
+      return Promise.resolve({
+        ok: true,
+        title: document.title || messages.content.untitledPage,
+        url: location.href,
+        textLength: collectPageTextLength(),
+      });
+    }
 
-    return Promise.resolve({
-      ok: true,
-      title: document.title || messages.content.untitledPage,
-      url: location.href,
-      textLength: collectPageTextLength(),
-    });
+    if (message?.type === 'WEBPAGE_SUMMARY_EXTRACT_TEXT') {
+      return (async () => {
+        try {
+          const settings = await loadGeneralSettings();
+          const extracted = parsePageContent(settings.pageTextExtractMethod, document);
+          return {
+            ok: true,
+            title: document.title || messages.content.untitledPage,
+            url: location.href,
+            text: extracted?.textContent ?? '',
+          };
+        } catch (e) {
+          return { ok: false, error: (e as Error)?.message ?? String(e) };
+        }
+      })();
+    }
+
+    return;
   });
 }

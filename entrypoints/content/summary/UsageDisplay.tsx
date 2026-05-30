@@ -1,4 +1,3 @@
-import React from 'react';
 import type { ModelConfigItem } from '@/constants/model-settings';
 
 interface UsageDisplayProps {

@@ -1,120 +1,281 @@
-import { ExternalLink, FileText, Settings } from 'lucide-react';
+import { ChevronDown, Copy, Play, Settings } from 'lucide-react';
 import { useEffect, useState } from 'react';
-import { Button } from '@/components/ui/button';
-import { getUiMessages } from '@/lib/i18n';
+import { browser } from 'wxt/browser';
+import { toast } from 'sonner';
+import { cn } from '@/lib/utils';
+import {
+  getModelDisplayIcon,
+  getModelProviderDefinition,
+  type ModelConfigItem,
+} from '@/constants/model-settings';
+import type { PromptConfigItem } from '@/constants/prompt-settings';
+import {
+  loadModelSettings,
+  setDefaultModelConfig,
+} from '@/lib/model-settings-storage';
+import {
+  loadPromptSettings,
+  seedDefaultPromptIfNeeded,
+  setDefaultPrompt,
+} from '@/lib/prompt-settings-storage';
+import { sendMessage as sendExtMessage } from '@/lib/messaging';
 
-type PageSnapshot = {
-  ok: boolean;
-  title: string;
-  url: string;
-  textLength: number;
-};
+type ExtractResult =
+  | { ok: true; title: string; url: string; text: string }
+  | { ok: false; error?: string };
 
 function App() {
-  const messages = getUiMessages();
-  const [snapshot, setSnapshot] = useState<PageSnapshot | null>(null);
-  const [status, setStatus] = useState(messages.popup.connectingCurrentPage);
+  const manifest = browser.runtime.getManifest();
+  const [models, setModels] = useState<ModelConfigItem[]>([]);
+  const [prompts, setPrompts] = useState<PromptConfigItem[]>([]);
+  const [currentModelId, setCurrentModelId] = useState('');
+  const [currentPromptId, setCurrentPromptId] = useState('');
+  const [copying, setCopying] = useState(false);
+  const [activeTabId, setActiveTabId] = useState<number | null>(null);
+  const [isContentPage, setIsContentPage] = useState(false);
 
   useEffect(() => {
-    let cancelled = false;
+    let active = true;
+    (async () => {
+      await seedDefaultPromptIfNeeded();
+      const [modelSettings, promptSettings] = await Promise.all([
+        loadModelSettings(),
+        loadPromptSettings(),
+      ]);
+      if (!active) return;
+      setModels(modelSettings.models);
+      setPrompts(promptSettings.prompts);
+      setCurrentModelId(
+        modelSettings.defaultModelId || modelSettings.models[0]?.id || '',
+      );
+      setCurrentPromptId(
+        promptSettings.defaultPromptId || promptSettings.prompts[0]?.id || '',
+      );
+    })();
+    return () => {
+      active = false;
+    };
+  }, []);
 
-    async function loadActivePage() {
-      const [tab] = await browser.tabs.query({
-        active: true,
-        currentWindow: true,
-      });
+  useEffect(() => {
+    let active = true;
+    (async () => {
+      try {
+        const [tab] = await browser.tabs.query({
+          active: true,
+          currentWindow: true,
+        });
+        if (!active || !tab?.id) return;
+        setActiveTabId(tab.id);
+        try {
+          await browser.tabs.sendMessage(tab.id, {
+            type: 'WEBPAGE_SUMMARY_PING',
+          });
+          if (active) setIsContentPage(true);
+        } catch {
+          if (active) setIsContentPage(false);
+        }
+      } catch (e) {
+        console.warn('[popup] failed to query active tab', e);
+      }
+    })();
+    return () => {
+      active = false;
+    };
+  }, []);
 
-      if (!tab?.id) {
-        setStatus(messages.popup.noActiveTab);
+  const handleModelChange = async (id: string) => {
+    setCurrentModelId(id);
+    await setDefaultModelConfig(id);
+  };
+
+  const handlePromptChange = async (id: string) => {
+    setCurrentPromptId(id);
+    await setDefaultPrompt(id);
+  };
+
+  const handleCopyPage = async () => {
+    console.log('[popup] handleCopyPage clicked', { copying, activeTabId, isContentPage });
+    if (copying) {
+      console.log('[popup] already copying, skip');
+      return;
+    }
+    if (!activeTabId) {
+      console.warn('[popup] no active tab id');
+      toast.error('没有可用的当前标签页');
+      return;
+    }
+    setCopying(true);
+    try {
+      console.log('[popup] sending WEBPAGE_SUMMARY_EXTRACT_TEXT to tab', activeTabId);
+      const result = (await browser.tabs.sendMessage(activeTabId, {
+        type: 'WEBPAGE_SUMMARY_EXTRACT_TEXT',
+      })) as ExtractResult | undefined;
+      console.log('[popup] extract result', result);
+
+      if (!result?.ok || !('text' in result) || !result.text) {
+        console.warn('[popup] extract returned no text', result);
+        toast.error('页面内容提取失败');
         return;
       }
-
-      try {
-        const result = (await browser.tabs.sendMessage(tab.id, {
-          type: 'WEBPAGE_SUMMARY_PING',
-        })) as PageSnapshot;
-
-        if (!cancelled) {
-          setSnapshot(result);
-          setStatus(
-            result.ok ? messages.popup.connected : messages.popup.injectionPending,
-          );
-        }
-      } catch {
-        if (!cancelled) {
-          setStatus(messages.popup.unsupportedPage);
-        }
-      }
+      console.log('[popup] writing to clipboard, length=', result.text.length);
+      await navigator.clipboard.writeText(result.text);
+      console.log('[popup] clipboard write success');
+      toast.success('已复制页面内容到剪切板');
+    } catch (e) {
+      console.error('[popup] copy page failed', e);
+      toast.error(`复制失败: ${(e as Error)?.message ?? e}`);
+    } finally {
+      setCopying(false);
     }
+  };
 
-    loadActivePage();
+  const handleSummarize = async () => {
+    if (!activeTabId) return;
+    try {
+      await sendExtMessage(
+        'invokeSummary',
+        { beginSummary: true },
+        { tabId: activeTabId },
+      );
+      window.close();
+    } catch (e) {
+      console.error('[popup] invoke summary failed', e);
+      toast.error('无法触发总结');
+    }
+  };
 
-    return () => {
-      cancelled = true;
-    };
-  }, [messages.popup]);
+  const currentModel = models.find((m) => m.id === currentModelId);
 
   return (
-    <main className="grid min-w-[360px] gap-3.5 p-4">
-      <header className="grid grid-cols-[40px_1fr] items-center gap-3">
-        <div className="grid size-10 place-items-center rounded-lg bg-primary text-primary-foreground">
-          <FileText size={18} />
+    <main className="grid max-w-3xl gap-1 px-2 py-1">
+      <header className="flex items-center gap-1">
+        <img
+          src={browser.runtime.getURL('/icon/32.png')}
+          alt="icon"
+          className="aspect-square shrink-0 rounded-lg object-contain"
+        />
+        <div className="flex min-w-0 flex-1 items-baseline gap-2">
+          <h1 className="truncate  font-semibold leading-tight">
+            {manifest.name}
+          </h1>
+          <span className="shrink-0 rounded-full bg-zinc-100 px-1 py-0.5 font-mono font-medium text-zinc-500">
+            v{manifest.version}
+          </span>
         </div>
-        <div>
-          <h1 className="text-[17px] font-semibold leading-tight">Webpage Summary</h1>
-          <p className="mt-1 text-xs text-muted-foreground">{status}</p>
-        </div>
+        <button
+          type="button"
+          onClick={() => browser.runtime.openOptionsPage()}
+          title="打开设置"
+          className="flex size-9 shrink-0 items-center justify-center rounded-md border border-zinc-300 bg-white text-zinc-700 shadow-sm transition-colors hover:bg-zinc-50 hover:text-zinc-900"
+        >
+          <Settings size={18} />
+        </button>
       </header>
 
-      <section
-        className="grid gap-2.5 rounded-lg border bg-card p-3"
-        aria-label={messages.popup.pageSectionLabel}
-      >
-        <div className="truncate text-sm font-semibold text-foreground">
-          {snapshot?.title || messages.popup.pageFallback}
-        </div>
-        <div className="truncate text-xs text-muted-foreground">
-          {snapshot?.url || messages.popup.pageUrlFallback}
-        </div>
-        <dl className="grid grid-cols-2 gap-2">
-          <div className="rounded-md bg-muted p-2.5">
-            <dt className="text-[11px] text-muted-foreground">
-              {messages.popup.textLength}
-            </dt>
-            <dd className="mt-1 text-[13px] font-semibold">
-              {snapshot ? snapshot.textLength.toLocaleString() : '-'}
-            </dd>
-          </div>
-          <div className="rounded-md bg-muted p-2.5">
-            <dt className="text-[11px] text-muted-foreground">
-              {messages.popup.injectionStatus}
-            </dt>
-            <dd className="mt-1 text-[13px] font-semibold">
-              {snapshot?.ok
-                ? messages.popup.connected
-                : messages.popup.injectionPending}
-            </dd>
-          </div>
-        </dl>
+      <section className="grid gap-1.5">
+        <SelectRow
+          label="模型"
+          value={currentModelId}
+          onChange={handleModelChange}
+          options={models.map((m) => ({ value: m.id, label: m.name }))}
+          icon={currentModel ? <ModelIcon model={currentModel} /> : undefined}
+        />
+        <SelectRow
+          label="提示词"
+          value={currentPromptId}
+          onChange={handlePromptChange}
+          options={prompts.map((p) => ({ value: p.id, label: p.name }))}
+        />
       </section>
 
-      <div className="flex justify-end gap-2">
-        <Button type="button" onClick={() => browser.runtime.openOptionsPage()}>
-          <Settings />
-          {messages.popup.openOptions}
-        </Button>
-        {snapshot?.url ? (
-          <Button
-            type="button"
-            variant="outline"
-            onClick={() => browser.tabs.create({ url: snapshot.url })}
-          >
-            <ExternalLink />
-            {messages.popup.open}
-          </Button>
-        ) : null}
-      </div>
+      <section className="flex items-center justify-between gap-2">
+        <div className="flex items-center">
+          {isContentPage && (
+            <button
+              type="button"
+              onClick={handleSummarize}
+              title="打开总结面板并立即开始总结"
+              className="flex items-center gap-1.5 rounded-md border border-emerald-300 bg-emerald-50 px-3 py-1.5 text-sm font-medium text-emerald-800 shadow-sm transition-colors hover:bg-emerald-100"
+            >
+              <Play size={13} className="fill-emerald-700 text-emerald-700" />
+              <span>总结</span>
+            </button>
+          )}
+        </div>
+        <button
+          type="button"
+          onClick={handleCopyPage}
+          disabled={copying || !isContentPage}
+          title="把页面内容复制到剪切板"
+          className={cn(
+            'flex items-center gap-1.5 rounded-md border border-zinc-300 bg-white px-3 py-1.5 text-sm font-medium text-zinc-700 shadow-sm transition-colors hover:bg-zinc-50',
+            (copying || !isContentPage) && 'cursor-not-allowed opacity-60',
+          )}
+        >
+          <Copy size={14} />
+          <span>Page</span>
+        </button>
+      </section>
     </main>
+  );
+}
+
+function ModelIcon({ model }: { model: ModelConfigItem }) {
+  const providerDef = getModelProviderDefinition(model.providerId);
+  const iconUrl = getModelDisplayIcon(model);
+  const src =
+    iconUrl.startsWith('http') || iconUrl.startsWith('data:')
+      ? iconUrl
+      : browser.runtime.getURL(iconUrl as any);
+  return (
+    <img
+      src={src}
+      alt={providerDef.label}
+      className="pointer-events-none size-3.5 object-contain"
+    />
+  );
+}
+
+interface SelectRowProps {
+  label: string;
+  value: string;
+  onChange: (value: string) => void;
+  options: Array<{ value: string; label: string }>;
+  icon?: React.ReactNode;
+}
+
+function SelectRow({ label, value, onChange, options, icon }: SelectRowProps) {
+  return (
+    <label className="grid grid-cols-[56px_1fr] items-center gap-2">
+      <span className="text-xs text-muted-foreground">{label}</span>
+      <div className="relative flex items-center">
+        {icon && (
+          <span className="pointer-events-none absolute left-2 z-10 flex items-center">
+            {icon}
+          </span>
+        )}
+        <select
+          className={cn(
+            'w-full appearance-none truncate rounded-md border border-zinc-300 bg-white py-1.5 pr-7 text-sm text-zinc-700 shadow-sm outline-none transition-colors hover:bg-zinc-50',
+            icon ? 'pl-7' : 'pl-2.5',
+          )}
+          value={value}
+          onChange={(e) => onChange(e.target.value)}
+        >
+          {options.length === 0 && <option value="">-</option>}
+          {options.map((opt) => (
+            <option key={opt.value} value={opt.value}>
+              {opt.label}
+            </option>
+          ))}
+        </select>
+        <ChevronDown
+          size={14}
+          className="pointer-events-none absolute right-2 text-zinc-400"
+        />
+      </div>
+    </label>
   );
 }
 
