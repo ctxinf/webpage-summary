@@ -74,7 +74,6 @@ type UiMessages = {
       noPrompts: string;
     };
     navigation: Record<
-      | 'appearance'
       | 'exportImport'
       | 'general'
       | 'interface'
@@ -164,7 +163,6 @@ type UiMessages = {
     >;
   };
   pageTitles: {
-    appearance: string;
     createModel: string;
     createPrompt: string;
     editModel: string;
@@ -291,7 +289,6 @@ const UI_MESSAGES: Record<UiLocale, UiMessages> = {
         noPrompts: 'No prompt templates',
       },
       navigation: {
-        appearance: 'Appearance',
         exportImport: 'Export Import',
         general: 'General',
         interface: 'Interface',
@@ -393,7 +390,6 @@ const UI_MESSAGES: Record<UiLocale, UiMessages> = {
       },
     },
     pageTitles: {
-      appearance: 'Appearance Setting',
       createModel: 'Create Model',
       createPrompt: 'Create Prompt',
       editModel: 'Edit Model',
@@ -514,7 +510,6 @@ const UI_MESSAGES: Record<UiLocale, UiMessages> = {
         noPrompts: '还没有提示词模板',
       },
       navigation: {
-        appearance: '外观',
         exportImport: '导入导出',
         general: '通用',
         interface: '界面',
@@ -610,7 +605,6 @@ const UI_MESSAGES: Record<UiLocale, UiMessages> = {
       },
     },
     pageTitles: {
-      appearance: '外观设置',
       createModel: '创建模型',
       createPrompt: '创建提示词',
       editModel: '编辑模型',

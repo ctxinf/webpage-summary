@@ -1,6 +1,5 @@
 import { createHashRouter, Navigate, RouterProvider } from 'react-router';
 import { OptionsLayout } from './layout/OptionsLayout';
-import { AppearancePage } from './pages/AppearancePage';
 import { ConfigManagerPage } from './pages/ConfigManagerPage';
 import { GeneralPage } from './pages/GeneralPage';
 import { InterfacePage } from './pages/InterfacePage';
@@ -71,10 +70,6 @@ const optionsRouter = createHashRouter([
       {
         path: 'site-customization',
         Component: SiteCustomizationPage,
-      },
-      {
-        path: 'appearance',
-        Component: AppearancePage,
       },
       {
         path: 'config_manager',
