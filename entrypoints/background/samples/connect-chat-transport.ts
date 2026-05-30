@@ -6,7 +6,7 @@ import {
   type ConnectChatTransportClientMessage,
   type ConnectChatTransportRequest,
   type ConnectChatTransportServerMessage,
-} from '../../options/sample/connect-chat-transport/port-protocol';
+} from '../../options/samples/connect-chat-transport/port-protocol';
 
 export function registerConnectChatTransportSample() {
   console.debug('[ConnectChatTransport:bg] register sample listeners');

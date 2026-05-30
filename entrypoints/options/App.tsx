@@ -1,6 +1,6 @@
 import { ENABLE_SAMPLES } from '@/constants/flag';
 import { OptionsRouter } from './router';
-import { DebugPage, SamplePage } from './sample/SamplePage';
+import { DebugPage, SamplePage } from './samples/SamplePage';
 
 function App() {
   const searchParams = new URLSearchParams(window.location.search);

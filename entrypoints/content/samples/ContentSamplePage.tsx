@@ -5,8 +5,10 @@ import { PageExtractionSample } from './page-extraction/PageExtractionSample';
 import { FloatingBallSample } from './floating-ball/FloatingBallSample';
 import RightFloatingBallContainer from '@/components/container/RightFloatingBallContainer';
 import { OmniPanelSample } from './omni-panel/OmniPanelSample';
+import { LegacyPanelSample } from './legacy-panel/LegacyPanelSample';
+import { ENABLE_SAMPLE_FLOATING_BALL, ENABLE_SAMPLE_OMNI_PANEL, ENABLE_SAMPLE_LEGACY_PANEL } from '@/constants/flag';
 
-type ContentSampleKey = 'ai-dialog' | 'page-extraction' | 'floating-ball' | 'omni-panel';
+type ContentSampleKey = 'ai-dialog' | 'page-extraction' | 'floating-ball' | 'omni-panel' | 'legacy-panel';
 
 type ContentSampleItem = {
   key: ContentSampleKey;
@@ -28,19 +30,34 @@ const CONTENT_SAMPLE_ITEMS: ContentSampleItem[] = [
     title: 'Page Extraction',
     component: PageExtractionSample,
   },
-  {
+];
+
+if (ENABLE_SAMPLE_FLOATING_BALL) {
+  CONTENT_SAMPLE_ITEMS.push({
     key: 'floating-ball',
     label: 'Floating Ball',
     title: 'Floating Ball',
     component: FloatingBallSample,
-  },
-  {
+  });
+}
+
+if (ENABLE_SAMPLE_OMNI_PANEL) {
+  CONTENT_SAMPLE_ITEMS.push({
     key: 'omni-panel',
     label: 'Omni Panel',
     title: 'OmniPanel Architecture',
     component: () => null, // Rendered specifically in tab panel
-  },
-];
+  });
+}
+
+if (ENABLE_SAMPLE_LEGACY_PANEL) {
+  CONTENT_SAMPLE_ITEMS.push({
+    key: 'legacy-panel',
+    label: 'Legacy UI',
+    title: 'Legacy UI Sample',
+    component: () => null, // Rendered separately to allow full container logic
+  });
+}
 
 export function ContentSamplesIndexPage() {
   const [isOpen, setIsOpen] = useState(false);
@@ -110,7 +127,7 @@ export function ContentSamplesIndexPage() {
           </nav>
 
           <div role="tabpanel">
-            {activeSampleKey === 'omni-panel' ? null : <ActiveSample />}
+            {(activeSampleKey === 'omni-panel' || activeSampleKey === 'legacy-panel') ? null : <ActiveSample />}
           </div>
         </section>
       )}
@@ -118,6 +135,11 @@ export function ContentSamplesIndexPage() {
       {/* OmniPanel Sample is rendered completely separate from the card to allow screen-level rendering */}
       {activeSampleKey === 'omni-panel' && isOpen && (
         <OmniPanelSample />
+      )}
+
+      {/* LegacyPanel Sample is rendered completely separate from the card to allow screen-level rendering */}
+      {activeSampleKey === 'legacy-panel' && isOpen && (
+        <LegacyPanelSample />
       )}
     </>
   );
