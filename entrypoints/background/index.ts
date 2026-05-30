@@ -5,6 +5,7 @@ import { registerAiSdkConnectBridge } from './ai-sdk-connect-bridge';
 import { registerTokenCountMessages } from './token-count-bg';
 import { registerBackgroundAiProviderSample } from './sample/background-ai-provider';
 import { registerConnectChatTransportSample } from './sample/connect-chat-transport';
+import { setupOnInstallHook } from './onInstall';
 import { registerControlMessages, addContextMenus, initializeControlHandlers } from './control';
 
 export default defineBackground(() => {
@@ -16,6 +17,7 @@ export default defineBackground(() => {
     });
   }
 
+  setupOnInstallHook();
   seedPromptLibrary();
   registerAiSdkConnectBridge();
   registerTokenCountMessages();

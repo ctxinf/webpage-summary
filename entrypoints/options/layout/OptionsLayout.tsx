@@ -59,7 +59,7 @@ export function OptionsLayout() {
       to: '/site-customization',
     },
     { label: messages.options.navigation.appearance, to: '/appearance' },
-    { label: messages.options.navigation.exportImport, to: '/export_import' },
+    { label: '配置管理', to: '/config_manager' },
   ];
 
   return (

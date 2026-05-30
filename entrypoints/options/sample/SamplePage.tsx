@@ -14,10 +14,12 @@ import { BackgroundAiProviderSample } from './background-ai-provider/BackgroundA
 import { ConnectChatTransportSample } from './connect-chat-transport/ConnectChatTransportSample';
 import { GptTokenizerSample } from './gpt-tokenizer/GptTokenizerSample';
 import { SonnerToastSample } from './sonner-toast/SonnerToastSample';
+import { ConfigTestSample } from './config-test/ConfigTestSample';
 
 type SampleKey =
   | 'aliyun-ai-api'
   | 'background-ai-provider'
+  | 'config-test'
   | 'connect-chat-transport'
   | 'gpt-tokenizer'
   | 'sonner-toast';
@@ -46,6 +48,13 @@ const SAMPLE_ITEMS: SampleItem[] = [
     component: BackgroundAiProviderSample,
   },
   {
+    key: 'config-test',
+    title: 'Config Migration Test',
+    description: 'Test configuration clearing and legacy importing',
+    icon: FlaskConical,
+    component: ConfigTestSample,
+  },
+  {
     key: 'connect-chat-transport',
     title: 'Connect Chat Transport',
     description: 'AI SDK useChat -> runtime port -> background UI stream',
@@ -71,6 +80,7 @@ const SAMPLE_ITEMS: SampleItem[] = [
 const SAMPLE_RENDERERS: Record<SampleKey, ComponentType> = {
   'aliyun-ai-api': AliyunAiApiSample,
   'background-ai-provider': BackgroundAiProviderSample,
+  'config-test': ConfigTestSample,
   'connect-chat-transport': ConnectChatTransportSample,
   'gpt-tokenizer': GptTokenizerSample,
   'sonner-toast': SonnerToastSample,

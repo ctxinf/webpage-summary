@@ -1,7 +1,7 @@
 import { createHashRouter, Navigate, RouterProvider } from 'react-router';
 import { OptionsLayout } from './layout/OptionsLayout';
 import { AppearancePage } from './pages/AppearancePage';
-import { ExportImportPage } from './pages/ExportImportPage';
+import { ConfigManagerPage } from './pages/ConfigManagerPage';
 import { GeneralPage } from './pages/GeneralPage';
 import { InterfacePage } from './pages/InterfacePage';
 import { CreateModelPage } from './pages/models/CreateModelPage';
@@ -77,8 +77,8 @@ const optionsRouter = createHashRouter([
         Component: AppearancePage,
       },
       {
-        path: 'export_import',
-        Component: ExportImportPage,
+        path: 'config_manager',
+        Component: ConfigManagerPage,
       },
       {
         path: 'welcome',
