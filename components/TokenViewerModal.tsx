@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { X, Info } from 'lucide-react';
 import { sendMessage } from '@/lib/messaging';
+import { getUiMessages } from '@/lib/i18n';
 import type { TokenPiece } from '@/lib/token-count';
 
 const TOKEN_COLORS = [
@@ -18,6 +19,7 @@ interface TokenViewerModalProps {
 }
 
 export function TokenViewerModal({ isOpen, onClose, textContent, maxInputTokens }: TokenViewerModalProps) {
+  const uiMessages = getUiMessages();
   const [pieces, setPieces] = useState<TokenPiece[]>([]);
   const [loading, setLoading] = useState(false);
   const [sliderValue, setSliderValue] = useState(maxInputTokens);
@@ -57,7 +59,7 @@ export function TokenViewerModal({ isOpen, onClose, textContent, maxInputTokens 
           <div className="group relative flex items-center justify-center">
             <Info size={14} className="text-zinc-400 cursor-help" />
             <div className="absolute left-1/2 -translate-x-1/2 top-full mt-1.5 w-60 p-2 bg-zinc-800 text-zinc-100 text-xs rounded shadow-lg opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity z-50 text-center font-normal leading-relaxed before:content-[''] before:absolute before:bottom-full before:left-1/2 before:-translate-x-1/2 before:border-4 before:border-transparent before:border-b-zinc-800">
-              此界面仅用于可视化分词效果。在此处的拖动调节不会改变实际发送给大语言模型的文本内容。
+              {uiMessages.content.tokenViewerInfoTip}
             </div>
           </div>
         </div>

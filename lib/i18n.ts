@@ -42,6 +42,7 @@ type UiMessages = {
     summary: string;
     untitledPage: string;
     contentTokenCount: string;
+    tokenViewerInfoTip: string;
   };
   general: {
     loadFailed: string;
@@ -278,8 +279,9 @@ const UI_MESSAGES: Record<UiLocale, UiMessages> = {
     content: {
       badgeLabel: 'Webpage Summary',
       summary: 'Summary',
-      untitledPage: 'Untitled page',
-      contentTokenCount: 'Content Token Count:',
+      untitledPage: 'Untitled Page',
+      contentTokenCount: 'Content Tokens:',
+      tokenViewerInfoTip: 'This interface is for visualising tokenisation only. Dragging the slider here does not change the actual text sent to the LLM.',
     },
     general: {
       loadFailed: 'General settings failed to load.',
@@ -586,8 +588,9 @@ const UI_MESSAGES: Record<UiLocale, UiMessages> = {
     content: {
       badgeLabel: '网页总结',
       summary: '总结',
-      untitledPage: '无标题页面',
+      untitledPage: '未命名页面',
       contentTokenCount: '内容 Token 数:',
+      tokenViewerInfoTip: '此界面仅用于可视化分词效果。在此处的拖动调节不会改变实际发送给大语言模型的文本内容。',
     },
     general: {
       loadFailed: '通用设置加载失败。',
