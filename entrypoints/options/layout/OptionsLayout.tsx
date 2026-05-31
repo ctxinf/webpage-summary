@@ -1,4 +1,5 @@
-import { ArrowLeft, ExternalLink, Languages } from 'lucide-react';
+import { ArrowLeft,  Languages } from 'lucide-react';
+import { GithubIcon } from '@/components/icons/GithubIcon';
 import { NavLink, Outlet, useLocation, useNavigate } from 'react-router';
 import { Button } from '@/components/ui/button';
 import { ENABLE_SAMPLES } from '@/constants/flag';
@@ -73,7 +74,7 @@ export function OptionsLayout() {
         </div>
 
         <div className="grow" />
-        <div className="flex min-w-0 items-center gap-2">
+        <div className="flex min-w-0 items-center gap-4">
           <label className="inline-flex h-8 min-w-0 items-center gap-1 rounded-md border bg-background px-2 text-sm shadow-sm">
             <Languages className="shrink-0 text-muted-foreground" size={15} />
             <span className="sr-only">{messages.options.header.language}</span>
@@ -101,7 +102,7 @@ export function OptionsLayout() {
             target="_blank"
             title="GitHub"
           >
-            <ExternalLink size={20} />
+            <GithubIcon size={20} />
           </a>
         </div>
       </header>
