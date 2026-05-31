@@ -5,8 +5,18 @@ import { visualizer } from 'rollup-plugin-visualizer';
 // See https://wxt.dev/api/config.html
 export default defineConfig({
   modules: ['@wxt-dev/module-react'],
+  hooks: {
+    'build:manifestGenerated': (wxt, manifest) => {
+      if (wxt.config.mode === 'development') {
+        console.log('manifest',manifest)
+        manifest.name = `(DEV-${wxt.config.browser})__MSG_extStoreName__`;
+      }
+    },
+  },
   manifest: {
-    name: 'Webpage Summary React',
+    name: '__MSG_extStoreName__',
+    description: '__MSG_extDescription__',
+    default_locale: 'en',
     host_permissions: ['<all_urls>'],
     permissions: ['activeTab', 'storage', 'contextMenus', 'scripting', 'cookies'],
     commands: {
@@ -15,14 +25,14 @@ export default defineConfig({
           default: 'Alt+S',
           mac: 'Command+S',
         },
-        description: 'Open summary panel',
+        description: '__MSG_Commad_Open_Panel_DESC__',
       },
       COMMAND_ADD_SELECTION: {
         suggested_key: {
           default: 'Alt+A',
           mac: 'Command+A',
         },
-        description: 'Add selection to chat',
+        description: '__MSG_add_selection_to_chat__',
       },
     },
     web_accessible_resources: [

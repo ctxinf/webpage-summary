@@ -1,0 +1,6 @@
+{
+  "extStoreName": { "message": "Webpage Summary- AI|OpenSource|Light|Privacy" },
+  "extDescription": { "message": "summarize text content with LLM Api, api/prompt customization, lightweight, no sub/service,  pure extension, no privacy worries" },
+  "Commad_Open_Panel_DESC": { "message": "open/hide summary panel in current page" },
+  "add_selection_to_chat": { "message": "Add selection to summary chat" }
+}

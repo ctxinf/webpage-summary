@@ -1,8 +1,8 @@
 {
-  "name": "webpage-summary-react",
-  "description": "React rewrite of the webpage summary browser extension",
-  "private": true,
-  "version": "0.0.0",
+  "name": "webpage-summary-ext",
+  "description": "(open source) webpage summary with AI, customization of llm-provider/prompt-template, no worries abound privacy",
+  "private": false,
+  "version": "0.7.0",
   "type": "module",
   "scripts": {
     "dev": "wxt",

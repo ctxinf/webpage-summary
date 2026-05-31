@@ -1,0 +1,6 @@
+{
+  "extStoreName": { "message": "網頁摘要: AI 摘要|開源|隱私無虞" },
+  "extDescription": { "message": "(開源)網頁摘要外掛，可配置任意大模型 API/個人化 Prompt 範本，輕量無服務純外掛, 隱私無虞" },
+  "Commad_Open_Panel_DESC": { "message": "(在當前頁面)開啟/隐藏摘要面板" },
+  "add_selection_to_chat": { "message": "添加選中文本到摘要聊天框" }
+}
