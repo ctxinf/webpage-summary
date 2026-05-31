@@ -652,7 +652,7 @@ const UI_MESSAGES: Record<UiLocale, UiMessages> = {
         },
       },
       summaryLanguage: {
-        description: '生成总结时使用的语言标签或区域设置。',
+        description: '总结输出的语言',
         label: '总结语言',
       },
       title: '通用设置',

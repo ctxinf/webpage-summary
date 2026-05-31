@@ -202,26 +202,6 @@ export function GeneralPage() {
     <form className="grid max-w-4xl gap-7 pb-24" onSubmit={handleSubmit}>
       <OptionsPageTitle>{messages.general.title}</OptionsPageTitle>
 
-      <section className="grid gap-3 border-b pb-7">
-        <label className="grid gap-2" htmlFor="summary-language">
-          <span className="text-base font-semibold">
-            {messages.general.summaryLanguage.label}
-          </span>
-          <span className="max-w-2xl text-sm leading-6 text-muted-foreground">
-            {messages.general.summaryLanguage.description}
-          </span>
-          <input
-            className="h-9 w-full max-w-sm rounded-md border bg-background px-3 text-sm shadow-sm outline-none focus-visible:ring-1 focus-visible:ring-ring"
-            id="summary-language"
-            onChange={(event) =>
-              updateSetting('summaryLanguage', event.currentTarget.value)
-            }
-            spellCheck={false}
-            value={settings.summaryLanguage}
-          />
-        </label>
-      </section>
-
       {BOOLEAN_SETTING_SECTIONS.map((section) => {
         const sectionMessage = messages.general.sections[section.key];
 
