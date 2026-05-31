@@ -61,6 +61,7 @@
     "sonner": "^2.0.7",
     "tailwind-merge": "^3.6.0",
     "use-stick-to-bottom": "^1.1.4",
+    "web-streams-polyfill": "^4.3.0",
     "zod": "^3.25.76"
   },
   "devDependencies": {

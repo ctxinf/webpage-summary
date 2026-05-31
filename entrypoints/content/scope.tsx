@@ -26,10 +26,10 @@ function collectPageTextLength() {
 }
 
 async function mountSummaryBadge(ctx: ContentScriptContext) {
-  console.log('[ContentScope] mountSummaryBadge running');
+  // console.log('[ContentScope] mountSummaryBadge running');
   const hostId = 'webpage-summary-react-root';
   if (document.getElementById(hostId)) {
-    console.log('[ContentScope] hostId already exists, skipping');
+    // console.log('[ContentScope] hostId already exists, skipping');
     return;
   }
 
@@ -41,23 +41,23 @@ async function mountSummaryBadge(ctx: ContentScriptContext) {
     append: 'last',
     zIndex: 2147483647,
     onMount(container) {
-      console.log('[ContentScope] UI container mounted, rendering React root');
+      // console.log('[ContentScope] UI container mounted, rendering React root');
       const root = createRoot(container);
       root.render(createElement(ContentEntrance));
       return root;
     },
     onRemove(root) {
-      console.log('[ContentScope] UI container unmounted');
+      // console.log('[ContentScope] UI container unmounted');
       root?.unmount();
     },
   });
 
   ui.mount();
-  console.log('[ContentScope] ui.mount() called');
+  // console.log('[ContentScope] ui.mount() called');
 }
 
 export async function mountContentScope(ctx: ContentScriptContext) {
-  console.log('[ContentScope] mountContentScope called');
+  // console.log('[ContentScope] mountContentScope called');
   const messages = getUiMessages();
 
   const { whitelist, blacklist } = await loadSiteRules();
@@ -65,7 +65,7 @@ export async function mountContentScope(ctx: ContentScriptContext) {
   if (urlAllowed) {
     await mountSummaryBadge(ctx);
   } else {
-    console.log('[ContentScope] site rules blocked UI mount for', location.hostname);
+    // console.log('[ContentScope] site rules blocked UI mount for', location.hostname);
   }
 
   browser.runtime.onMessage.addListener((message: IncomingMessage) => {
@@ -87,7 +87,7 @@ export async function mountContentScope(ctx: ContentScriptContext) {
           ]);
 
           const matchedRule = findMatchingCustomization(location, siteCustomization);
-          console.log('matchedRule',matchedRule)
+          // console.log('matchedRule',matchedRule)
           const extracted = matchedRule
             ? textsBySelectors(
                 matchedRule.selectors,

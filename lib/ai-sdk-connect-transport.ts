@@ -92,6 +92,8 @@ export class AiSdkConnectTransport implements ChatTransport<UIMessage> {
             port.postMessage({
               type: 'abort',
             } satisfies AiSdkConnectBridgeClientMessage);
+          } catch {
+            // Ignore errors if port is already closed
           } finally {
             errorStream('Chat request aborted.');
           }
@@ -122,6 +124,8 @@ export class AiSdkConnectTransport implements ChatTransport<UIMessage> {
           port.postMessage({
             type: 'abort',
           } satisfies AiSdkConnectBridgeClientMessage);
+        } catch {
+          // ignore
         } finally {
           port.disconnect();
         }

@@ -58,7 +58,7 @@ export function useContentApp() {
   useEffect(() => {
     let active = true;
     async function init() {
-      console.log('[useContentApp] Initializing...');
+      // console.log('[useContentApp] Initializing...');
       await seedDefaultPromptIfNeeded();
       const [modelSettings, promptSettings, generalSettings] = await Promise.all([
         loadModelSettings(),
@@ -75,7 +75,7 @@ export function useContentApp() {
       setSettings(generalSettings);
       setShowBottom(generalSettings.enableChatInputBox);
 
-      console.log('[useContentApp] Extracting page content...');
+      // console.log('[useContentApp] Extracting page content...');
       const extracted = await extractWebpageContent(generalSettings.pageTextExtractMethod, document);
       if (!active) return;
       if (extracted) {
@@ -87,14 +87,14 @@ export function useContentApp() {
           .catch((e) => console.error('Failed to count tokens', e));
       }
 
-      console.log('[useContentApp] Init finished.', {
+      /* console.log('[useContentApp] Init finished.', {
         models: modelSettings.models,
         prompts: promptSettings.prompts,
         extracted,
-      });
+      }); */
 
       if (generalSettings.enableAutoBeginSummary) {
-        console.log('[useContentApp] Auto trigger summarize by settings is enabled');
+        // console.log('[useContentApp] Auto trigger summarize by settings is enabled');
         setAutoSummarizePending(true);
       }
     }
@@ -107,7 +107,7 @@ export function useContentApp() {
   // External trigger (e.g. popup "summarize" button)
   useEffect(() => {
     const handleBegin = () => {
-      console.log('[useContentApp] External WEBPAGE_SUMMARY_BEGIN received');
+      // console.log('[useContentApp] External WEBPAGE_SUMMARY_BEGIN received');
       setAutoSummarizePending(true);
     };
     window.addEventListener('WEBPAGE_SUMMARY_BEGIN', handleBegin);
@@ -193,7 +193,7 @@ export function useContentApp() {
       return;
     }
 
-    console.log('[useContentApp] Triggering summarize...');
+    // console.log('[useContentApp] Triggering summarize...');
 
     setMessages([
       {

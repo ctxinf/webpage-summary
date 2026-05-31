@@ -17,6 +17,8 @@ export function registerAiSdkConnectBridge() {
       return;
     }
 
+    console.debug(`[AI SDK Bridge] Port connected: ${port.name}`);
+
     let requestId = 'pending';
     const abortController = new AbortController();
     let started = false;
@@ -26,8 +28,10 @@ export function registerAiSdkConnectBridge() {
       if (finished) return;
 
       try {
+        console.debug(`[AI SDK Bridge] Post message (requestId: ${requestId}):`, message.type);
         port.postMessage(message);
-      } catch {
+      } catch (e) {
+        console.error(`[AI SDK Bridge] Error posting message (requestId: ${requestId}):`, e);
         abortController.abort();
         finish();
       }
@@ -36,6 +40,7 @@ export function registerAiSdkConnectBridge() {
     const finish = () => {
       if (finished) return;
 
+      console.debug(`[AI SDK Bridge] Finishing connection (requestId: ${requestId})`);
       finished = true;
       port.onMessage.removeListener(onMessage);
       port.onDisconnect.removeListener(onDisconnect);
@@ -43,14 +48,17 @@ export function registerAiSdkConnectBridge() {
     };
 
     const onDisconnect = () => {
+      console.debug(`[AI SDK Bridge] Port disconnected (requestId: ${requestId})`);
       abortController.abort();
       finish();
     };
 
     const onMessage = (message: unknown) => {
       const frame = message as AiSdkConnectBridgeClientMessage;
+      console.debug(`[AI SDK Bridge] Received message from client:`, frame.type);
 
       if (frame.type === 'abort') {
+        console.debug(`[AI SDK Bridge] Aborting (requestId: ${requestId})`);
         abortController.abort();
         finish();
         return;
@@ -62,8 +70,12 @@ export function registerAiSdkConnectBridge() {
 
       started = true;
       requestId = frame.requestId;
+      console.debug(`[AI SDK Bridge] Starting stream (requestId: ${requestId})`);
       void streamMessages(frame, abortController.signal, postMessage).finally(
-        () => finish(),
+        () => {
+          console.debug(`[AI SDK Bridge] Stream finished (requestId: ${requestId})`);
+          finish();
+        }
       );
     };
 
@@ -78,20 +90,30 @@ async function streamMessages(
   postMessage: (message: AiSdkConnectBridgeServerMessage) => void,
 ) {
   try {
+    console.debug(`[AI SDK Bridge streamMessages] Fetching model config for id: ${request.modelConfigId}`);
     const modelConfig = await getModelConfigById(request.modelConfigId);
 
     if (!modelConfig) {
+      console.error(`[AI SDK Bridge streamMessages] Model config not found for id: ${request.modelConfigId}`);
       throw new Error('No model config is available.');
     }
 
+    console.debug(`[AI SDK Bridge streamMessages] Model config fetched:`, modelConfig.providerId, modelConfig.modelId);
+    console.debug(`[AI SDK Bridge streamMessages] Converting messages to model messages...`);
+    const messages = await convertToModelMessages(request.messages);
+    console.debug(`[AI SDK Bridge streamMessages] Messages converted. Ready to streamText. Messages count: ${messages.length}`);
+
+    console.debug(`[AI SDK Bridge streamMessages] Calling streamText...`);
     const result = streamText({
       abortSignal,
-      messages: await convertToModelMessages(request.messages),
+      messages: messages,
       allowSystemInMessages: true,
       model: createLanguageModelFromConfig(modelConfig),
       system: request.system,
     });
+    console.debug(`[AI SDK Bridge streamMessages] streamText called, beginning iteration...`);
 
+    let chunkCount = 0;
     for await (const chunk of result.toUIMessageStream({
       sendReasoning: true,
       messageMetadata: ({ part }) => {
@@ -103,15 +125,32 @@ async function streamMessages(
         return undefined;
       }
     })) {
+      chunkCount++;
+      if (chunkCount === 1) {
+        console.debug(`[AI SDK Bridge streamMessages] Received first chunk`);
+      }
+
+      let processedChunk = chunk as UIMessageChunk;
+      if (processedChunk.type === 'error') {
+        const anyChunk = processedChunk as any;
+        processedChunk = {
+          ...processedChunk,
+          errorText: getErrorMessage(anyChunk.error ?? anyChunk.errorText),
+        } as any;
+      }
+
       postMessage({
         type: 'chunk',
-        chunk: chunk as UIMessageChunk,
+        chunk: processedChunk,
       });
     }
 
+    console.debug(`[AI SDK Bridge streamMessages] Finished iterating stream. Total chunks: ${chunkCount}`);
     postMessage({ type: 'done' });
   } catch (error) {
+    console.error(`[AI SDK Bridge streamMessages] Error occurred:`, error);
     if (abortSignal.aborted) {
+      console.debug(`[AI SDK Bridge streamMessages] Aborted, ignoring error.`);
       return;
     }
 

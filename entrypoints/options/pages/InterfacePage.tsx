@@ -336,7 +336,7 @@ export function InterfacePage() {
                 </div>
                 <div className="flex items-center gap-3">
                   <span className="flex items-center gap-1 text-xs text-muted-foreground font-medium">
-                    (Default: <input type="checkbox" checked={GENERAL_SETTING_DEFINITIONS.enableFloatingBall.defaultValue} disabled readOnly className="size-3.5 cursor-not-allowed ml-0.5" />)
+                    (Default: <input type="checkbox" checked={GENERAL_SETTING_DEFINITIONS.enableFloatingBall.defaultValue as boolean} disabled readOnly className="size-3.5 cursor-not-allowed ml-0.5" />)
                   </span>
                   <Switch
                     checked={settings.enableFloatingBall}
@@ -364,7 +364,7 @@ export function InterfacePage() {
                 </div>
                 <div className="flex items-center gap-3">
                   <span className="flex items-center gap-1 text-xs text-muted-foreground font-medium">
-                    (Default: <input type="checkbox" checked={GENERAL_SETTING_DEFINITIONS.enableChatInputBox.defaultValue} disabled readOnly className="size-3.5 cursor-not-allowed ml-0.5" />)
+                    (Default: <input type="checkbox" checked={GENERAL_SETTING_DEFINITIONS.enableChatInputBox.defaultValue as boolean} disabled readOnly className="size-3.5 cursor-not-allowed ml-0.5" />)
                   </span>
                   <Switch
                     checked={settings.enableChatInputBox}
@@ -389,7 +389,7 @@ export function InterfacePage() {
                 </div>
                 <div className="flex items-center gap-3">
                   <span className="flex items-center gap-1 text-xs text-muted-foreground font-medium">
-                    (Default: <input type="checkbox" checked={GENERAL_SETTING_DEFINITIONS.enableCreateNewPanelButton.defaultValue} disabled readOnly className="size-3.5 cursor-not-allowed ml-0.5" />)
+                    (Default: <input type="checkbox" checked={GENERAL_SETTING_DEFINITIONS.enableCreateNewPanelButton.defaultValue as boolean} disabled readOnly className="size-3.5 cursor-not-allowed ml-0.5" />)
                   </span>
                   <Switch
                     checked={settings.enableCreateNewPanelButton}
@@ -536,7 +536,7 @@ export function InterfacePage() {
             </span>
             <div className="flex items-center gap-3">
               <span className="flex items-center gap-1 text-xs text-muted-foreground font-medium">
-                (Default: <input type="checkbox" checked={GENERAL_SETTING_DEFINITIONS.enableAutoBeginSummary.defaultValue} disabled readOnly className="size-3.5 cursor-not-allowed ml-0.5" />)
+                (Default: <input type="checkbox" checked={GENERAL_SETTING_DEFINITIONS.enableAutoBeginSummary.defaultValue as boolean} disabled readOnly className="size-3.5 cursor-not-allowed ml-0.5" />)
               </span>
               <Switch
                 checked={settings.enableAutoBeginSummary}
@@ -565,7 +565,7 @@ export function InterfacePage() {
               </div>
               <div className="flex items-center gap-3">
                 <span className="flex items-center gap-1 text-xs text-muted-foreground font-medium">
-                  (Default: <input type="checkbox" checked={GENERAL_SETTING_DEFINITIONS.enableTokenUsageView.defaultValue} disabled readOnly className="size-3.5 cursor-not-allowed ml-0.5" />)
+                  (Default: <input type="checkbox" checked={GENERAL_SETTING_DEFINITIONS.enableTokenUsageView.defaultValue as boolean} disabled readOnly className="size-3.5 cursor-not-allowed ml-0.5" />)
                 </span>
                 <Switch
                   checked={settings.enableTokenUsageView}
