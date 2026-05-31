@@ -31,11 +31,17 @@ type UiMessages = {
     saving: string;
     success: string;
     unsavedChanges: string;
+    contextMenu: {
+      summarizeThisPage: string;
+      addToChat: string;
+      openSetting: string;
+    };
   };
   content: {
     badgeLabel: string;
     summary: string;
     untitledPage: string;
+    contentTokenCount: string;
   };
   general: {
     loadFailed: string;
@@ -63,6 +69,18 @@ type UiMessages = {
     };
     title: string;
   };
+  exportImport: {
+    exportImportDescription: string;
+    exportConfiguration: string;
+    exportWithApiKeys: string;
+    copyToClipboard: string;
+    importConfiguration: string;
+    importConfigurationDescription: string;
+    readFromClipboard: string;
+    dangerZone: string;
+    resetConfigurationDescription: string;
+    resetAllConfigurations: string;
+  };
   options: {
     debug: string;
     header: {
@@ -84,6 +102,30 @@ type UiMessages = {
       string
     >;
     navigationLabel: string;
+  };
+  models: {
+    createModelConfig: string;
+    noModelConfigsYet: string;
+    createOneBeforeBackgroundBridge: string;
+    defaultBadge: string;
+    provider: string;
+    baseUrl: string;
+    apiMode: string;
+    maxInputTokens: string;
+    price: string;
+    useDefault: (name: string) => string;
+    moveUp: (name: string) => string;
+    moveDown: (name: string) => string;
+    duplicate: (name: string) => string;
+    edit: (name: string) => string;
+    delete: (name: string) => string;
+    deleteConfirm: (name: string) => string;
+    deletedToast: string;
+    deleteFailed: string;
+    moveFailed: string;
+    duplicatedToast: string;
+    duplicateFailed: string;
+    defaultChangedFailed: string;
   };
   interface: {
     chatInputBox: {
@@ -188,6 +230,17 @@ type UiMessages = {
     pageUrlFallback: string;
     textLength: string;
     unsupportedPage: string;
+    model: string;
+    prompt: string;
+    sample: string;
+    summary: string;
+    page: string;
+    openPanelAndStartSummary: string;
+    copyPageContentToClipboard: string;
+    extractFailed: string;
+    copySuccess: string;
+    copyFailed: string;
+    invokeSummaryFailed: string;
   };
   siteCustomization: {
     examplesTitle: string;
@@ -233,11 +286,17 @@ const UI_MESSAGES: Record<UiLocale, UiMessages> = {
       saving: 'Saving',
       success: 'Success',
       unsavedChanges: 'Unsaved changes',
+      contextMenu: {
+        summarizeThisPage: 'Summarize this page',
+        addToChat: 'Add selection to chat',
+        openSetting: 'Open Setting',
+      },
     },
     content: {
       badgeLabel: 'Webpage Summary',
       summary: 'Summary',
       untitledPage: 'Untitled page',
+      contentTokenCount: 'Content Token Count:',
     },
     general: {
       loadFailed: 'General settings failed to load.',
@@ -258,17 +317,17 @@ const UI_MESSAGES: Record<UiLocale, UiMessages> = {
       settings: {
         enableAutoBeginChatForAddSelectionToChat: {
           description:
-            'Start chat automatically after selected page text is added to the conversation.',
-          label: 'Send selected text after adding it',
+            'Start message upon adding selected page text to the conversation.',
+          label: 'Send selected text upon adding it',
         },
         enableAutoBeginSummary: {
-          description: 'Begin summarizing as soon as the summary panel opens.',
-          label: 'Start summary after panel opens',
+          description: '',
+          label: 'Begin summarizing immediately upon launch panel',
         },
         enableAutoBeginSummaryByActionOrContextTrigger: {
           description:
-            'Begin summarizing when the extension action or a context menu opens the panel.',
-          label: 'Start after action or context trigger',
+            '',
+          label: 'Begin summarizing immediately upon trigger by context menu',
         },
         enableChatInputBox: {
           description: 'Show the chat input inside the summary panel.',
@@ -286,19 +345,19 @@ const UI_MESSAGES: Record<UiLocale, UiMessages> = {
         },
         enableCreateNewPanelButton: {
           description: 'Show a button to create an additional summary panel.',
-          label: 'Allow new panels',
+          label: 'Allow creating new panels',
         },
         enableFloatingBall: {
-          description: 'Show a page control for opening the summary panel.',
+          description: 'Show a floating button positioned at the bottom-right for opening the summary panel.',
           label: 'Floating button',
         },
         enableSummaryWindowDefault: {
           caution: 'This changes the default behavior on every matching page.',
-          description: 'Open the summary panel as a page starts.',
-          label: 'Open panel on new pages',
+          description: '',
+          label: 'Auto-open panel on new pages',
         },
         enableTokenUsageView: {
-          description: 'Show token usage information in the panel header.',
+          description: 'Show token usage in the panel.',
           label: 'Token usage',
         },
       },
@@ -306,7 +365,19 @@ const UI_MESSAGES: Record<UiLocale, UiMessages> = {
         description: 'Language tag or locale used for generated summaries.',
         label: 'Summary Language',
       },
-      title: 'General Setting',
+      title: 'General',
+    },
+    exportImport: {
+      exportImportDescription: 'Here you can export, import, or reset all extension configurations, models, and prompt settings.',
+      exportConfiguration: 'Export Configuration',
+      exportWithApiKeys: 'Export with API Keys',
+      copyToClipboard: 'Copy to Clipboard',
+      importConfiguration: 'Import Configuration',
+      importConfigurationDescription: 'Read configuration from clipboard. You can selectively override or append settings.',
+      readFromClipboard: 'Read from Clipboard',
+      dangerZone: 'Danger Zone',
+      resetConfigurationDescription: 'Clear all extension configuration from local storage. Please ensure you have exported a backup before proceeding.',
+      resetAllConfigurations: 'Reset All Configurations',
     },
     options: {
       debug: 'Debug',
@@ -320,7 +391,7 @@ const UI_MESSAGES: Record<UiLocale, UiMessages> = {
         noPrompts: 'No prompt templates',
       },
       navigation: {
-        exportImport: 'Export Import',
+        exportImport: 'Config Manager',
         general: 'General',
         interface: 'Interface',
         models: 'Models',
@@ -339,17 +410,41 @@ const UI_MESSAGES: Record<UiLocale, UiMessages> = {
         title: 'Floating button',
       },
       panelLayout: {
-        description: 'Choose the default layout form for the summary panel.',
+        description: '',
         dialog: 'Floating Panel',
         sidebar: 'Sidebar',
         title: 'Panel layout mode',
       },
       shortcuts: {
-        model: 'Model settings',
-        prompt: 'Prompt settings',
+        model: 'Model',
+        prompt: 'Prompt',
         title: 'Shortcuts',
       },
       title: 'Interface',
+    },
+    models: {
+      createModelConfig: 'Create Model Config',
+      noModelConfigsYet: 'No model configs yet',
+      createOneBeforeBackgroundBridge: 'Create one model config before the background bridge can call a provider.',
+      defaultBadge: 'Default',
+      provider: 'Provider',
+      baseUrl: 'Base URL',
+      apiMode: 'API Mode',
+      maxInputTokens: 'Max Input Tokens',
+      price: 'Price',
+      useDefault: (name) => `Use ${name} by default`,
+      moveUp: (name) => `Move up ${name}`,
+      moveDown: (name) => `Move down ${name}`,
+      duplicate: (name) => `Duplicate ${name}`,
+      edit: (name) => `Edit ${name}`,
+      delete: (name) => `Delete ${name}`,
+      deleteConfirm: (name) => `Are you sure you want to delete "${name}"?`,
+      deletedToast: 'Model deleted.',
+      deleteFailed: 'Model could not be deleted.',
+      moveFailed: 'Model could not be moved.',
+      duplicatedToast: 'Model duplicated.',
+      duplicateFailed: 'Model could not be duplicated.',
+      defaultChangedFailed: 'Default model could not be changed.',
     },
     pageExtraction: {
       defaultReadability: 'Default readability',
@@ -367,7 +462,7 @@ const UI_MESSAGES: Record<UiLocale, UiMessages> = {
         },
         readability: {
           description:
-            'Reader-mode extraction for articles. This remains the default input path.',
+            'Reader-mode extraction for articles. https://github.com/mozilla/readability',
           label: 'Readability',
         },
       },
@@ -425,7 +520,7 @@ const UI_MESSAGES: Record<UiLocale, UiMessages> = {
       createPrompt: 'Create Prompt',
       editModel: 'Edit Model',
       editPrompt: 'Edit Prompt',
-      exportImport: 'Export Import',
+      exportImport: 'Config Manager',
       interface: 'Interface',
       models: 'Models',
       prompts: 'Prompts',
@@ -445,6 +540,17 @@ const UI_MESSAGES: Record<UiLocale, UiMessages> = {
       pageUrlFallback: 'Open a webpage to inspect injection status',
       textLength: 'Text length',
       unsupportedPage: 'This page does not support injection yet',
+      model: 'Model',
+      prompt: 'Prompt',
+      sample: 'Sample',
+      summary: 'Summary',
+      page: 'Page',
+      openPanelAndStartSummary: 'Open summary panel and start immediately',
+      copyPageContentToClipboard: 'Copy page content to clipboard',
+      extractFailed: 'Failed to extract page content',
+      copySuccess: 'Copied page content to clipboard',
+      copyFailed: 'Copy failed',
+      invokeSummaryFailed: 'Failed to invoke summary',
     },
     siteCustomization: {
       examplesTitle: 'Match Pattern Examples',
@@ -505,11 +611,17 @@ const UI_MESSAGES: Record<UiLocale, UiMessages> = {
       saving: '保存中',
       success: '成功',
       unsavedChanges: '有未保存的更改',
+      contextMenu: {
+        summarizeThisPage: '总结此页',
+        addToChat: '添加选中内容到聊天框',
+        openSetting: '打开设置',
+      },
     },
     content: {
       badgeLabel: '网页总结',
       summary: '总结',
       untitledPage: '无标题页面',
+      contentTokenCount: '内容 Token 数:',
     },
     general: {
       loadFailed: '通用设置加载失败。',
@@ -529,16 +641,16 @@ const UI_MESSAGES: Record<UiLocale, UiMessages> = {
       },
       settings: {
         enableAutoBeginChatForAddSelectionToChat: {
-          description: '添加选中文本后立即发送。',
-          label: '添加选中文本后立即发送',
+          description: '添加页面选中文本到对话后立即开始消息对话。',
+          label: '添加后立即发送选中文本',
         },
         enableAutoBeginSummary: {
-          description: '总结面板打开后立即开始总结。',
-          label: '面板打开后开始总结',
+          description: '',
+          label: '启动面板后立即开始总结',
         },
         enableAutoBeginSummaryByActionOrContextTrigger: {
-          description: '通过扩展按钮或右键菜单打开面板时开始总结。',
-          label: '通过按钮或菜单触发后开始',
+          description: '',
+          label: '通过右键菜单触发后立即开始总结',
         },
         enableChatInputBox: {
           description: '在总结面板中显示聊天输入框。',
@@ -554,19 +666,19 @@ const UI_MESSAGES: Record<UiLocale, UiMessages> = {
         },
         enableCreateNewPanelButton: {
           description: '显示新建额外的另一个总结面板的按钮。',
-          label: '允许新建面板',
+          label: '允许创建新面板',
         },
         enableFloatingBall: {
-          description: '显示用于打开总结面板的页面控件。',
+          description: '在右下角显示用于打开总结面板的悬浮按钮。',
           label: '悬浮按钮',
         },
         enableSummaryWindowDefault: {
           caution: '这会改变每个匹配页面的默认行为。',
-          description: '页面开始加载时打开总结面板。',
-          label: '新页面默认打开面板',
+          description: '',
+          label: '新页面自动打开面板',
         },
         enableTokenUsageView: {
-          description: '在面板头部显示 token 用量信息。',
+          description: '显示 token 用量。',
           label: 'Token 用量',
         },
       },
@@ -575,6 +687,18 @@ const UI_MESSAGES: Record<UiLocale, UiMessages> = {
         label: '总结语言',
       },
       title: '通用设置',
+    },
+    exportImport: {
+      exportImportDescription: '在这里您可以导出、导入或重置扩展的所有配置、模型和提示词设置。',
+      exportConfiguration: '导出配置',
+      exportWithApiKeys: '是否包含 API Keys？',
+      copyToClipboard: '复制到剪贴板',
+      importConfiguration: '导入配置',
+      importConfigurationDescription: '从剪贴板读取配置。您可以逐条选择需要覆盖或添加的设置。',
+      readFromClipboard: '从剪贴板读取',
+      dangerZone: '危险操作',
+      resetConfigurationDescription: '清除所有本地存储中的扩展配置。请在操作前确保您已经导出了需要的配置备份。',
+      resetAllConfigurations: '重置所有配置',
     },
     options: {
       debug: '调试',
@@ -588,7 +712,7 @@ const UI_MESSAGES: Record<UiLocale, UiMessages> = {
         noPrompts: '还没有提示词模板',
       },
       navigation: {
-        exportImport: '导入导出',
+        exportImport: '配置管理',
         general: '通用',
         interface: '界面',
         models: '模型',
@@ -607,17 +731,41 @@ const UI_MESSAGES: Record<UiLocale, UiMessages> = {
         title: '悬浮球',
       },
       panelLayout: {
-        description: '选择总结面板默认在页面中展开的交互形式。',
+        description: '',
         dialog: '悬浮面板',
         sidebar: '侧边栏',
         title: '默认面板形式',
       },
       shortcuts: {
-        model: '模型设置',
-        prompt: '提示词设置',
+        model: '模型',
+        prompt: '提示词',
         title: '快捷跳转',
       },
       title: '界面',
+    },
+    models: {
+      createModelConfig: '创建模型配置',
+      noModelConfigsYet: '暂无模型配置',
+      createOneBeforeBackgroundBridge: '请先创建一个模型配置，以便后台脚本可以调用接口。',
+      defaultBadge: '默认',
+      provider: '提供商 (Provider)',
+      baseUrl: '基础 URL',
+      apiMode: 'API 模式',
+      maxInputTokens: '最大输入 Token',
+      price: '价格',
+      useDefault: (name) => `将 ${name} 设为默认`,
+      moveUp: (name) => `上移 ${name}`,
+      moveDown: (name) => `下移 ${name}`,
+      duplicate: (name) => `复制 ${name}`,
+      edit: (name) => `编辑 ${name}`,
+      delete: (name) => `删除 ${name}`,
+      deleteConfirm: (name) => `确定要删除 "${name}" 吗？`,
+      deletedToast: '模型已删除。',
+      deleteFailed: '模型删除失败。',
+      moveFailed: '模型移动失败。',
+      duplicatedToast: '模型已复制。',
+      duplicateFailed: '模型复制失败。',
+      defaultChangedFailed: '默认模型切换失败。',
     },
     pageExtraction: {
       defaultReadability: '恢复默认 Readability',
@@ -633,7 +781,7 @@ const UI_MESSAGES: Record<UiLocale, UiMessages> = {
           label: 'DOM 启发式',
         },
         readability: {
-          description: '按阅读模式提取文章内容，这仍是默认输入路径。',
+          description: '按阅读模式提取文章内容。https://github.com/mozilla/readability',
           label: 'Readability',
         },
       },
@@ -687,7 +835,7 @@ const UI_MESSAGES: Record<UiLocale, UiMessages> = {
       createPrompt: '创建提示词',
       editModel: '编辑模型',
       editPrompt: '编辑提示词',
-      exportImport: '导入导出',
+      exportImport: '配置管理',
       interface: '界面',
       models: '模型',
       prompts: '提示词',
@@ -707,6 +855,17 @@ const UI_MESSAGES: Record<UiLocale, UiMessages> = {
       pageUrlFallback: '打开任意网页后查看注入状态',
       textLength: '文本长度',
       unsupportedPage: '当前页面暂不支持注入',
+      model: '模型',
+      prompt: '提示词',
+      sample: 'Sample',
+      summary: '总结',
+      page: 'Page',
+      openPanelAndStartSummary: '打开总结面板并立即开始总结',
+      copyPageContentToClipboard: '把页面内容复制到剪切板',
+      extractFailed: '页面内容提取失败',
+      copySuccess: '已复制页面内容到剪切板',
+      copyFailed: '复制失败',
+      invokeSummaryFailed: '无法触发总结',
     },
     siteCustomization: {
       examplesTitle: '匹配规则示例',
@@ -793,7 +952,20 @@ export function setUiLocaleOverride(locale: UiLocale) {
 }
 
 export function getUiLocale() {
-  return getUiLocaleOverride() ?? resolveUiLocale(browser.i18n.getUILanguage());
+  const override = getUiLocaleOverride();
+  const browserLang = browser.i18n.getUILanguage();
+  const resolved = resolveUiLocale(browserLang);
+  const finalLocale = override ?? resolved;
+  
+  // console.log('[i18n Debug]', {
+  //   override,
+  //   browserLang,
+  //   resolved,
+  //   finalLocale,
+  //   protocol: typeof window !== 'undefined' ? window.location.protocol : 'no-window'
+  // });
+  
+  return finalLocale;
 }
 
 export function getUiMessages(locale = getUiLocale()) {

@@ -201,14 +201,14 @@ export function ConfigManagerPage() {
 
   return (
     <>
-      <OptionsPageTitle>配置管理</OptionsPageTitle>
+      <OptionsPageTitle>{messages.options.navigation.exportImport}</OptionsPageTitle>
       <div className="text-sm text-muted-foreground mb-6">
-        在这里您可以导出、导入或重置扩展的所有配置、模型和提示词设置。
+        {messages.exportImport.exportImportDescription}
       </div>
 
       <div className="flex flex-col gap-8">
         <section className="space-y-4">
-          <h2 className="text-lg font-semibold">Export Configuration</h2>
+          <h2 className="text-lg font-semibold">{messages.exportImport.exportConfiguration}</h2>
           <div className="flex items-center gap-2">
             <Switch 
               id="export-apikeys" 
@@ -216,7 +216,7 @@ export function ConfigManagerPage() {
               onCheckedChange={(checked) => setIsExportWithApiKeys(checked === true)}
             />
             <label htmlFor="export-apikeys" className="text-sm font-medium leading-none cursor-pointer">
-              Export with API Keys
+              {messages.exportImport.exportWithApiKeys}
             </label>
           </div>
           {isExportWithApiKeys && (
@@ -225,17 +225,17 @@ export function ConfigManagerPage() {
             </p>
           )}
           <Button onClick={handleExport} disabled={isLoading}>
-            {isLoading ? 'Exporting...' : 'Copy to Clipboard'}
+            {isLoading ? 'Exporting...' : messages.exportImport.copyToClipboard}
           </Button>
         </section>
 
         <section className="space-y-4 border-t pt-6">
-          <h2 className="text-lg font-semibold">Import Configuration</h2>
+          <h2 className="text-lg font-semibold">{messages.exportImport.importConfiguration}</h2>
           <p className="text-sm text-muted-foreground">
-            从剪贴板读取配置。您可以逐条选择需要覆盖或添加的设置。
+            {messages.exportImport.importConfigurationDescription}
           </p>
           <Button onClick={handleImport} disabled={isLoading || diffItems !== null} variant="secondary">
-            {isLoading ? 'Reading...' : 'Read from Clipboard'}
+            {isLoading ? 'Reading...' : messages.exportImport.readFromClipboard}
           </Button>
 
           {diffItems && (
@@ -338,12 +338,12 @@ export function ConfigManagerPage() {
         </section>
 
         <section className="space-y-4 border-t pt-6">
-          <h2 className="text-lg font-semibold text-destructive">Danger Zone</h2>
+          <h2 className="text-lg font-semibold text-destructive">{messages.exportImport.dangerZone}</h2>
           <p className="text-sm text-muted-foreground">
-            清除所有本地存储中的扩展配置。请在操作前确保您已经导出了需要的配置备份。
+            {messages.exportImport.resetConfigurationDescription}
           </p>
-          <Button onClick={handleResetAll} disabled={isLoading} variant="destructive">
-            重置所有配置
+          <Button variant="destructive" onClick={handleResetAll} disabled={isLoading}>
+            {messages.exportImport.resetAllConfigurations}
           </Button>
         </section>
       </div>

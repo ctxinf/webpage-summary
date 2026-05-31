@@ -49,6 +49,7 @@ import { TokenViewerModal } from '@/components/TokenViewerModal';
 import { useContentApp } from './useContentApp';
 import { UsageDisplay } from './UsageDisplay';
 import { ModelPromptSelector } from './ModelPromptSelector';
+import { getUiMessages } from '@/lib/i18n';
 
 interface ContentAppFrameProps {
   onClose: () => void;
@@ -57,6 +58,7 @@ interface ContentAppFrameProps {
 }
 
 export function ContentAppFrame({ onClose, isMain = true, onAdd }: ContentAppFrameProps) {
+  const uiMessages = getUiMessages();
   const { mode, setMode } = usePanel();
   const [isTokenViewerOpen, setIsTokenViewerOpen] = useState(false);
   const scrollRef = useRef<HTMLDivElement>(null);
@@ -130,7 +132,7 @@ export function ContentAppFrame({ onClose, isMain = true, onAdd }: ContentAppFra
               <Play size={14} strokeWidth={3.5} className="text-emerald-700 fill-emerald-700" />
             )}
             {messages.length === 0 && !isBusy ? (
-              <span className="font-medium text-emerald-900 pr-0.5">总结</span>
+              <span className="font-medium text-emerald-900 pr-0.5">{uiMessages.content.summary}</span>
             ) : null}
           </button>
 
@@ -203,7 +205,7 @@ export function ContentAppFrame({ onClose, isMain = true, onAdd }: ContentAppFra
         >
           <div className="flex items-center rounded-lg underline decoration-dashed text-nowrap text-xs font-light bg-white/10 px-2 py-1 text-zinc-500">
             <div title="click the right eye button to View&Change">
-              内容 Token 数:{' '}
+              {uiMessages.content.contentTokenCount}{' '}
               <span>{pageContentTokenCount !== null ? pageContentTokenCount : '计算中...'}</span>
             </div>
             <button

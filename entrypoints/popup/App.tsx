@@ -19,6 +19,7 @@ import {
   setDefaultPrompt,
 } from '@/lib/prompt-settings-storage';
 import { sendMessage as sendExtMessage } from '@/lib/messaging';
+import { getUiMessages } from '@/lib/i18n';
 
 type ExtractResult =
   | { ok: true; title: string; url: string; text: string }
@@ -26,6 +27,7 @@ type ExtractResult =
 
 function App() {
   const manifest = browser.runtime.getManifest();
+  const messages = getUiMessages();
   const [models, setModels] = useState<ModelConfigItem[]>([]);
   const [prompts, setPrompts] = useState<PromptConfigItem[]>([]);
   const [currentModelId, setCurrentModelId] = useState('');
@@ -102,7 +104,7 @@ function App() {
     }
     if (!activeTabId) {
       console.warn('[popup] no active tab id');
-      toast.error('没有可用的当前标签页');
+      toast.error(messages.popup.noActiveTab);
       return;
     }
     setCopying(true);
@@ -115,16 +117,16 @@ function App() {
 
       if (!result?.ok || !('text' in result) || !result.text) {
         console.warn('[popup] extract returned no text', result);
-        toast.error('页面内容提取失败');
+        toast.error(messages.popup.extractFailed);
         return;
       }
       console.log('[popup] writing to clipboard, length=', result.text.length);
       await navigator.clipboard.writeText(result.text);
       console.log('[popup] clipboard write success');
-      toast.success('已复制页面内容到剪切板');
+      toast.success(messages.popup.copySuccess);
     } catch (e) {
       console.error('[popup] copy page failed', e);
-      toast.error(`复制失败: ${(e as Error)?.message ?? e}`);
+      toast.error(`${messages.popup.copyFailed}: ${(e as Error)?.message ?? e}`);
     } finally {
       setCopying(false);
     }
@@ -141,7 +143,7 @@ function App() {
       window.close();
     } catch (e) {
       console.error('[popup] invoke summary failed', e);
-      toast.error('无法触发总结');
+      toast.error(messages.popup.invokeSummaryFailed);
     }
   };
 
@@ -166,7 +168,7 @@ function App() {
         <button
           type="button"
           onClick={() => browser.runtime.openOptionsPage()}
-          title="打开设置"
+          title={messages.popup.openOptions}
           className="flex size-9 shrink-0 items-center justify-center rounded-md border border-zinc-300 bg-white text-zinc-700 shadow-sm transition-colors hover:bg-zinc-50 hover:text-zinc-900"
         >
           <Settings size={18} />
@@ -175,14 +177,14 @@ function App() {
 
       <section className="grid gap-1.5">
         <SelectRow
-          label="模型"
+          label={messages.popup.model}
           value={currentModelId}
           onChange={handleModelChange}
           options={models.map((m) => ({ value: m.id, label: m.name }))}
           icon={currentModel ? <ModelIcon model={currentModel} /> : undefined}
         />
         <SelectRow
-          label="提示词"
+          label={messages.popup.prompt}
           value={currentPromptId}
           onChange={handlePromptChange}
           options={prompts.map((p) => ({ value: p.id, label: p.name }))}
@@ -195,11 +197,11 @@ function App() {
             <button
               type="button"
               onClick={handleSummarize}
-              title="打开总结面板并立即开始总结"
+              title={messages.popup.openPanelAndStartSummary}
               className="flex items-center gap-1.5 rounded-md border border-emerald-300 bg-emerald-50 px-3 py-1.5 text-sm font-medium text-emerald-800 shadow-sm transition-colors hover:bg-emerald-100"
             >
               <Play size={13} className="fill-emerald-700 text-emerald-700" />
-              <span>总结</span>
+              <span>{messages.popup.summary}</span>
             </button>
           )}
         </div>
@@ -207,14 +209,14 @@ function App() {
           type="button"
           onClick={handleCopyPage}
           disabled={copying || !isContentPage}
-          title="把页面内容复制到剪切板"
+          title={messages.popup.copyPageContentToClipboard}
           className={cn(
             'flex items-center gap-1.5 rounded-md border border-zinc-300 bg-white px-3 py-1.5 text-sm font-medium text-zinc-700 shadow-sm transition-colors hover:bg-zinc-50',
             (copying || !isContentPage) && 'cursor-not-allowed opacity-60',
           )}
         >
           <Copy size={14} />
-          <span>Page</span>
+          <span>{messages.popup.page}</span>
         </button>
       </section>
     </main>

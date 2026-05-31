@@ -80,7 +80,7 @@ export function ModelsListPage() {
   }
 
   function handleDelete(model: ModelConfigItem) {
-    if (!window.confirm(`Delete "${model.name}"?`)) {
+    if (!window.confirm(messages.models.deleteConfirm(model.name))) {
       return;
     }
 
@@ -90,12 +90,12 @@ export function ModelsListPage() {
         const deleted = await deleteModelConfig(model.id);
 
         if (deleted) {
-          toast.success('Model deleted.');
+          toast.success(messages.models.deletedToast);
         }
 
         return deleted;
       },
-      'Model could not be deleted.',
+      messages.models.deleteFailed,
     );
   }
 
@@ -110,7 +110,7 @@ export function ModelsListPage() {
         const created = await createModelConfig(newDraft);
 
         if (created) {
-          toast.success('Model duplicated.');
+          toast.success(messages.models.duplicatedToast);
           setTimeout(() => {
             window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
           }, 100);
@@ -119,7 +119,7 @@ export function ModelsListPage() {
 
         return false;
       },
-      'Model could not be duplicated.',
+      messages.models.duplicateFailed,
     );
   }
 
@@ -143,14 +143,14 @@ export function ModelsListPage() {
           <Button asChild>
             <Link to="/models/create">
               <Plus />
-              Create Model Config
+              {messages.models.createModelConfig}
             </Link>
           </Button>
           {settings?.defaultModelId ? (() => {
             const defaultModel = settings.models.find(m => m.id === settings.defaultModelId);
             return defaultModel ? (
               <div className="text-sm font-bold text-primary">
-                Default: {defaultModel.name}
+                {messages.models.defaultBadge}: {defaultModel.name}
               </div>
             ) : null;
           })() : null}
@@ -165,14 +165,14 @@ export function ModelsListPage() {
 
       {settings && settings.models.length === 0 ? (
         <section className="grid max-w-2xl gap-3 rounded-md border border-dashed p-6">
-          <h2 className="text-base font-semibold">No model configs yet</h2>
+          <h2 className="text-base font-semibold">{messages.models.noModelConfigsYet}</h2>
           <p className="text-sm leading-6 text-muted-foreground">
-            Create one model config before the background bridge can call a provider.
+            {messages.models.createOneBeforeBackgroundBridge}
           </p>
           <Button asChild className="justify-self-start">
             <Link to="/models/create">
               <Plus />
-              Create Model Config
+              {messages.models.createModelConfig}
             </Link>
           </Button>
         </section>
@@ -200,7 +200,7 @@ export function ModelsListPage() {
                 <div className="min-w-0">
                   <label className="inline-flex cursor-pointer items-center gap-3">
                     <input
-                      aria-label={`Use ${model.name} by default`}
+                      aria-label={messages.models.useDefault(model.name)}
                       checked={isDefault}
                       className="size-4 accent-primary"
                       disabled={isBusy}
@@ -209,7 +209,7 @@ export function ModelsListPage() {
                         runModelAction(
                           model.id,
                           () => setDefaultModelConfig(model.id),
-                          'Default model could not be changed.',
+                          messages.models.defaultChangedFailed,
                         )
                       }
                       type="radio"
@@ -230,7 +230,7 @@ export function ModelsListPage() {
                     </span>
                     {isDefault ? (
                       <span className="rounded-sm bg-primary px-2 py-0.5 text-xs font-medium text-primary-foreground">
-                        Default
+                        {messages.models.defaultBadge}
                       </span>
                     ) : null}
                   </label>
@@ -238,14 +238,14 @@ export function ModelsListPage() {
                   <dl className="mt-4 grid gap-3 text-sm lg:grid-cols-2">
                     <div className="min-w-0">
                       <dt className="text-xs font-medium uppercase text-muted-foreground">
-                        Provider
+                        {messages.models.provider}
                       </dt>
                       <dd className="mt-1 break-words">{provider.label}</dd>
                     </div>
                     {provider.supportsBaseURL ? (
                       <div className="min-w-0 lg:col-span-2">
                         <dt className="text-xs font-medium uppercase text-muted-foreground">
-                          Base URL
+                          {messages.models.baseUrl}
                         </dt>
                         <dd className="mt-1 break-words font-mono text-xs">
                           {model.baseURL}
@@ -255,7 +255,7 @@ export function ModelsListPage() {
                     {provider.supportsApiMode ? (
                       <div className="min-w-0">
                         <dt className="text-xs font-medium uppercase text-muted-foreground">
-                          API Mode
+                          {messages.models.apiMode}
                         </dt>
                         <dd className="mt-1">{model.apiMode}</dd>
                       </div>
@@ -263,7 +263,7 @@ export function ModelsListPage() {
                     {model.maxInputTokens ? (
                       <div className="min-w-0">
                         <dt className="text-xs font-medium uppercase text-muted-foreground">
-                          Max Input Tokens
+                          {messages.models.maxInputTokens}
                         </dt>
                         <dd className="mt-1">{model.maxInputTokens}</dd>
                       </div>
@@ -271,7 +271,7 @@ export function ModelsListPage() {
                     {model.inputTokenPrice || model.outputTokenPrice ? (
                       <div className="min-w-0">
                         <dt className="text-xs font-medium uppercase text-muted-foreground">
-                          Price
+                          {messages.models.price}
                         </dt>
                         <dd className="mt-1">
                           {model.priceUnit} {model.inputTokenPrice || 0}/M input
@@ -285,57 +285,57 @@ export function ModelsListPage() {
 
                 <div className="group flex items-start gap-2 sm:justify-end">
                   <Button
-                    aria-label={`Move up ${model.name}`}
+                    aria-label={messages.models.moveUp(model.name)}
                     disabled={isBusy || index === 0}
                     onClick={() =>
                       runModelAction(
                         model.id,
                         () => moveModelConfig(model.id, 'up'),
-                        'Model could not be moved.',
+                        messages.models.moveFailed,
                       )
                     }
                     size="icon"
-                    title={`Move up ${model.name}`}
+                    title={messages.models.moveUp(model.name)}
                     type="button"
                     variant="outline"
                   >
                     <ArrowUp className="size-4" />
                   </Button>
                   <Button
-                    aria-label={`Move down ${model.name}`}
+                    aria-label={messages.models.moveDown(model.name)}
                     disabled={isBusy || index === settings.models.length - 1}
                     onClick={() =>
                       runModelAction(
                         model.id,
                         () => moveModelConfig(model.id, 'down'),
-                        'Model could not be moved.',
+                        messages.models.moveFailed,
                       )
                     }
                     size="icon"
-                    title={`Move down ${model.name}`}
+                    title={messages.models.moveDown(model.name)}
                     type="button"
                     variant="outline"
                   >
                     <ArrowDown className="size-4" />
                   </Button>
                   <Button
-                    aria-label={`Duplicate ${model.name}`}
+                    aria-label={messages.models.duplicate(model.name)}
                     className="opacity-0 group-hover:opacity-100 focus-visible:opacity-100 transition-opacity"
                     disabled={isBusy}
                     onClick={() => handleDuplicate(model)}
                     size="icon"
-                    title={`Duplicate ${model.name}`}
+                    title={messages.models.duplicate(model.name)}
                     type="button"
                     variant="outline"
                   >
                     <Copy className="size-4" />
                   </Button>
                   <Button
-                    aria-label={`Edit ${model.name}`}
+                    aria-label={messages.models.edit(model.name)}
                     asChild
                     disabled={isBusy}
                     size="icon"
-                    title={`Edit ${model.name}`}
+                    title={messages.models.edit(model.name)}
                     variant="outline"
                   >
                     <Link to={`/models/edit?id=${model.id}`}>
@@ -343,11 +343,11 @@ export function ModelsListPage() {
                     </Link>
                   </Button>
                   <Button
-                    aria-label={`Delete ${model.name}`}
+                    aria-label={messages.models.delete(model.name)}
                     disabled={isBusy}
                     onClick={() => handleDelete(model)}
                     size="icon"
-                    title={`Delete ${model.name}`}
+                    title={messages.models.delete(model.name)}
                     type="button"
                     variant="destructive"
                   >

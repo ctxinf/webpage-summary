@@ -8,7 +8,7 @@ export default defineConfig({
   hooks: {
     'build:manifestGenerated': (wxt, manifest) => {
       if (wxt.config.mode === 'development') {
-        console.log('manifest',manifest)
+        // console.log('manifest',manifest)
         manifest.name = `(DEV-${wxt.config.browser})__MSG_extStoreName__`;
       }
     },
