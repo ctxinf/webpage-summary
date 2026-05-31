@@ -16,8 +16,8 @@
 已先做一版 v2 配置链路，用来跑通页面、存储、provider factory、正式 background connect bridge：
 
 1. 新 storage key：
-   - `local:react-model-configs-v2`
-   - `local:react-default-model-id-v2`
+   - `local:model-configs`
+   - `local:default-model-id`
 2. 新增 provider 描述表：`constants/model-settings.ts`
    - provider 直接展示当前 `package.json` 仍保留的 provider：OpenAI Compatible、OpenAI、Open Responses、Anthropic、Google Generative AI、Ollama、Browser AI。
    - Base URL 不是伪装成 provider，而是在 provider 下提供快捷服务商 URL；OpenRouter 作为 OpenAI Compatible 的快捷 URL。

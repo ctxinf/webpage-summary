@@ -1,9 +1,9 @@
 import type { StorageItemKey } from '#imports';
 
 export const MODEL_CONFIGS_V2_STORAGE_KEY: StorageItemKey =
-  'local:react-model-configs-v2';
+  'local:model-configs';
 export const DEFAULT_MODEL_ID_V2_STORAGE_KEY: StorageItemKey =
-  'local:react-default-model-id-v2';
+  'local:default-model-id';
 
 export const MODEL_API_MODES = ['chat', 'responses'] as const;
 export type ModelApiMode = (typeof MODEL_API_MODES)[number];

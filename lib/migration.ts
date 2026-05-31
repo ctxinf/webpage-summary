@@ -6,7 +6,53 @@ export function migrateModelConfigs(models: any[]): { models: any[], updated: bo
   const migratedModels = models.map((model) => {
     // V1 to V2 mapping
     if (model.providerType) {
-      model.providerId = model.providerType;
+      let type = model.providerType;
+      let iconToAssign: string | undefined = undefined;
+
+      // Fix typos or legacy names
+      if (type === 'google geneative' || type === 'google generative' || type === 'google-generative') {
+        type = 'google';
+      } else if (type === 'openai-compitable') {
+        type = 'openai-compatible';
+      }
+
+      // If it's not a standard provider, map to openai-compatible
+      const standardProviders = ['openai', 'anthropic', 'google', 'ollama', 'browser-ai', 'open-responses', 'openai-compatible'];
+      if (!standardProviders.includes(type)) {
+        let urlToAssign: string | undefined = undefined;
+
+        // Use the original type to determine icon before overwriting
+        const lowerType = type.toLowerCase();
+        if (lowerType.includes('deepseek')) { iconToAssign = '/llm-icons/deepseek.svg'; urlToAssign = 'https://api.deepseek.com'; }
+        else if (lowerType.includes('moonshot') || lowerType.includes('kimi')) { iconToAssign = '/llm-icons/kimi-web.svg'; urlToAssign = 'https://api.moonshot.ai/v1'; }
+        else if (lowerType.includes('xai')) { iconToAssign = '/llm-icons/xAI.svg'; urlToAssign = 'https://api.x.ai/v1'; }
+        else if (lowerType.includes('openrouter')) { iconToAssign = '/llm-icons/openrouter.svg'; urlToAssign = 'https://openrouter.ai/api/v1'; }
+        else if (lowerType.includes('perplexity')) { iconToAssign = '/llm-icons/perplexity.svg'; urlToAssign = 'https://api.perplexity.ai/v1'; }
+        else if (lowerType.includes('siliconflow')) { iconToAssign = '/llm-icons/siliconflow.svg'; urlToAssign = 'https://api.siliconflow.cn/v1'; }
+        else if (lowerType.includes('together')) { iconToAssign = '/llm-icons/together.svg'; urlToAssign = 'https://api.together.xyz/v1'; }
+        else if (lowerType.includes('cohere')) { iconToAssign = '/llm-icons/cohere.svg'; urlToAssign = 'https://api.cohere.com/v1'; }
+        else if (lowerType.includes('deepinfra')) { iconToAssign = '/llm-icons/deepinfra.svg'; urlToAssign = 'https://api.deepinfra.com/v1/openai'; }
+        else if (lowerType.includes('groq')) { iconToAssign = '/llm-icons/groq.svg'; urlToAssign = 'https://api.groq.com/openai/v1'; }
+        else if (lowerType.includes('zhipu') || lowerType.includes('glm')) { iconToAssign = '/llm-icons/zhipu.svg'; urlToAssign = 'https://open.bigmodel.cn/api/paas/v4'; }
+        else if (lowerType.includes('minimax')) { iconToAssign = '/llm-icons/minimax.svg'; urlToAssign = 'https://api.minimax.io/v1'; }
+        else if (lowerType.includes('mistral')) { iconToAssign = '/llm-icons/mistral.svg'; urlToAssign = 'https://api.mistral.ai/v1'; }
+        else if (lowerType.includes('qwen') || lowerType.includes('aliyun') || lowerType.includes('dashscope')) { iconToAssign = '/llm-icons/aliyun.svg'; urlToAssign = 'https://dashscope.aliyuncs.com/compatible-mode/v1'; }
+        else if (lowerType.includes('baidu') || lowerType.includes('qianfan')) { iconToAssign = '/llm-icons/baidu.svg'; urlToAssign = 'https://qianfan.baidubce.com/v2'; }
+        else if (lowerType.includes('byteplus')) { iconToAssign = '/llm-icons/byteplus.svg'; urlToAssign = 'https://ark.ap-southeast.bytepluses.com/api/v3'; }
+        else if (lowerType.includes('volcengine') || lowerType.includes('ark')) { iconToAssign = '/llm-icons/volcengine.svg'; urlToAssign = 'https://ark.cn-beijing.volces.com/api/v3'; }
+        else if (lowerType.includes('cerebras')) { iconToAssign = '/llm-icons/cerebras.svg'; urlToAssign = 'https://api.cerebras.ai/v1'; }
+
+        if (urlToAssign && !model.baseURL) {
+          model.baseURL = urlToAssign;
+        }
+
+        type = 'openai-compatible';
+      }
+
+      model.providerId = type;
+      if (iconToAssign && !model.iconPath) {
+        model.iconPath = iconToAssign;
+      }
       delete model.providerType;
       updated = true;
     }
@@ -78,11 +124,11 @@ export async function runFullMigration(): Promise<string[]> {
     logs.push(`Found ${Object.keys(data).length} raw configuration keys in storage.`);
 
     const KEY_MAPPING: Record<string, string> = {
-      'default-model-id': 'react-default-model-id-v2',
+      'default-model-id': 'default-model-id',
       'default-prompt-id': 'default-prompt-id',
       'expand-chat-input-box': 'enable-chat-input-box',
       'is-first-install': 'is-first-install',
-      'model-configs': 'react-model-configs-v2',
+      'model-configs': 'model-configs',
       'prompt-configs': 'prompt-configs',
       'site-customization-list': 'site-customization-list',
       'site-filter-blacklist': 'site-filter-blacklist',
@@ -100,7 +146,7 @@ export async function runFullMigration(): Promise<string[]> {
 
       const newKey = KEY_MAPPING[oldKey] || oldKey;
       
-      if (newKey === 'react-model-configs-v2' && Array.isArray(value)) {
+      if (newKey === 'model-configs' && Array.isArray(value)) {
         logs.push(`Applying model auto-conversion for key: ${oldKey} -> ${newKey}`);
         const { models: migratedModels, updated } = migrateModelConfigs(value);
         migratedData[newKey] = migratedModels;
