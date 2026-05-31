@@ -232,7 +232,7 @@ export function ContentAppFrame({ onClose, isMain = true, onAdd }: ContentAppFra
         </div>
 
         <Conversation className="relative size-full">
-          <ConversationContent>
+          <ConversationContent className="pb-14">
             {messages.slice(2).map((message, index) => {
               const displayMessages = messages.slice(2);
               const isLastMessage = index === displayMessages.length - 1;

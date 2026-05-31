@@ -119,7 +119,7 @@ export function ContentEntrance() {
         >
           <div
             onClick={() => setMainPanelOpen(true)}
-            className="relative flex items-center justify-center p-1.5 rounded-full border border-purple-200/80 bg-purple-50/50 hover:bg-purple-100/70 hover:border-purple-300 transition-all duration-200 shadow-xs cursor-pointer group"
+            className="relative flex items-center justify-center p-1.5 rounded-full border border-purple-200/80 bg-purple-50/20 hover:bg-purple-100/70 hover:border-purple-300 transition-all duration-200 shadow-xs cursor-pointer group"
             title={messages.content.badgeLabel}
           >
             <img
