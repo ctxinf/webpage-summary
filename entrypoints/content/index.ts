@@ -1,7 +1,6 @@
 import './polyfill';
 import { ENABLE_CONTENT_SAMPLES } from '@/constants/flag';
 import { mountContentScope } from './scope';
-import { mountContentSamples } from './sample/mountContentSamples';
 import 'sonner/dist/styles.css';
 import './style.css';
 
@@ -13,7 +12,7 @@ export default defineContentScript({
     await mountContentScope(ctx);
 
     if (ENABLE_CONTENT_SAMPLES) {
-      // console.log('ENABLE_CONTENT_SAMPLES',ENABLE_CONTENT_SAMPLES)
+      const { mountContentSamples } = await import('./sample/mountContentSamples');
       await mountContentSamples(ctx);
     }
   },

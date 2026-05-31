@@ -3,8 +3,6 @@ import { ENABLE_SAMPLES } from '@/constants/flag';
 import { seedDefaultPromptIfNeeded } from '@/lib/prompt-settings-storage';
 import { registerAiSdkConnectBridge } from './ai-sdk-connect-bridge';
 import { registerTokenCountMessages } from './token-count-bg';
-import { registerBackgroundAiProviderSample } from './sample/background-ai-provider';
-import { registerConnectChatTransportSample } from './sample/connect-chat-transport';
 import { setupOnInstallHook } from './onInstall';
 import { registerControlMessages, addContextMenus, initializeControlHandlers } from './control';
 
@@ -25,9 +23,10 @@ export default defineBackground(() => {
   addContextMenus().catch((err) => console.error('Failed to setup context menus:', err));
   initializeControlHandlers();
 
-  console.log('ENABLE_SAMPLES', ENABLE_SAMPLES);
   if (ENABLE_SAMPLES) {
-    registerBackgroundAiProviderSample();
-    registerConnectChatTransportSample();
+    Promise.all([
+      import('./sample/background-ai-provider').then((m) => m.registerBackgroundAiProviderSample()),
+      import('./sample/connect-chat-transport').then((m) => m.registerConnectChatTransportSample()),
+    ]).catch((err) => console.error('Failed to load samples:', err));
   }
 });
