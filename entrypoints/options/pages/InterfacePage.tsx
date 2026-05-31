@@ -6,6 +6,7 @@ import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Switch } from '@/components/ui/switch';
 import {
+  GENERAL_SETTING_DEFINITIONS,
   type GeneralSettingKey,
   type GeneralSettings,
 } from '@/constants/general-settings';
@@ -265,8 +266,9 @@ export function InterfacePage() {
             {/* Panel Layout Mode */}
             <section className="rounded-xl border bg-card p-6 shadow-sm">
               <header className="mb-6">
-                <h2 className="text-base font-semibold text-foreground">
+                <h2 className="text-base font-semibold text-foreground w-fit flex items-center gap-2" title={GENERAL_SETTING_DEFINITIONS.panelLayoutMode.storageKey}>
                   {messages.interface.panelLayout.title}
+                  
                 </h2>
                 <p className="mt-1 text-sm text-muted-foreground">
                   {messages.interface.panelLayout.description}
@@ -325,19 +327,24 @@ export function InterfacePage() {
               </div>
               <div className="flex items-center justify-between gap-4">
                 <div>
-                  <h2 className="text-base font-semibold text-foreground">
+                  <h2 className="text-base font-semibold text-foreground w-fit" title={GENERAL_SETTING_DEFINITIONS.enableFloatingBall.storageKey}>
                     {messages.interface.floatingBall.title}
                   </h2>
                   <p className="mt-1 text-sm text-muted-foreground">
                     {messages.interface.floatingBall.description}
                   </p>
                 </div>
-                <Switch
-                  checked={settings.enableFloatingBall}
-                  onCheckedChange={(checked) =>
-                    updateSetting('enableFloatingBall', checked)
-                  }
-                />
+                <div className="flex items-center gap-3">
+                  <span className="flex items-center gap-1 text-xs text-muted-foreground font-medium">
+                    (Default: <input type="checkbox" checked={GENERAL_SETTING_DEFINITIONS.enableFloatingBall.defaultValue} disabled readOnly className="size-3.5 cursor-not-allowed ml-0.5" />)
+                  </span>
+                  <Switch
+                    checked={settings.enableFloatingBall}
+                    onCheckedChange={(checked) =>
+                      updateSetting('enableFloatingBall', checked)
+                    }
+                  />
+                </div>
               </div>
             </section>
 
@@ -348,19 +355,24 @@ export function InterfacePage() {
               </div>
               <div className="flex items-center justify-between gap-4">
                 <div>
-                  <h2 className="text-base font-semibold text-foreground">
+                  <h2 className="text-base font-semibold text-foreground w-fit" title={GENERAL_SETTING_DEFINITIONS.enableChatInputBox.storageKey}>
                     {messages.interface.chatInputBox.title}
                   </h2>
                   <p className="mt-1 text-sm text-muted-foreground">
                     {messages.interface.chatInputBox.description}
                   </p>
                 </div>
-                <Switch
-                  checked={settings.enableChatInputBox}
-                  onCheckedChange={(checked) =>
-                    updateSetting('enableChatInputBox', checked)
-                  }
-                />
+                <div className="flex items-center gap-3">
+                  <span className="flex items-center gap-1 text-xs text-muted-foreground font-medium">
+                    (Default: <input type="checkbox" checked={GENERAL_SETTING_DEFINITIONS.enableChatInputBox.defaultValue} disabled readOnly className="size-3.5 cursor-not-allowed ml-0.5" />)
+                  </span>
+                  <Switch
+                    checked={settings.enableChatInputBox}
+                    onCheckedChange={(checked) =>
+                      updateSetting('enableChatInputBox', checked)
+                    }
+                  />
+                </div>
               </div>
             </section>
 
@@ -368,19 +380,24 @@ export function InterfacePage() {
             <section className="rounded-xl border bg-card p-6 shadow-sm">
               <div className="flex items-center justify-between gap-4">
                 <div>
-                  <h2 className="text-base font-semibold text-foreground">
+                  <h2 className="text-base font-semibold text-foreground w-fit" title={GENERAL_SETTING_DEFINITIONS.enableCreateNewPanelButton.storageKey}>
                     {messages.general.settings.enableCreateNewPanelButton.label}
                   </h2>
                   <p className="mt-1 text-sm text-muted-foreground">
                     {messages.general.settings.enableCreateNewPanelButton.description}
                   </p>
                 </div>
-                <Switch
-                  checked={settings.enableCreateNewPanelButton}
-                  onCheckedChange={(checked) =>
-                    updateSetting('enableCreateNewPanelButton', checked)
-                  }
-                />
+                <div className="flex items-center gap-3">
+                  <span className="flex items-center gap-1 text-xs text-muted-foreground font-medium">
+                    (Default: <input type="checkbox" checked={GENERAL_SETTING_DEFINITIONS.enableCreateNewPanelButton.defaultValue} disabled readOnly className="size-3.5 cursor-not-allowed ml-0.5" />)
+                  </span>
+                  <Switch
+                    checked={settings.enableCreateNewPanelButton}
+                    onCheckedChange={(checked) =>
+                      updateSetting('enableCreateNewPanelButton', checked)
+                    }
+                  />
+                </div>
               </div>
             </section>
 
@@ -514,15 +531,20 @@ export function InterfacePage() {
 
           {/* Auto Begin Summary */}
           <div className="flex items-center justify-between gap-4">
-            <span className="text-sm font-medium text-foreground">
+            <span className="text-sm font-medium text-foreground w-fit" title={GENERAL_SETTING_DEFINITIONS.enableAutoBeginSummary.storageKey}>
               {messages.general.settings.enableAutoBeginSummary.label}
             </span>
-            <Switch
-              checked={settings.enableAutoBeginSummary}
-              onCheckedChange={(checked) =>
-                updateSetting('enableAutoBeginSummary', checked)
-              }
-            />
+            <div className="flex items-center gap-3">
+              <span className="flex items-center gap-1 text-xs text-muted-foreground font-medium">
+                (Default: <input type="checkbox" checked={GENERAL_SETTING_DEFINITIONS.enableAutoBeginSummary.defaultValue} disabled readOnly className="size-3.5 cursor-not-allowed ml-0.5" />)
+              </span>
+              <Switch
+                checked={settings.enableAutoBeginSummary}
+                onCheckedChange={(checked) =>
+                  updateSetting('enableAutoBeginSummary', checked)
+                }
+              />
+            </div>
           </div>
 
           <hr className="border-border my-2" />
@@ -534,19 +556,24 @@ export function InterfacePage() {
             </div>
             <div className="flex items-center justify-between gap-4">
               <div>
-                <h2 className="text-base font-semibold text-foreground">
+                <h2 className="text-base font-semibold text-foreground w-fit" title={GENERAL_SETTING_DEFINITIONS.enableTokenUsageView.storageKey}>
                   {messages.general.settings.enableTokenUsageView.label}
                 </h2>
                 <p className="mt-1 text-sm text-muted-foreground">
                   {messages.general.settings.enableTokenUsageView.description}
                 </p>
               </div>
-              <Switch
-                checked={settings.enableTokenUsageView}
-                onCheckedChange={(checked) =>
-                  updateSetting('enableTokenUsageView', checked)
-                }
-              />
+              <div className="flex items-center gap-3">
+                <span className="flex items-center gap-1 text-xs text-muted-foreground font-medium">
+                  (Default: <input type="checkbox" checked={GENERAL_SETTING_DEFINITIONS.enableTokenUsageView.defaultValue} disabled readOnly className="size-3.5 cursor-not-allowed ml-0.5" />)
+                </span>
+                <Switch
+                  checked={settings.enableTokenUsageView}
+                  onCheckedChange={(checked) =>
+                    updateSetting('enableTokenUsageView', checked)
+                  }
+                />
+              </div>
             </div>
           </section>
 

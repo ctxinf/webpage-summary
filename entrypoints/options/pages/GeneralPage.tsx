@@ -4,6 +4,7 @@ import { toast } from 'sonner';
 import { Button } from '@/components/ui/button';
 import {
   createDefaultGeneralSettings,
+  GENERAL_SETTING_DEFINITIONS,
   type GeneralSettingKey,
   type GeneralSettings,
 } from '@/constants/general-settings';
@@ -63,6 +64,8 @@ type SettingRowProps = {
     off: string;
     on: string;
   };
+  storageKey?: string;
+  defaultValue?: any;
 };
 
 function SettingRow({
@@ -72,11 +75,15 @@ function SettingRow({
   label,
   onChange,
   statusLabels,
+  storageKey,
+  defaultValue,
 }: SettingRowProps) {
+  const hoverTitle = storageKey;
+  
   return (
     <label className="grid cursor-pointer grid-cols-[minmax(0,1fr)_auto] items-center gap-4 border-b py-4 last:border-b-0 max-sm:grid-cols-1">
       <span className="min-w-0">
-        <span className="block text-sm font-medium">{label}</span>
+        <span className="block text-sm font-medium" title={hoverTitle}>{label}</span>
         <span className="mt-1 block max-w-2xl text-sm leading-6 text-muted-foreground">
           {description}
         </span>
@@ -90,11 +97,15 @@ function SettingRow({
       <span className="inline-flex items-center gap-2 text-sm font-medium max-sm:justify-self-start">
         <input
           checked={checked}
-          className="size-4 accent-primary"
+          className="size-4 accent-primary cursor-pointer"
           onChange={(event) => onChange(event.currentTarget.checked)}
           type="checkbox"
         />
-        <span>{checked ? statusLabels.on : statusLabels.off}</span>
+        {defaultValue !== undefined && (
+          <span className="flex items-center gap-1 text-xs text-muted-foreground font-medium ml-2">
+            (Default: <input type="checkbox" checked={defaultValue} disabled readOnly className="size-3.5 cursor-not-allowed ml-0.5" />)
+          </span>
+        )}
       </span>
     </label>
   );
@@ -218,6 +229,8 @@ export function GeneralPage() {
 
             {section.fields.map((field) => {
               const fieldMessage = messages.general.settings[field];
+              const definition = GENERAL_SETTING_DEFINITIONS[field];
+              const defaultValue = typeof definition.defaultValue === 'function' ? (definition.defaultValue as any)() : definition.defaultValue;
 
               return (
                 <SettingRow
@@ -226,6 +239,8 @@ export function GeneralPage() {
                   description={fieldMessage.description}
                   key={field}
                   label={fieldMessage.label}
+                  storageKey={definition.storageKey}
+                  defaultValue={defaultValue}
                   onChange={(checked) => updateSetting(field, checked)}
                   statusLabels={messages.common}
                 />
@@ -237,7 +252,10 @@ export function GeneralPage() {
 
       <section className="grid gap-3 border-b pb-7">
         <header className="mb-4 border-b pb-2">
-          <h2 className="text-xl font-extrabold text-primary">
+          <h2 
+            className="text-xl font-extrabold text-primary w-fit" 
+            title={GENERAL_SETTING_DEFINITIONS.pageTextExtractMethod.storageKey}
+          >
             {messages.pageExtraction.method.title}
           </h2>
           <p className="mt-1 max-w-2xl text-sm leading-6 text-muted-foreground">
@@ -263,10 +281,13 @@ export function GeneralPage() {
                   value={method}
                 />
                 <span>
-                  <span className="block text-sm font-medium">
+                  <span className="block text-sm font-medium flex items-center gap-2">
                     {methodMessage.label}
+                    {GENERAL_SETTING_DEFINITIONS.pageTextExtractMethod.defaultValue === method && (
+                      <span className="text-xs font-normal text-muted-foreground/50">(Default)</span>
+                    )}
                   </span>
-                  <span className="mt-1 block text-sm leading-6 text-muted-foreground">
+                  <span className="mt-1 block max-w-xl text-sm leading-6 text-muted-foreground">
                     {methodMessage.description}
                   </span>
                 </span>

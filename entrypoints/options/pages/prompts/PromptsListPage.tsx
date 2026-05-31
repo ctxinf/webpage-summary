@@ -28,6 +28,7 @@ import {
   loadGeneralSettings,
   saveGeneralSettings,
 } from '@/lib/general-settings-storage';
+import { GENERAL_SETTING_DEFINITIONS } from '@/constants/general-settings';
 import { cn } from '@/lib/utils';
 import { OptionsPageTitle } from '../OptionsPageTitle';
 
@@ -171,8 +172,14 @@ export function PromptsListPage() {
       {summaryLang !== undefined ? (
         <section className="flex items-center justify-between gap-4 border-b pb-5">
           <label className="flex items-baseline gap-2 min-w-0" htmlFor="summary-language">
-            <span className="text-sm font-semibold whitespace-nowrap">
+            <span 
+              className="text-sm font-semibold whitespace-nowrap"
+              title={GENERAL_SETTING_DEFINITIONS.summaryLanguage.storageKey}
+            >
               {messages.general.summaryLanguage.label}
+            </span>
+            <span className="text-xs text-muted-foreground font-medium uppercase tracking-wider whitespace-nowrap">
+              (Default: Browser Lang)
             </span>
             <span className="text-xs text-muted-foreground truncate">
               ({messages.general.summaryLanguage.description})
