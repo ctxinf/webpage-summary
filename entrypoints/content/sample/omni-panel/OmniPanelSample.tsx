@@ -35,7 +35,7 @@ function PanelContent() {
 
 export function OmniPanelSample() {
   return (
-    <PanelContainer defaultMode="floating">
+    <PanelContainer defaultMode="floating" storageKey="sample-panel">
       <PanelContent />
     </PanelContainer>
   );

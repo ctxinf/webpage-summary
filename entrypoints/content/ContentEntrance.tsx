@@ -78,7 +78,7 @@ export function ContentEntrance() {
       {/* Switchable summary panel layout — controller is shared from parent */}
       {
         mainPanelOpen && (
-          <PanelContainer defaultMode={defaultMode}>
+          <PanelContainer defaultMode={defaultMode} storageKey="main-panel">
             <ContentAppFrame 
               isMain={true} 
               onClose={() => setMainPanelOpen(false)} 
