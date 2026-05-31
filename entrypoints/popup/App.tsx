@@ -155,9 +155,9 @@ function App() {
         <img
           src={browser.runtime.getURL('/icon/32.png')}
           alt="icon"
-          className="aspect-square shrink-0 rounded-lg object-contain"
+          className="aspect-square size-5 shrink-0 rounded-lg object-contain"
         />
-        <div className="flex min-w-0 flex-1 items-baseline gap-2">
+        <div className="flex min-w-0 max-w-64 flex-1 items-baseline gap-2">
           <h1 className="truncate  font-semibold leading-tight">
             {manifest.name}
           </h1>
@@ -259,7 +259,7 @@ function SelectRow({ label, value, onChange, options, icon }: SelectRowProps) {
         )}
         <select
           className={cn(
-            'w-full appearance-none truncate rounded-md border border-border bg-background py-1.5 pr-7 text-sm text-muted-foreground shadow-sm outline-none transition-colors hover:bg-muted focus:border-primary',
+            'w-full  appearance-none truncate rounded-md border border-border bg-background py-1.5 pr-7 text-sm text-muted-foreground shadow-sm outline-none transition-colors hover:bg-muted focus:border-primary',
             icon ? 'pl-7' : 'pl-2.5',
           )}
           value={value}

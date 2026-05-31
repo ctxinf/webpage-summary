@@ -97,7 +97,7 @@ type SettingValue<TDefinition> =
   TDefinition extends GeneralSettingDefinition<infer TValue> ? TValue : never;
 
 export type GeneralSettings = {
-  [Key in keyof GeneralSettingDefinitionMap]: SettingValue<
+  -readonly [Key in keyof GeneralSettingDefinitionMap]: SettingValue<
     GeneralSettingDefinitionMap[Key]
   >;
 };
