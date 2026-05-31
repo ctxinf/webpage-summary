@@ -58,8 +58,8 @@ export function ModelPromptSelector({
           className={cn(
             'appearance-none pl-7 pr-6 py-1 outline-none font-medium max-w-[120px] truncate cursor-pointer transition-colors',
             isFloating
-              ? 'border border-zinc-300 rounded-lg text-xs bg-white shadow-sm text-zinc-700'
-              : 'border border-zinc-300 rounded-full text-xs bg-white/90 backdrop-blur shadow-sm hover:bg-zinc-50 text-zinc-700',
+              ? 'border border-border rounded-lg text-xs bg-background shadow-sm text-foreground'
+              : 'border border-border rounded-full text-xs bg-background/90 backdrop-blur shadow-sm hover:bg-muted text-foreground',
           )}
           value={currentModelId}
           onChange={(e) => {
@@ -83,8 +83,8 @@ export function ModelPromptSelector({
           className={cn(
             'appearance-none pl-2 pr-6 py-1 outline-none font-medium max-w-[120px] truncate cursor-pointer transition-colors',
             isFloating
-              ? 'border border-zinc-300 rounded-lg text-xs bg-white shadow-sm text-zinc-700'
-              : 'border border-zinc-300 rounded-full text-xs bg-white/90 backdrop-blur shadow-sm hover:bg-zinc-50 text-zinc-700',
+              ? 'border border-border rounded-lg text-xs bg-background shadow-sm text-foreground'
+              : 'border border-border rounded-full text-xs bg-background/90 backdrop-blur shadow-sm hover:bg-muted text-foreground',
           )}
           value={currentPromptId}
           onChange={(e) => {

@@ -75,6 +75,7 @@ export function ContentEntrance() {
   }, []);
 
   const shadowHost = typeof document !== 'undefined' ? document.querySelector('webpage-summary-entrance') as HTMLElement | null : null;
+  console.log('[ContentEntrance] document.querySelector("webpage-summary-entrance"):', shadowHost);
 
   return (
     <ThemeProvider container={shadowHost}>

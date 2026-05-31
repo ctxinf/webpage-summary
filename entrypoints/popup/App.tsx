@@ -161,7 +161,7 @@ function App() {
           <h1 className="truncate  font-semibold leading-tight">
             {manifest.name}
           </h1>
-          <span className="shrink-0 rounded-full bg-zinc-100 px-1 py-0.5 font-mono font-medium text-zinc-500">
+          <span className="shrink-0 rounded-full bg-muted px-1 py-0.5 font-mono font-medium text-muted-foreground">
             v{manifest.version}
           </span>
         </div>
@@ -169,7 +169,7 @@ function App() {
           type="button"
           onClick={() => browser.runtime.openOptionsPage()}
           title={messages.popup.openOptions}
-          className="flex size-9 shrink-0 items-center justify-center rounded-md border border-border bg-background text-muted-foreground shadow-sm transition-colors hover:bg-zinc-50 hover:text-foreground"
+          className="flex size-9 shrink-0 items-center justify-center rounded-md border border-border bg-background text-muted-foreground shadow-sm transition-colors hover:bg-muted hover:text-foreground"
         >
           <Settings size={18} />
         </button>
@@ -198,9 +198,9 @@ function App() {
               type="button"
               onClick={handleSummarize}
               title={messages.popup.openPanelAndStartSummary}
-              className="flex items-center gap-1.5 rounded-md border border-emerald-300 bg-emerald-50 px-3 py-1.5 text-sm font-medium text-emerald-800 shadow-sm transition-colors hover:bg-emerald-100"
+              className="flex items-center gap-1.5 rounded-md border border-emerald-300 dark:border-emerald-800 bg-emerald-50 dark:bg-emerald-950 px-3 py-1.5 text-sm font-medium text-emerald-800 dark:text-emerald-300 shadow-sm transition-colors hover:bg-emerald-100 dark:hover:bg-emerald-900"
             >
-              <Play size={13} className="fill-emerald-700 text-emerald-700" />
+              <Play size={13} className="fill-emerald-700 text-emerald-700 dark:fill-emerald-400 dark:text-emerald-400" />
               <span>{messages.popup.summary}</span>
             </button>
           )}
@@ -211,7 +211,7 @@ function App() {
           disabled={copying || !isContentPage}
           title={messages.popup.copyPageContentToClipboard}
           className={cn(
-            'flex items-center gap-1.5 rounded-md border border-border bg-background px-3 py-1.5 text-sm font-medium text-muted-foreground shadow-sm transition-colors hover:bg-zinc-50',
+            'flex items-center gap-1.5 rounded-md border border-border bg-background px-3 py-1.5 text-sm font-medium text-muted-foreground shadow-sm transition-colors hover:bg-muted',
             (copying || !isContentPage) && 'cursor-not-allowed opacity-60',
           )}
         >
@@ -259,7 +259,7 @@ function SelectRow({ label, value, onChange, options, icon }: SelectRowProps) {
         )}
         <select
           className={cn(
-            'w-full appearance-none truncate rounded-md border border-border bg-background py-1.5 pr-7 text-sm text-muted-foreground shadow-sm outline-none transition-colors hover:bg-zinc-50',
+            'w-full appearance-none truncate rounded-md border border-border bg-background py-1.5 pr-7 text-sm text-muted-foreground shadow-sm outline-none transition-colors hover:bg-muted focus:border-primary',
             icon ? 'pl-7' : 'pl-2.5',
           )}
           value={value}

@@ -116,23 +116,23 @@ export function ContentAppFrame({ onClose, isMain = true, onAdd }: ContentAppFra
           <img
             src={browser.runtime.getURL('/icon/32.png')}
             alt="icon"
-            className="size-6 rounded-lg object-contain shrink-0 self-center"
+            className="size-6 rounded-lg object-contain shrink-0 self-center transition-all dark:brightness-110 dark:drop-shadow-[0_0_6px_rgba(255,255,255,0.3)]"
           />
 
           <button
-            className="flex items-center gap-1 px-1.5 bg-background border border-border rounded-lg text-xs hover:bg-emerald-50 shadow-sm text-muted-foreground shrink-0 transition-colors"
+            className="flex items-center gap-1 px-1.5 bg-background border border-border rounded-lg text-xs hover:bg-emerald-50 dark:hover:bg-emerald-500  dark:border-emerald-500 shadow-sm text-muted-foreground shrink-0 transition-colors"
             onClick={handleSummarize}
             title={messages.length > 0 ? '重新总结' : '总结'}
           >
             {isBusy ? (
-              <RefreshCw size={14} strokeWidth={3.5} className="text-emerald-700 animate-spin" />
+              <RefreshCw size={14} strokeWidth={1.5} className="text-emerald-700 dark:text-emerald-500 animate-spin" />
             ) : messages.length > 0 ? (
-              <RefreshCw size={14} strokeWidth={3.5} className="text-emerald-700" />
+              <RefreshCw size={14} strokeWidth={1.5} className="text-emerald-700 dark:text-emerald-500" />
             ) : (
-              <Play size={14} strokeWidth={2.5} className="text-emerald-700" />
+              <Play size={14} strokeWidth={2.5} className="text-emerald-700 dark:text-emerald-500 dark:fill-white" />
             )}
             {messages.length === 0 && !isBusy ? (
-              <span className="font-medium text-emerald-900 pr-0.5">{uiMessages.content.summary}</span>
+              <span className="font-medium text-emerald-900 dark:text-emerald-500 pr-0.5">{uiMessages.content.summary}</span>
             ) : null}
           </button>
 
@@ -161,10 +161,10 @@ export function ContentAppFrame({ onClose, isMain = true, onAdd }: ContentAppFra
           <div />
         )}
 
-        <div className="flex items-center gap-0.5 text-zinc-500 justify-end shrink-0 h-full">
+        <div className="flex items-center gap-0.5 text-zinc-500 dark:text-zinc-300 justify-end shrink-0 h-full">
           {mode !== 'sidebar' && (
             <button
-              className="flex items-center justify-center border  rounded size-6 hover:bg-zinc-50 shadow-sm shrink-0"
+              className="flex items-center justify-center border border-border rounded size-6 hover:bg-muted shadow-sm shrink-0 transition-colors hover:text-foreground"
               title="Add"
               onClick={onAdd}
             >
@@ -173,7 +173,7 @@ export function ContentAppFrame({ onClose, isMain = true, onAdd }: ContentAppFra
           )}
           {isMain && (
             <button
-              className="flex items-center justify-center aspect-square border size-6  border-zinc-200 rounded hover:bg-zinc-50 shadow-sm shrink-0"
+              className="flex items-center justify-center aspect-square border size-6 border-border rounded hover:bg-muted shadow-sm shrink-0 transition-colors hover:text-foreground"
               title={mode === 'floating' ? 'Switch to Sidebar' : 'Switch to Floating'}
               onClick={() => setMode(mode === 'floating' ? 'sidebar' : 'floating')}
             >
@@ -181,14 +181,14 @@ export function ContentAppFrame({ onClose, isMain = true, onAdd }: ContentAppFra
             </button>
           )}
           <button
-            className="flex items-center justify-center size-6  border border-zinc-200 rounded hover:bg-zinc-50 shadow-sm shrink-0"
+            className="flex items-center justify-center size-6 border border-border rounded hover:bg-muted shadow-sm shrink-0 transition-colors hover:text-foreground"
             title="Settings"
             onClick={() => sendExtMessage('openOptionPage', '/options.html#/')}
           >
             <Settings size={14} />
           </button>
           <button
-            className="flex items-center justify-center size-6  border border-zinc-200 rounded hover:bg-zinc-50 shadow-sm text-zinc-500 hover:text-zinc-600 shrink-0"
+            className="flex items-center justify-center size-6 border border-border rounded hover:bg-muted shadow-sm hover:text-foreground shrink-0 transition-colors"
             onClick={onClose}
             title="Close"
           >
@@ -222,7 +222,7 @@ export function ContentAppFrame({ onClose, isMain = true, onAdd }: ContentAppFra
               </div>
             )}
             <button
-              className="inline-flex items-center justify-center gap-1 whitespace-nowrap rounded-md text-[10px] font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-3 [&_svg]:shrink-0 bg-background/80 backdrop-blur-sm border border-zinc-200 hover:bg-zinc-50 text-muted-foreground w-6 h-6"
+              className="inline-flex items-center justify-center gap-1 whitespace-nowrap rounded-md text-[10px] font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-3 [&_svg]:shrink-0 bg-background/80 backdrop-blur-sm border border-border hover:bg-muted text-muted-foreground dark:text-zinc-300 hover:text-foreground w-6 h-6"
               title="copy all"
               onClick={handleCopyMessages}
             >
@@ -288,14 +288,14 @@ export function ContentAppFrame({ onClose, isMain = true, onAdd }: ContentAppFra
           )}
         >
           <button
-            className="p-1.5 rounded-full border border-zinc-200 text-zinc-400 hover:text-zinc-600 shadow-sm bg-background/90 backdrop-blur"
+            className="p-1.5 rounded-full border border-border text-muted-foreground hover:text-foreground shadow-sm bg-background/90 backdrop-blur transition-colors hover:bg-muted"
             onClick={scrollToTop}
             title="Go to top"
           >
             <ArrowUpToLine size={14} />
           </button>
           <button
-            className="p-1.5 rounded-full border border-zinc-200 text-zinc-400 hover:text-zinc-600 shadow-sm bg-background/90 backdrop-blur"
+            className="p-1.5 rounded-full border border-border text-muted-foreground hover:text-foreground shadow-sm bg-background/90 backdrop-blur transition-colors hover:bg-muted"
             onClick={scrollToBottom}
             title="Go to bottom"
           >
@@ -334,7 +334,7 @@ export function ContentAppFrame({ onClose, isMain = true, onAdd }: ContentAppFra
       >
         <button
           onClick={() => setShowBottom(!showBottom)}
-          className="bg-background/30 backdrop-blur-sm border border-zinc-200/50 rounded-full p-1 text-zinc-400/70 hover:bg-background/90 hover:border-border hover:text-muted-foreground hover:shadow-md shadow-sm flex items-center justify-center transition-all pointer-events-auto"
+          className="bg-background/30 backdrop-blur-sm border border-border/50 rounded-full p-1 text-muted-foreground/70 hover:bg-background/90 hover:border-border hover:text-foreground hover:shadow-md shadow-sm flex items-center justify-center transition-all pointer-events-auto"
           title={showBottom ? 'Close input' : 'Open input'}
         >
           {showBottom ? <ChevronUp size={14} /> : <PlusCircleIcon size={14} />}
@@ -359,7 +359,7 @@ export function ContentAppFrame({ onClose, isMain = true, onAdd }: ContentAppFra
                 disabled={!inputText && !status} 
                 status={status as any} 
                 variant="outline" 
-                className="bg-transparent border border-border text-zinc-600 hover:bg-zinc-50 hover:text-foreground disabled:opacity-50" 
+                className="bg-transparent border border-border text-muted-foreground hover:bg-muted hover:text-foreground disabled:opacity-50" 
               />
             </PromptInputFooter>
           </PromptInput>
