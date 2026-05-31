@@ -1,0 +1,6 @@
+{
+  "extStoreName": { "message": "Webpage Summary - IA|OpenSource|Leve|Privacidade" },
+  "extDescription": { "message": "(OpenSource) Extensão de resumo de páginas da web. APIs LLM e prompts personalizáveis. Leve, sem assinaturas e protege a privacidade." },
+  "Commad_Open_Panel_DESC": { "message": "Abrir/ocultar painel de resumo na página atual" },
+  "add_selection_to_chat": { "message": "Adicionar seleção ao chat de resumo" }
+}

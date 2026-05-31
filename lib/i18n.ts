@@ -1,8 +1,15 @@
-export type UiLocale = 'en' | 'zh-CN';
+export type UiLocale = 'en' | 'zh-CN' | 'zh-TW' | 'ja' | 'ko' | 'pt' | 'es' | 'fr' | 'de';
 
 export const UI_LOCALE_OPTIONS = [
   { label: 'English', value: 'en' },
   { label: '简体中文', value: 'zh-CN' },
+  { label: '繁體中文', value: 'zh-TW' },
+  { label: '日本語', value: 'ja' },
+  { label: '한국어', value: 'ko' },
+  { label: 'Português', value: 'pt' },
+  { label: 'Español', value: 'es' },
+  { label: 'Français', value: 'fr' },
+  { label: 'Deutsch', value: 'de' },
 ] as const satisfies Array<{ label: string; value: UiLocale }>;
 
 const UI_LOCALE_OVERRIDE_STORAGE_KEY = 'webpage-summary-ui-locale';
@@ -945,14 +952,587 @@ const UI_MESSAGES: Record<UiLocale, UiMessages> = {
         '从上述选择器匹配到的元素内部进入 shadowRoot 并应用这些选择器。',
     },
   },
+  'zh-TW': {
+    common: {
+      allChangesSaved: '所有變更均已儲存。',
+      back: '返回',
+      loadingSettings: '正在載入設定...',
+      off: '關閉',
+      on: '開啟',
+      save: '儲存',
+      saved: '已儲存',
+      saving: '儲存中',
+      success: '成功',
+      unsavedChanges: '有未儲存的變更',
+      unknownError: '發生未知錯誤，請重試',
+      collapse: '收合',
+      more: '更多...',
+      contextMenu: {
+        summarizeThisPage: '總結此頁',
+        addToChat: '加入選取內容到聊天框',
+        openSetting: '開啟設定',
+      },
+    },
+    content: {
+      badgeLabel: '網頁總結',
+      summary: '總結',
+      reSummarize: '重新總結',
+      untitledPage: '未命名頁面',
+      contentTokenCount: '內容 Token 數:',
+      tokenViewerInfoTip: '此介面僅用於視覺化分詞效果。在此處的拖動調節不會改變實際發送給大語言模型的文本內容。',
+      calculating: '計算中...',
+    },
+    general: {
+      loadFailed: '一般設定載入失敗。',
+      restoreDefaults: '還原預設值',
+      saveFailed: '一般設定儲存失敗。',
+      savedToast: '一般設定已儲存。',
+      sections: {
+        contextMenu: { description: '選擇擴充套件在頁面選單中提供哪些入口。', title: '右鍵選單' },
+        triggers: { description: '控制面板的預設行為以及何時自動開始工作。', title: '觸發' },
+      },
+      settings: {
+        enableAutoBeginChatForAddSelectionToChat: { description: '將頁面選取文字加入對話後立即開始訊息對話。', label: '加入後立即發送選取文字' },
+        enableAutoBeginSummary: { description: '', label: '啟動面板後立即開始總結' },
+        enableAutoBeginSummaryByActionOrContextTrigger: { description: '', label: '透過右鍵選單觸發後立即開始總結' },
+        enableChatInputBox: { description: '在總結面板中顯示聊天輸入框。', label: '聊天輸入框' },
+        enableContextMenuAddSelectionToChat: { description: '顯示將選取文字加入聊天的選單項目。', label: '加入選取文字到聊天' },
+        enableContextMenuSummarizeThisPage: { description: '顯示總結當前頁面的選單項目。', label: '總結當前頁面' },
+        enableCreateNewPanelButton: { description: '顯示建立額外的另一個總結面板的按鈕。', label: '允許建立新面板' },
+        enableFloatingBall: { description: '在右下角顯示用於開啟總結面板的懸浮按鈕。', label: '懸浮按鈕' },
+        enableSummaryWindowDefault: { caution: '這會改變每個匹配頁面的預設行為。', description: '', label: '新頁面自動開啟面板' },
+        enableTokenUsageView: { description: '顯示 token 用量。', label: 'Token 用量' },
+      },
+      summaryLanguage: { description: '總結輸出的語言', label: '總結語言' },
+      title: '一般設定',
+    },
+    exportImport: {
+      exportImportDescription: '在這裡您可以匯出、匯入或重設擴充套件的所有設定、模型和提示詞設定。',
+      exportConfiguration: '匯出設定',
+      exportWithApiKeys: '是否包含 API Keys？',
+      copyToClipboard: '複製到剪貼簿',
+      importConfiguration: '匯入設定',
+      importConfigurationDescription: '從剪貼簿讀取設定。您可以逐條選擇需要覆蓋或加入的設定。',
+      readFromClipboard: '從剪貼簿讀取',
+      dangerZone: '危險操作',
+      resetConfigurationDescription: '清除所有本機儲存中的擴充套件設定。請在操作前確保您已經匯出了需要的設定備份。',
+      resetAllConfigurations: '重設所有設定',
+      resetConfirm: '確定要清除所有設定嗎？此操作無法復原。',
+      noChanges: '未發現任何變更',
+      noChangesDesc: '剪貼簿中的設定與目前設定完全一致。',
+      reviewImport: '請審閱即將匯入的設定',
+      importedSuccess: (count) => `成功匯入了 ${count} 項設定。`,
+      noImportSelected: '未選擇任何設定進行匯入。',
+      resetSuccess: '所有設定已被清除。',
+      importReviewTitle: '匯入審閱',
+      confirmImport: '確認匯入',
+      acceptAll: '全部接受',
+      rejectAll: '全部拒絕',
+      cancel: '取消',
+      configItem: '設定項目',
+      oldValue: '舊的值',
+      newValue: '新的值',
+      action: '操作',
+      conflict: '衝突',
+      addNew: '新增',
+      overwrite: '覆蓋',
+      accept: '接受',
+      skip: '跳過',
+      discard: '放棄',
+    },
+    options: {
+      debug: '除錯',
+      header: {
+        defaultModel: '預設模型', defaultModelFailed: '預設模型切換失敗。',
+        defaultPrompt: '預設提示詞', defaultPromptFailed: '預設提示詞切換失敗。',
+        language: '語言', noModels: '還沒有模型設定', noPrompts: '還沒有提示詞模板',
+      },
+      navigation: { exportImport: '設定管理', general: '一般', interface: '介面', models: '模型', prompts: '提示詞', siteCustomization: '站點客製化' },
+      navigationLabel: '選項',
+    },
+    interface: {
+      chatInputBox: { description: '預設在總結面板底部展示對話輸入框，你可以隨時輸入新的提問或指令。', title: '預設開啟對話輸入框' },
+      floatingBall: { description: '在網頁中顯示一個可以隨時開啟總結面板的懸浮控制球。', title: '懸浮球' },
+      panelLayout: { description: '', dialog: '懸浮面板', sidebar: '側邊欄', title: '預設面板形式' },
+      shortcuts: { model: '模型', prompt: '提示詞', title: '快捷跳轉' },
+      title: '介面',
+    },
+    models: {
+      createModelConfig: '建立模型設定', noModelConfigsYet: '暫無模型設定',
+      createOneBeforeBackgroundBridge: '請先建立一個模型設定，以便後台腳本可以呼叫 API。',
+      defaultBadge: '預設', provider: '供應商', baseUrl: '基礎 URL', apiMode: 'API 模式', maxInputTokens: '最大輸入 Token', price: '價格',
+      useDefault: (name) => `將 ${name} 設為預設`, moveUp: (name) => `上移 ${name}`, moveDown: (name) => `下移 ${name}`,
+      duplicate: (name) => `複製 ${name}`, edit: (name) => `編輯 ${name}`, delete: (name) => `刪除 ${name}`,
+      deleteConfirm: (name) => `確定要刪除 "${name}" 嗎？`, deletedToast: '模型已刪除。', deleteFailed: '模型刪除失敗。',
+      moveFailed: '模型移動失敗。', duplicatedToast: '模型已複製。', duplicateFailed: '模型複製失敗。', defaultChangedFailed: '預設模型切換失敗。',
+    },
+    pageExtraction: {
+      method: { description: '獲取頁面內容的演算法', title: '頁面內容提取方式' },
+      methods: {
+        'dom-heuristic': { description: '按語義 DOM 容器打分，保留文件提示塊、註解等較長的可見內容。', label: 'DOM 啟發式' },
+        readability: { description: '按閱讀模式提取文章內容。', label: 'Readability' },
+      },
+    },
+    prompts: {
+      create: '建立提示詞', createFromPreset: '從預置開始：', createdToast: '提示詞已建立。', defaultBadge: '預設',
+      delete: (name) => `刪除 ${name}`, deleteConfirm: (name) => `確認刪除“${name}”？`, deleteFailed: '提示詞刪除失敗。', deletedToast: '提示詞已刪除。',
+      edit: (name) => `編輯 ${name}`, emptyDescription: '先建立一個提示詞模板，再組裝總結輸入。', emptyTitle: '還沒有提示詞模板',
+      libraryDescription: '在這裡管理可重複使用的 system 和 user 模板，選擇預設項，並調整後續選擇器中的順序。', libraryTitle: '提示詞模板',
+      loadFailed: '提示詞設定載入失敗。', makeDefault: (name) => `將 ${name} 設為預設提示詞`, missingPromptId: '缺少提示詞 ID。',
+      moveDown: (name) => `下移 ${name}`, moveFailed: '提示詞順序調整失敗。', moveUp: (name) => `上移 ${name}`,
+      name: '名稱', namePlaceholder: '文章總結', promptNotFound: '未找到提示詞。', saveFailed: '提示詞儲存失敗。', savedToast: '提示詞已儲存。',
+      selectDefaultFailed: '預設提示詞切換失敗。', systemMessage: 'System 訊息', systemMessageDescription: '定義總結行為、輸出語言和輸出格式。',
+      templateVariables: '模板變數', templateVariablesDescription: '組裝總結請求時會渲染這些佔位符。', userMessage: 'User 訊息',
+      userMessageDescription: '包裹頁面輸入並補充任務上下文。',
+      variableDescriptions: {
+        articleUrl: '當前總結頁面的 URL。', currentSelection: '頁面中當前存在的選取文字。', summaryLanguage: '設定的輸出語言。', textContent: '作為總結輸入的頁面提取文字。',
+      },
+    },
+    pageTitles: { createModel: '建立模型', createPrompt: '建立提示詞', editModel: '編輯模型', editPrompt: '編輯提示詞', exportImport: '設定管理', interface: '介面', models: '模型', prompts: '提示詞', siteCustomization: '站點客製化', welcome: '歡迎' },
+    popup: { noActiveTab: '沒有可用的當前分頁', openOptions: '設定', model: '模型', prompt: '提示詞', summary: '總結', page: 'Page', openPanelAndStartSummary: '開啟總結面板並立即開始總結', copyPageContentToClipboard: '複製頁面內容到剪貼簿', extractFailed: '頁面內容提取失敗', copySuccess: '已複製頁面內容', copyFailed: '複製失敗', invokeSummaryFailed: '無法觸發總結' },
+    siteCustomization: {
+      examplesTitle: '匹配規則範例', examplesDescription: '支援現代 glob 語法 (picomatch)。',
+      examples: [ { key: 'example.com', description: '匹配 example.com' }, { key: '*.example.com', description: '匹配 a.example.com' }, { key: '**.example.com', description: '匹配 a.example.com, a.b.example.com' }, { key: 'example.com/articles/*', description: '匹配 example.com/articles/1' } ],
+      whitelist: '白名單', blacklist: '黑名單', whitelistDescription: '開啟後，套件只會注入到白名單內的網頁。', blacklistDescription: '開啟後，套件不會注入到黑名單內的網頁。', patternsLabel: '匹配規則', onePerLine: '每行一個',
+      whitelistPlaceholder: '例如：\nwww.reddit.com\n*.news.com', blacklistPlaceholder: '例如：\nwww.bing.com\n*.visa.com',
+      customizationTitle: '站點客製化', customizationDescription: '為特定站點設定 CSS 選擇器，以便套件更準確地獲取內容。', addRule: '加入規則', noRules: '暫無站點客製化規則', noRulesDescription: '為自動提取內容失敗的站點加入選擇器規則。',
+      newRuleFallback: '新規則', matchPattern: '匹配規則', matchPatternPlaceholder: '支援 minimatch 語法', useShadowRoot: '穿透 Shadow DOM', selectorsNormal: 'CSS 選擇器', selectorsHost: '宿主選擇器',
+      selectorsPlaceholderNormal: '例如：\n.text-neutral-content', selectorsPlaceholderHost: '例如：\n#app > div', shadowRootSelectors: 'Shadow Root 內部選擇器', shadowRootSelectorsPlaceholder: '例如：\n#content', shadowRootTip: '從上述選擇器匹配到的元素內部進入 shadowRoot 並應用這些選擇器。'
+    },
+  },
+  'ja': {
+    common: {
+      allChangesSaved: 'すべての変更が保存されました。', back: '戻る', loadingSettings: '設定を読み込み中...',
+      off: 'オフ', on: 'オン', save: '保存', saved: '保存済み', saving: '保存中', success: '成功',
+      unsavedChanges: '未保存の変更', unknownError: '不明なエラーが発生しました', collapse: '折りたたむ', more: 'さらに...',
+      contextMenu: { summarizeThisPage: 'このページを要約', addToChat: '選択範囲をチャットに追加', openSetting: '設定を開く' },
+    },
+    content: {
+      badgeLabel: 'Webpage Summary', summary: '要約', reSummarize: '再要約', untitledPage: '無題のページ',
+      contentTokenCount: 'コンテンツトークン数:', tokenViewerInfoTip: 'トークン化を視覚化します。実際には送信されません。', calculating: '計算中...',
+    },
+    general: {
+      loadFailed: '設定の読み込みに失敗しました。', restoreDefaults: 'デフォルトに戻す', saveFailed: '保存に失敗しました。', savedToast: '設定を保存しました。',
+      sections: { contextMenu: { description: 'コンテキストメニューに表示する項目を選択します。', title: 'コンテキストメニュー' }, triggers: { description: 'パネルのデフォルト動作を設定します。', title: 'トリガー' } },
+      settings: {
+        enableAutoBeginChatForAddSelectionToChat: { description: '選択したテキストをチャットに追加した直後に送信します。', label: '追加直後に送信' },
+        enableAutoBeginSummary: { description: '', label: 'パネル起動後すぐに要約を開始' },
+        enableAutoBeginSummaryByActionOrContextTrigger: { description: '', label: 'コンテキストメニューからトリガー後すぐに要約' },
+        enableChatInputBox: { description: '要約パネルにチャット入力ボックスを表示します。', label: 'チャット入力ボックス' },
+        enableContextMenuAddSelectionToChat: { description: 'チャットに追加するメニュー項目を表示します。', label: '選択範囲をチャットに追加' },
+        enableContextMenuSummarizeThisPage: { description: 'ページを要約するメニュー項目を表示します。', label: 'このページを要約' },
+        enableCreateNewPanelButton: { description: '新しい要約パネルを作成するボタンを表示します。', label: '新規パネルの作成を許可' },
+        enableFloatingBall: { description: 'パネルを開くためのフローティングボタンを表示します。', label: 'フローティングボタン' },
+        enableSummaryWindowDefault: { caution: '全ての一致するページで動作が変わります。', description: '', label: '新しいページでパネルを自動で開く' },
+        enableTokenUsageView: { description: 'トークン使用量を表示します。', label: 'トークン使用量' },
+      },
+      summaryLanguage: { description: '出力言語', label: '要約の言語' }, title: '一般設定',
+    },
+    exportImport: {
+      exportImportDescription: '拡張機能の設定をエクスポート、インポート、またはリセットします。',
+      exportConfiguration: '設定のエクスポート', exportWithApiKeys: 'APIキーを含める', copyToClipboard: 'クリップボードにコピー',
+      importConfiguration: '設定のインポート', importConfigurationDescription: 'クリップボードから読み込みます。', readFromClipboard: 'クリップボードから読み込む',
+      dangerZone: '危険な操作', resetConfigurationDescription: 'すべての設定をクリアします。', resetAllConfigurations: 'すべての設定をリセット',
+      resetConfirm: '設定をリセットしてもよろしいですか？', noChanges: '変更なし', noChangesDesc: '現在の設定と同じです。',
+      reviewImport: 'インポートする設定を確認してください', importedSuccess: (count) => `${count}件のアイテムをインポートしました。`,
+      noImportSelected: 'アイテムが選択されていません。', resetSuccess: 'すべての設定がクリアされました。',
+      importReviewTitle: 'インポートの確認', confirmImport: 'インポートの確認', acceptAll: 'すべて受け入れる', rejectAll: 'すべて拒否する', cancel: 'キャンセル',
+      configItem: '設定項目', oldValue: '元の値', newValue: '新しい値', action: 'アクション', conflict: '競合', addNew: '新規追加', overwrite: '上書き', accept: '承認', skip: 'スキップ', discard: '破棄',
+    },
+    options: {
+      debug: 'デバッグ', header: { defaultModel: 'デフォルトモデル', defaultModelFailed: '失敗しました。', defaultPrompt: 'デフォルトプロンプト', defaultPromptFailed: '失敗しました。', language: '言語', noModels: 'モデルなし', noPrompts: 'プロンプトなし' },
+      navigation: { exportImport: '設定の管理', general: '一般', interface: 'インターフェース', models: 'モデル', prompts: 'プロンプト', siteCustomization: 'サイトのカスタマイズ' }, navigationLabel: 'オプション',
+    },
+    interface: {
+      chatInputBox: { description: 'チャット入力を表示します。', title: 'チャット入力ボックス' },
+      floatingBall: { description: 'フローティングボタンを表示します。', title: 'フローティングボタン' },
+      panelLayout: { description: '', dialog: 'フローティングパネル', sidebar: 'サイドバー', title: 'パネルのレイアウト' },
+      shortcuts: { model: 'モデル', prompt: 'プロンプト', title: 'ショートカット' }, title: 'インターフェース',
+    },
+    models: {
+      createModelConfig: 'モデル設定を作成', noModelConfigsYet: 'モデル設定なし', createOneBeforeBackgroundBridge: 'モデル設定を作成してください。',
+      defaultBadge: 'デフォルト', provider: 'プロバイダー', baseUrl: 'ベースURL', apiMode: 'API モード', maxInputTokens: '最大入力トークン', price: '価格',
+      useDefault: (name) => `デフォルトに設定`, moveUp: (name) => `上へ`, moveDown: (name) => `下へ`, duplicate: (name) => `複製`, edit: (name) => `編集`, delete: (name) => `削除`, deleteConfirm: (name) => `削除しますか？`, deletedToast: '削除しました。', deleteFailed: '失敗しました。', moveFailed: '失敗しました。', duplicatedToast: '複製しました。', duplicateFailed: '失敗しました。', defaultChangedFailed: '失敗しました。',
+    },
+    pageExtraction: {
+      method: { description: 'テキストの抽出方法', title: 'テキスト抽出方法' },
+      methods: { 'dom-heuristic': { description: 'DOMヒューリスティック。', label: 'DOMヒューリスティック' }, readability: { description: 'Readabilityモード', label: 'Readability' } },
+    },
+    prompts: {
+      create: '作成', createFromPreset: 'プリセットから作成:', createdToast: '作成しました。', defaultBadge: 'デフォルト', delete: (name) => `削除`, deleteConfirm: (name) => `削除しますか？`, deleteFailed: '失敗しました。', deletedToast: '削除しました。', edit: (name) => `編集`, emptyDescription: 'プロンプトテンプレートを作成してください。', emptyTitle: 'テンプレートなし', libraryDescription: 'テンプレートの管理。', libraryTitle: 'プロンプトテンプレート', loadFailed: '読み込みに失敗しました。', makeDefault: (name) => `デフォルトに設定`, missingPromptId: 'IDがありません。', moveDown: (name) => `下へ`, moveFailed: '失敗しました。', moveUp: (name) => `上へ`, name: '名前', namePlaceholder: '記事の要約', promptNotFound: '見つかりません。', saveFailed: '保存に失敗しました。', savedToast: '保存しました。', selectDefaultFailed: '失敗しました。', systemMessage: 'System', systemMessageDescription: '動作を定義します。', templateVariables: 'テンプレート変数', templateVariablesDescription: 'プレースホルダーです。', userMessage: 'User', userMessageDescription: 'コンテキスト。',
+      variableDescriptions: { articleUrl: 'URL', currentSelection: '選択テキスト', summaryLanguage: '言語', textContent: 'テキストコンテンツ' },
+    },
+    pageTitles: { createModel: 'モデル作成', createPrompt: 'プロンプト作成', editModel: 'モデル編集', editPrompt: 'プロンプト編集', exportImport: '設定管理', interface: 'インターフェース', models: 'モデル', prompts: 'プロンプト', siteCustomization: 'サイトカスタマイズ', welcome: 'ようこそ' },
+    popup: { noActiveTab: 'タブなし', openOptions: '設定', model: 'モデル', prompt: 'プロンプト', summary: '要約', page: 'ページ', openPanelAndStartSummary: '要約を開始', copyPageContentToClipboard: 'コピー', extractFailed: '失敗しました', copySuccess: 'コピーしました', copyFailed: '失敗しました', invokeSummaryFailed: '失敗しました' },
+    siteCustomization: {
+      examplesTitle: '例', examplesDescription: 'glob構文', examples: [], whitelist: 'ホワイトリスト', blacklist: 'ブラックリスト', whitelistDescription: '一致するページでのみ実行します。', blacklistDescription: '一致するページでは実行しません。', patternsLabel: 'URL パターン', onePerLine: '1行に1つ', whitelistPlaceholder: '例: www.reddit.com', blacklistPlaceholder: '例: www.bing.com',
+      customizationTitle: 'セレクター', customizationDescription: '特定のCSSセレクターを設定します。', addRule: 'ルールの追加', noRules: 'ルールなし', noRulesDescription: 'ルールを追加します。', newRuleFallback: '新規ルール', matchPattern: 'マッチパターン', matchPatternPlaceholder: 'minimatchパターン', useShadowRoot: 'Shadow DOMの検索', selectorsNormal: 'CSSセレクター', selectorsHost: 'ホストセレクター', selectorsPlaceholderNormal: '例: .text', selectorsPlaceholderHost: '例: #app', shadowRootSelectors: 'Shadow Root セレクター', shadowRootSelectorsPlaceholder: '例: #content', shadowRootTip: 'Shadow DOMの検索。'
+    },
+  },
+  'ko': {
+    common: {
+      allChangesSaved: '모든 변경 사항이 저장되었습니다.', back: '뒤로', loadingSettings: '설정 로드 중...',
+      off: '끄기', on: '켜기', save: '저장', saved: '저장됨', saving: '저장 중', success: '성공',
+      unsavedChanges: '저장되지 않은 변경 사항', unknownError: '알 수 없는 오류가 발생했습니다.', collapse: '접기', more: '더보기...',
+      contextMenu: { summarizeThisPage: '이 페이지 요약', addToChat: '채팅에 선택 항목 추가', openSetting: '설정 열기' },
+    },
+    content: {
+      badgeLabel: 'Webpage Summary', summary: '요약', reSummarize: '다시 요약', untitledPage: '제목 없는 페이지',
+      contentTokenCount: '콘텐츠 토큰 수:', tokenViewerInfoTip: '토큰화를 시각화합니다.', calculating: '계산 중...',
+    },
+    general: {
+      loadFailed: '설정 로드 실패.', restoreDefaults: '기본값 복원', saveFailed: '저장 실패.', savedToast: '설정이 저장되었습니다.',
+      sections: { contextMenu: { description: '컨텍스트 메뉴 항목을 선택합니다.', title: '컨텍스트 메뉴' }, triggers: { description: '패널의 기본 동작을 설정합니다.', title: '트리거' } },
+      settings: {
+        enableAutoBeginChatForAddSelectionToChat: { description: '채팅에 선택한 텍스트를 추가한 후 바로 전송합니다.', label: '추가 후 바로 전송' },
+        enableAutoBeginSummary: { description: '', label: '패널 실행 후 바로 요약 시작' },
+        enableAutoBeginSummaryByActionOrContextTrigger: { description: '', label: '컨텍스트 메뉴 트리거 후 바로 요약 시작' },
+        enableChatInputBox: { description: '요약 패널에 채팅 입력 상자를 표시합니다.', label: '채팅 입력 상자' },
+        enableContextMenuAddSelectionToChat: { description: '채팅에 추가하는 메뉴 항목을 표시합니다.', label: '채팅에 선택 항목 추가' },
+        enableContextMenuSummarizeThisPage: { description: '페이지를 요약하는 메뉴 항목을 표시합니다.', label: '이 페이지 요약' },
+        enableCreateNewPanelButton: { description: '새 요약 패널 생성 버튼을 표시합니다.', label: '새 패널 생성 허용' },
+        enableFloatingBall: { description: '패널 열기를 위한 플로팅 버튼을 표시합니다.', label: '플로팅 버튼' },
+        enableSummaryWindowDefault: { caution: '일치하는 모든 페이지에서 동작이 변경됩니다.', description: '', label: '새 페이지에서 패널 자동 열기' },
+        enableTokenUsageView: { description: '토큰 사용량을 표시합니다.', label: '토큰 사용량' },
+      },
+      summaryLanguage: { description: '출력 언어', label: '요약 언어' }, title: '일반 설정',
+    },
+    exportImport: {
+      exportImportDescription: '확장 프로그램 설정을 내보내기, 가져오기 또는 재설정합니다.',
+      exportConfiguration: '설정 내보내기', exportWithApiKeys: 'API 키 포함', copyToClipboard: '클립보드에 복사',
+      importConfiguration: '설정 가져오기', importConfigurationDescription: '클립보드에서 읽기.', readFromClipboard: '클립보드에서 읽기',
+      dangerZone: '위험 구역', resetConfigurationDescription: '모든 설정을 지웁니다.', resetAllConfigurations: '모든 설정 재설정',
+      resetConfirm: '설정을 재설정하시겠습니까?', noChanges: '변경 사항 없음', noChangesDesc: '현재 설정과 같습니다.',
+      reviewImport: '가져올 설정을 확인하세요', importedSuccess: (count) => `${count}개 항목을 가져왔습니다.`,
+      noImportSelected: '선택된 항목이 없습니다.', resetSuccess: '모든 설정이 지워졌습니다.',
+      importReviewTitle: '가져오기 검토', confirmImport: '가져오기 확인', acceptAll: '모두 수락', rejectAll: '모두 거부', cancel: '취소',
+      configItem: '설정 항목', oldValue: '기존 값', newValue: '새 값', action: '작업', conflict: '충돌', addNew: '새로 추가', overwrite: '덮어쓰기', accept: '수락', skip: '건너뛰기', discard: '버리기',
+    },
+    options: {
+      debug: '디버그', header: { defaultModel: '기본 모델', defaultModelFailed: '실패했습니다.', defaultPrompt: '기본 프롬프트', defaultPromptFailed: '실패했습니다.', language: '언어', noModels: '모델 없음', noPrompts: '프롬프트 없음' },
+      navigation: { exportImport: '설정 관리', general: '일반', interface: '인터페이스', models: '모델', prompts: '프롬프트', siteCustomization: '사이트 사용자 지정' }, navigationLabel: '옵션',
+    },
+    interface: {
+      chatInputBox: { description: '채팅 입력 상자를 표시합니다.', title: '채팅 입력 상자' },
+      floatingBall: { description: '플로팅 버튼을 표시합니다.', title: '플로팅 버튼' },
+      panelLayout: { description: '', dialog: '플로팅 패널', sidebar: '사이드바', title: '패널 레이아웃' },
+      shortcuts: { model: '모델', prompt: '프롬프트', title: '바로 가기' }, title: '인터페이스',
+    },
+    models: {
+      createModelConfig: '모델 설정 생성', noModelConfigsYet: '모델 설정 없음', createOneBeforeBackgroundBridge: '모델 설정을 생성하세요.',
+      defaultBadge: '기본', provider: '제공자', baseUrl: '기본 URL', apiMode: 'API 모드', maxInputTokens: '최대 입력 토큰', price: '가격',
+      useDefault: (name) => `기본으로 설정`, moveUp: (name) => `위로`, moveDown: (name) => `아래로`, duplicate: (name) => `복제`, edit: (name) => `편집`, delete: (name) => `삭제`, deleteConfirm: (name) => `삭제하시겠습니까?`, deletedToast: '삭제되었습니다.', deleteFailed: '실패했습니다.', moveFailed: '실패했습니다.', duplicatedToast: '복제되었습니다.', duplicateFailed: '실패했습니다.', defaultChangedFailed: '실패했습니다.',
+    },
+    pageExtraction: {
+      method: { description: '텍스트 추출 방법', title: '텍스트 추출 방법' },
+      methods: { 'dom-heuristic': { description: 'DOM 휴리스틱.', label: 'DOM 휴리스틱' }, readability: { description: 'Readability 모드', label: 'Readability' } },
+    },
+    prompts: {
+      create: '생성', createFromPreset: '프리셋에서 생성:', createdToast: '생성되었습니다.', defaultBadge: '기본', delete: (name) => `삭제`, deleteConfirm: (name) => `삭제하시겠습니까?`, deleteFailed: '실패했습니다.', deletedToast: '삭제되었습니다.', edit: (name) => `편집`, emptyDescription: '프롬프트 템플릿을 생성하세요.', emptyTitle: '템플릿 없음', libraryDescription: '템플릿 관리.', libraryTitle: '프롬프트 템플릿', loadFailed: '로드 실패.', makeDefault: (name) => `기본으로 설정`, missingPromptId: 'ID가 없습니다.', moveDown: (name) => `아래로`, moveFailed: '실패했습니다.', moveUp: (name) => `위로`, name: '이름', namePlaceholder: '기사 요약', promptNotFound: '찾을 수 없습니다.', saveFailed: '저장 실패.', savedToast: '저장되었습니다.', selectDefaultFailed: '실패했습니다.', systemMessage: 'System', systemMessageDescription: '동작을 정의합니다.', templateVariables: '템플릿 변수', templateVariablesDescription: '자리 표시자입니다.', userMessage: 'User', userMessageDescription: '컨텍스트.',
+      variableDescriptions: { articleUrl: 'URL', currentSelection: '선택 텍스트', summaryLanguage: '언어', textContent: '텍스트 콘텐츠' },
+    },
+    pageTitles: { createModel: '모델 생성', createPrompt: '프롬프트 생성', editModel: '모델 편집', editPrompt: '프롬프트 편집', exportImport: '설정 관리', interface: '인터페이스', models: '모델', prompts: '프롬프트', siteCustomization: '사이트 맞춤설정', welcome: '환영합니다' },
+    popup: { noActiveTab: '활성 탭 없음', openOptions: '설정', model: '모델', prompt: '프롬프트', summary: '요약', page: '페이지', openPanelAndStartSummary: '요약 시작', copyPageContentToClipboard: '복사', extractFailed: '실패했습니다', copySuccess: '복사되었습니다', copyFailed: '실패했습니다', invokeSummaryFailed: '실패했습니다' },
+    siteCustomization: {
+      examplesTitle: '예시', examplesDescription: 'glob 구문', examples: [], whitelist: '화이트리스트', blacklist: '블랙리스트', whitelistDescription: '일치하는 페이지만 실행합니다.', blacklistDescription: '일치하는 페이지는 실행하지 않습니다.', patternsLabel: 'URL 패턴', onePerLine: '한 줄에 하나씩', whitelistPlaceholder: '예: www.reddit.com', blacklistPlaceholder: '예: www.bing.com',
+      customizationTitle: '선택기', customizationDescription: '특정 CSS 선택기를 설정합니다.', addRule: '규칙 추가', noRules: '규칙 없음', noRulesDescription: '규칙을 추가하세요.', newRuleFallback: '새 규칙', matchPattern: '일치 패턴', matchPatternPlaceholder: 'minimatch 패턴', useShadowRoot: 'Shadow DOM 검색', selectorsNormal: 'CSS 선택기', selectorsHost: '호스트 선택기', selectorsPlaceholderNormal: '예: .text', selectorsPlaceholderHost: '예: #app', shadowRootSelectors: 'Shadow Root 선택기', shadowRootSelectorsPlaceholder: '예: #content', shadowRootTip: 'Shadow DOM 검색.'
+    },
+  },
+  'pt': {
+    common: {
+      allChangesSaved: 'Todas as alterações foram salvas.', back: 'Voltar', loadingSettings: 'Carregando...',
+      off: 'Desligado', on: 'Ligado', save: 'Salvar', saved: 'Salvo', saving: 'Salvando', success: 'Sucesso',
+      unsavedChanges: 'Alterações não salvas', unknownError: 'Ocorreu um erro desconhecido.', collapse: 'Recolher', more: 'Mais...',
+      contextMenu: { summarizeThisPage: 'Resumir esta página', addToChat: 'Adicionar ao chat', openSetting: 'Abrir configurações' },
+    },
+    content: {
+      badgeLabel: 'Resumo da página', summary: 'Resumo', reSummarize: 'Re-resumir', untitledPage: 'Página sem título',
+      contentTokenCount: 'Tokens:', tokenViewerInfoTip: 'Apenas visualização.', calculating: 'Calculando...',
+    },
+    general: {
+      loadFailed: 'Falha ao carregar.', restoreDefaults: 'Restaurar padrões', saveFailed: 'Falha ao salvar.', savedToast: 'Salvo.',
+      sections: { contextMenu: { description: 'Menu de contexto.', title: 'Menu de contexto' }, triggers: { description: 'Comportamento padrão.', title: 'Gatilhos' } },
+      settings: {
+        enableAutoBeginChatForAddSelectionToChat: { description: 'Enviar logo após adicionar.', label: 'Enviar ao adicionar' },
+        enableAutoBeginSummary: { description: '', label: 'Resumir ao abrir' },
+        enableAutoBeginSummaryByActionOrContextTrigger: { description: '', label: 'Resumir por menu' },
+        enableChatInputBox: { description: 'Caixa de chat no painel.', label: 'Caixa de chat' },
+        enableContextMenuAddSelectionToChat: { description: 'Adicionar ao chat.', label: 'Adicionar seleção ao chat' },
+        enableContextMenuSummarizeThisPage: { description: 'Resumir esta página.', label: 'Resumir esta página' },
+        enableCreateNewPanelButton: { description: 'Botão novo painel.', label: 'Novo painel' },
+        enableFloatingBall: { description: 'Botão flutuante.', label: 'Botão flutuante' },
+        enableSummaryWindowDefault: { caution: 'Muda todas as páginas.', description: '', label: 'Auto-abrir' },
+        enableTokenUsageView: { description: 'Uso de tokens.', label: 'Tokens' },
+      },
+      summaryLanguage: { description: 'Idioma do resumo.', label: 'Idioma' }, title: 'Geral',
+    },
+    exportImport: {
+      exportImportDescription: 'Gerenciar configurações.',
+      exportConfiguration: 'Exportar', exportWithApiKeys: 'Com chaves de API', copyToClipboard: 'Copiar',
+      importConfiguration: 'Importar', importConfigurationDescription: 'Da área de transferência.', readFromClipboard: 'Ler da área de transferência',
+      dangerZone: 'Zona de Perigo', resetConfigurationDescription: 'Limpar tudo.', resetAllConfigurations: 'Resetar',
+      resetConfirm: 'Tem certeza?', noChanges: 'Sem mudanças', noChangesDesc: 'As configurações são as mesmas.',
+      reviewImport: 'Revisar', importedSuccess: (count) => `${count} importados.`,
+      noImportSelected: 'Nada selecionado.', resetSuccess: 'Resetado.',
+      importReviewTitle: 'Revisão', confirmImport: 'Confirmar', acceptAll: 'Aceitar tudo', rejectAll: 'Rejeitar', cancel: 'Cancelar',
+      configItem: 'Item', oldValue: 'Antigo', newValue: 'Novo', action: 'Ação', conflict: 'Conflito', addNew: 'Novo', overwrite: 'Sobrescrever', accept: 'Aceitar', skip: 'Pular', discard: 'Descartar',
+    },
+    options: {
+      debug: 'Debug', header: { defaultModel: 'Modelo padrão', defaultModelFailed: 'Falha.', defaultPrompt: 'Prompt padrão', defaultPromptFailed: 'Falha.', language: 'Idioma', noModels: 'Sem modelos', noPrompts: 'Sem prompts' },
+      navigation: { exportImport: 'Configurações', general: 'Geral', interface: 'Interface', models: 'Modelos', prompts: 'Prompts', siteCustomization: 'Sites' }, navigationLabel: 'Opções',
+    },
+    interface: {
+      chatInputBox: { description: 'Mostrar caixa de entrada.', title: 'Caixa de chat' },
+      floatingBall: { description: 'Botão flutuante.', title: 'Botão flutuante' },
+      panelLayout: { description: '', dialog: 'Flutuante', sidebar: 'Barra lateral', title: 'Layout' },
+      shortcuts: { model: 'Modelo', prompt: 'Prompt', title: 'Atalhos' }, title: 'Interface',
+    },
+    models: {
+      createModelConfig: 'Criar modelo', noModelConfigsYet: 'Sem modelos', createOneBeforeBackgroundBridge: 'Crie um modelo.',
+      defaultBadge: 'Padrão', provider: 'Provedor', baseUrl: 'Base URL', apiMode: 'Modo API', maxInputTokens: 'Tokens máx', price: 'Preço',
+      useDefault: (name) => `Usar como padrão`, moveUp: (name) => `Subir`, moveDown: (name) => `Descer`, duplicate: (name) => `Duplicar`, edit: (name) => `Editar`, delete: (name) => `Deletar`, deleteConfirm: (name) => `Deletar?`, deletedToast: 'Deletado.', deleteFailed: 'Falha.', moveFailed: 'Falha.', duplicatedToast: 'Duplicado.', duplicateFailed: 'Falha.', defaultChangedFailed: 'Falha.',
+    },
+    pageExtraction: {
+      method: { description: 'Método de extração', title: 'Extração' },
+      methods: { 'dom-heuristic': { description: 'DOM', label: 'DOM' }, readability: { description: 'Readability', label: 'Readability' } },
+    },
+    prompts: {
+      create: 'Criar', createFromPreset: 'Do preset:', createdToast: 'Criado.', defaultBadge: 'Padrão', delete: (name) => `Deletar`, deleteConfirm: (name) => `Deletar?`, deleteFailed: 'Falha.', deletedToast: 'Deletado.', edit: (name) => `Editar`, emptyDescription: 'Crie um prompt.', emptyTitle: 'Sem prompts', libraryDescription: 'Gerenciar templates.', libraryTitle: 'Prompts', loadFailed: 'Falha.', makeDefault: (name) => `Usar como padrão`, missingPromptId: 'Sem ID.', moveDown: (name) => `Descer`, moveFailed: 'Falha.', moveUp: (name) => `Subir`, name: 'Nome', namePlaceholder: 'Resumo', promptNotFound: 'Não encontrado.', saveFailed: 'Falha.', savedToast: 'Salvo.', selectDefaultFailed: 'Falha.', systemMessage: 'System', systemMessageDescription: 'Instruções.', templateVariables: 'Variáveis', templateVariablesDescription: 'Variáveis.', userMessage: 'User', userMessageDescription: 'Mensagem do usuário.',
+      variableDescriptions: { articleUrl: 'URL', currentSelection: 'Seleção', summaryLanguage: 'Idioma', textContent: 'Conteúdo' },
+    },
+    pageTitles: { createModel: 'Criar modelo', createPrompt: 'Criar prompt', editModel: 'Editar modelo', editPrompt: 'Editar prompt', exportImport: 'Configurações', interface: 'Interface', models: 'Modelos', prompts: 'Prompts', siteCustomization: 'Personalização', welcome: 'Bem-vindo' },
+    popup: { noActiveTab: 'Sem guia ativa', openOptions: 'Opções', model: 'Modelo', prompt: 'Prompt', summary: 'Resumo', page: 'Página', openPanelAndStartSummary: 'Iniciar resumo', copyPageContentToClipboard: 'Copiar conteúdo', extractFailed: 'Falha', copySuccess: 'Copiado', copyFailed: 'Falha', invokeSummaryFailed: 'Falha' },
+    siteCustomization: {
+      examplesTitle: 'Exemplos', examplesDescription: 'Padrões', examples: [], whitelist: 'Lista Branca', blacklist: 'Lista Negra', whitelistDescription: 'Apenas nestes.', blacklistDescription: 'Exceto nestes.', patternsLabel: 'Padrões', onePerLine: 'Um por linha', whitelistPlaceholder: 'ex: www.reddit.com', blacklistPlaceholder: 'ex: www.bing.com',
+      customizationTitle: 'Seletores', customizationDescription: 'CSS.', addRule: 'Add regra', noRules: 'Sem regras', noRulesDescription: 'Adicione.', newRuleFallback: 'Nova', matchPattern: 'Padrão', matchPatternPlaceholder: 'Padrão', useShadowRoot: 'Shadow DOM', selectorsNormal: 'CSS', selectorsHost: 'Host', selectorsPlaceholderNormal: 'ex: .text', selectorsPlaceholderHost: 'ex: #app', shadowRootSelectors: 'Shadow Root', shadowRootSelectorsPlaceholder: 'ex: #content', shadowRootTip: 'Shadow DOM.'
+    },
+  },
+  'es': {
+    common: {
+      allChangesSaved: 'Todos los cambios han sido guardados.', back: 'Atrás', loadingSettings: 'Cargando...',
+      off: 'Apagado', on: 'Encendido', save: 'Guardar', saved: 'Guardado', saving: 'Guardando', success: 'Éxito',
+      unsavedChanges: 'Cambios no guardados', unknownError: 'Ocurrió un error desconocido.', collapse: 'Contraer', more: 'Más...',
+      contextMenu: { summarizeThisPage: 'Resumir esta página', addToChat: 'Añadir al chat', openSetting: 'Abrir configuración' },
+    },
+    content: {
+      badgeLabel: 'Resumen de página', summary: 'Resumen', reSummarize: 'Re-resumir', untitledPage: 'Página sin título',
+      contentTokenCount: 'Tokens:', tokenViewerInfoTip: 'Solo visualización.', calculating: 'Calculando...',
+    },
+    general: {
+      loadFailed: 'Fallo al cargar.', restoreDefaults: 'Restaurar', saveFailed: 'Fallo al guardar.', savedToast: 'Guardado.',
+      sections: { contextMenu: { description: 'Menú contextual.', title: 'Menú contextual' }, triggers: { description: 'Comportamiento.', title: 'Desencadenadores' } },
+      settings: {
+        enableAutoBeginChatForAddSelectionToChat: { description: 'Enviar inmediatamente al añadir.', label: 'Enviar al añadir' },
+        enableAutoBeginSummary: { description: '', label: 'Resumir al abrir' },
+        enableAutoBeginSummaryByActionOrContextTrigger: { description: '', label: 'Resumir por menú' },
+        enableChatInputBox: { description: 'Caja de chat en el panel.', label: 'Caja de chat' },
+        enableContextMenuAddSelectionToChat: { description: 'Añadir al chat.', label: 'Añadir selección al chat' },
+        enableContextMenuSummarizeThisPage: { description: 'Resumir esta página.', label: 'Resumir esta página' },
+        enableCreateNewPanelButton: { description: 'Botón nuevo panel.', label: 'Nuevo panel' },
+        enableFloatingBall: { description: 'Botón flotante.', label: 'Botón flotante' },
+        enableSummaryWindowDefault: { caution: 'Cambia todas las páginas.', description: '', label: 'Auto-abrir' },
+        enableTokenUsageView: { description: 'Uso de tokens.', label: 'Tokens' },
+      },
+      summaryLanguage: { description: 'Idioma del resumen.', label: 'Idioma' }, title: 'General',
+    },
+    exportImport: {
+      exportImportDescription: 'Gestionar configuraciones.',
+      exportConfiguration: 'Exportar', exportWithApiKeys: 'Con claves de API', copyToClipboard: 'Copiar',
+      importConfiguration: 'Importar', importConfigurationDescription: 'Del portapapeles.', readFromClipboard: 'Leer del portapapeles',
+      dangerZone: 'Zona de Peligro', resetConfigurationDescription: 'Limpiar todo.', resetAllConfigurations: 'Resetear',
+      resetConfirm: '¿Estás seguro?', noChanges: 'Sin cambios', noChangesDesc: 'Las configuraciones son iguales.',
+      reviewImport: 'Revisar', importedSuccess: (count) => `${count} importados.`,
+      noImportSelected: 'Nada seleccionado.', resetSuccess: 'Reseteado.',
+      importReviewTitle: 'Revisión', confirmImport: 'Confirmar', acceptAll: 'Aceptar todo', rejectAll: 'Rechazar', cancel: 'Cancelar',
+      configItem: 'Item', oldValue: 'Antiguo', newValue: 'Nuevo', action: 'Acción', conflict: 'Conflicto', addNew: 'Nuevo', overwrite: 'Sobrescribir', accept: 'Aceptar', skip: 'Saltar', discard: 'Descartar',
+    },
+    options: {
+      debug: 'Debug', header: { defaultModel: 'Modelo predeterminado', defaultModelFailed: 'Fallo.', defaultPrompt: 'Prompt predeterminado', defaultPromptFailed: 'Fallo.', language: 'Idioma', noModels: 'Sin modelos', noPrompts: 'Sin prompts' },
+      navigation: { exportImport: 'Configuraciones', general: 'General', interface: 'Interfaz', models: 'Modelos', prompts: 'Prompts', siteCustomization: 'Sitios' }, navigationLabel: 'Opciones',
+    },
+    interface: {
+      chatInputBox: { description: 'Caja de chat.', title: 'Caja de chat' },
+      floatingBall: { description: 'Botón flotante.', title: 'Botón flotante' },
+      panelLayout: { description: '', dialog: 'Flotante', sidebar: 'Barra lateral', title: 'Diseño' },
+      shortcuts: { model: 'Modelo', prompt: 'Prompt', title: 'Atajos' }, title: 'Interfaz',
+    },
+    models: {
+      createModelConfig: 'Crear modelo', noModelConfigsYet: 'Sin modelos', createOneBeforeBackgroundBridge: 'Crea un modelo.',
+      defaultBadge: 'Predeterminado', provider: 'Proveedor', baseUrl: 'Base URL', apiMode: 'Modo API', maxInputTokens: 'Tokens máx', price: 'Precio',
+      useDefault: (name) => `Predeterminado`, moveUp: (name) => `Subir`, moveDown: (name) => `Bajar`, duplicate: (name) => `Duplicar`, edit: (name) => `Editar`, delete: (name) => `Eliminar`, deleteConfirm: (name) => `¿Eliminar?`, deletedToast: 'Eliminado.', deleteFailed: 'Fallo.', moveFailed: 'Fallo.', duplicatedToast: 'Duplicado.', duplicateFailed: 'Fallo.', defaultChangedFailed: 'Fallo.',
+    },
+    pageExtraction: {
+      method: { description: 'Extracción', title: 'Extracción' },
+      methods: { 'dom-heuristic': { description: 'DOM', label: 'DOM' }, readability: { description: 'Readability', label: 'Readability' } },
+    },
+    prompts: {
+      create: 'Crear', createFromPreset: 'Del preset:', createdToast: 'Creado.', defaultBadge: 'Predeterminado', delete: (name) => `Eliminar`, deleteConfirm: (name) => `¿Eliminar?`, deleteFailed: 'Fallo.', deletedToast: 'Eliminado.', edit: (name) => `Editar`, emptyDescription: 'Crea un prompt.', emptyTitle: 'Sin prompts', libraryDescription: 'Templates.', libraryTitle: 'Prompts', loadFailed: 'Fallo.', makeDefault: (name) => `Predeterminado`, missingPromptId: 'Sin ID.', moveDown: (name) => `Bajar`, moveFailed: 'Fallo.', moveUp: (name) => `Subir`, name: 'Nombre', namePlaceholder: 'Resumen', promptNotFound: 'No encontrado.', saveFailed: 'Fallo.', savedToast: 'Guardado.', selectDefaultFailed: 'Fallo.', systemMessage: 'System', systemMessageDescription: 'Instrucciones.', templateVariables: 'Variables', templateVariablesDescription: 'Variables.', userMessage: 'User', userMessageDescription: 'Contexto.',
+      variableDescriptions: { articleUrl: 'URL', currentSelection: 'Selección', summaryLanguage: 'Idioma', textContent: 'Contenido' },
+    },
+    pageTitles: { createModel: 'Crear modelo', createPrompt: 'Crear prompt', editModel: 'Editar modelo', editPrompt: 'Editar prompt', exportImport: 'Configuración', interface: 'Interfaz', models: 'Modelos', prompts: 'Prompts', siteCustomization: 'Sitios', welcome: 'Bienvenido' },
+    popup: { noActiveTab: 'Sin pestaña', openOptions: 'Opciones', model: 'Modelo', prompt: 'Prompt', summary: 'Resumen', page: 'Página', openPanelAndStartSummary: 'Resumir', copyPageContentToClipboard: 'Copiar', extractFailed: 'Fallo', copySuccess: 'Copiado', copyFailed: 'Fallo', invokeSummaryFailed: 'Fallo' },
+    siteCustomization: {
+      examplesTitle: 'Ejemplos', examplesDescription: 'Patrones', examples: [], whitelist: 'Lista Blanca', blacklist: 'Lista Negra', whitelistDescription: 'Solo en estos.', blacklistDescription: 'Excepto estos.', patternsLabel: 'Patrones', onePerLine: 'Uno por línea', whitelistPlaceholder: 'ej: www.reddit.com', blacklistPlaceholder: 'ej: www.bing.com',
+      customizationTitle: 'Selectores', customizationDescription: 'CSS.', addRule: 'Añadir', noRules: 'Sin reglas', noRulesDescription: 'Añade.', newRuleFallback: 'Nueva', matchPattern: 'Patrón', matchPatternPlaceholder: 'Patrón', useShadowRoot: 'Shadow DOM', selectorsNormal: 'CSS', selectorsHost: 'Host', selectorsPlaceholderNormal: 'ej: .text', selectorsPlaceholderHost: 'ej: #app', shadowRootSelectors: 'Shadow Root', shadowRootSelectorsPlaceholder: 'ej: #content', shadowRootTip: 'Shadow DOM.'
+    },
+  },
+  'fr': {
+    common: {
+      allChangesSaved: 'Toutes les modifications ont été enregistrées.', back: 'Retour', loadingSettings: 'Chargement...',
+      off: 'Désactivé', on: 'Activé', save: 'Enregistrer', saved: 'Enregistré', saving: 'Enregistrement', success: 'Succès',
+      unsavedChanges: 'Modifications non enregistrées', unknownError: 'Une erreur inconnue s\'est produite.', collapse: 'Réduire', more: 'Plus...',
+      contextMenu: { summarizeThisPage: 'Résumer cette page', addToChat: 'Ajouter au chat', openSetting: 'Ouvrir les paramètres' },
+    },
+    content: {
+      badgeLabel: 'Résumé de la page', summary: 'Résumé', reSummarize: 'Re-résumer', untitledPage: 'Page sans titre',
+      contentTokenCount: 'Tokens:', tokenViewerInfoTip: 'Visualisation uniquement.', calculating: 'Calcul...',
+    },
+    general: {
+      loadFailed: 'Échec du chargement.', restoreDefaults: 'Restaurer', saveFailed: 'Échec de la sauvegarde.', savedToast: 'Enregistré.',
+      sections: { contextMenu: { description: 'Menu contextuel.', title: 'Menu contextuel' }, triggers: { description: 'Comportement.', title: 'Déclencheurs' } },
+      settings: {
+        enableAutoBeginChatForAddSelectionToChat: { description: 'Envoyer immédiatement.', label: 'Envoyer lors de l\'ajout' },
+        enableAutoBeginSummary: { description: '', label: 'Résumer à l\'ouverture' },
+        enableAutoBeginSummaryByActionOrContextTrigger: { description: '', label: 'Résumer par menu' },
+        enableChatInputBox: { description: 'Boîte de chat dans le panneau.', label: 'Boîte de chat' },
+        enableContextMenuAddSelectionToChat: { description: 'Ajouter au chat.', label: 'Ajouter la sélection au chat' },
+        enableContextMenuSummarizeThisPage: { description: 'Résumer cette page.', label: 'Résumer cette page' },
+        enableCreateNewPanelButton: { description: 'Bouton nouveau panneau.', label: 'Nouveau panneau' },
+        enableFloatingBall: { description: 'Bouton flottant.', label: 'Bouton flottant' },
+        enableSummaryWindowDefault: { caution: 'Modifie toutes les pages.', description: '', label: 'Ouverture auto' },
+        enableTokenUsageView: { description: 'Utilisation des tokens.', label: 'Tokens' },
+      },
+      summaryLanguage: { description: 'Langue du résumé.', label: 'Langue' }, title: 'Général',
+    },
+    exportImport: {
+      exportImportDescription: 'Gérer les paramètres.',
+      exportConfiguration: 'Exporter', exportWithApiKeys: 'Avec les clés API', copyToClipboard: 'Copier',
+      importConfiguration: 'Importer', importConfigurationDescription: 'Depuis le presse-papiers.', readFromClipboard: 'Lire depuis le presse-papiers',
+      dangerZone: 'Zone de Danger', resetConfigurationDescription: 'Tout effacer.', resetAllConfigurations: 'Réinitialiser',
+      resetConfirm: 'Êtes-vous sûr ?', noChanges: 'Aucun changement', noChangesDesc: 'Les paramètres sont identiques.',
+      reviewImport: 'Réviser', importedSuccess: (count) => `${count} importés.`,
+      noImportSelected: 'Rien n\'est sélectionné.', resetSuccess: 'Réinitialisé.',
+      importReviewTitle: 'Révision', confirmImport: 'Confirmer', acceptAll: 'Tout accepter', rejectAll: 'Rejeter', cancel: 'Annuler',
+      configItem: 'Élément', oldValue: 'Ancien', newValue: 'Nouveau', action: 'Action', conflict: 'Conflit', addNew: 'Nouveau', overwrite: 'Écraser', accept: 'Accepter', skip: 'Ignorer', discard: 'Ignorer',
+    },
+    options: {
+      debug: 'Debug', header: { defaultModel: 'Modèle par défaut', defaultModelFailed: 'Échec.', defaultPrompt: 'Prompt par défaut', defaultPromptFailed: 'Échec.', language: 'Langue', noModels: 'Aucun modèle', noPrompts: 'Aucun prompt' },
+      navigation: { exportImport: 'Paramètres', general: 'Général', interface: 'Interface', models: 'Modèles', prompts: 'Prompts', siteCustomization: 'Sites' }, navigationLabel: 'Options',
+    },
+    interface: {
+      chatInputBox: { description: 'Boîte de chat.', title: 'Boîte de chat' },
+      floatingBall: { description: 'Bouton flottant.', title: 'Bouton flottant' },
+      panelLayout: { description: '', dialog: 'Flottant', sidebar: 'Barre latérale', title: 'Mise en page' },
+      shortcuts: { model: 'Modèle', prompt: 'Prompt', title: 'Raccourcis' }, title: 'Interface',
+    },
+    models: {
+      createModelConfig: 'Créer un modèle', noModelConfigsYet: 'Aucun modèle', createOneBeforeBackgroundBridge: 'Créez un modèle.',
+      defaultBadge: 'Défaut', provider: 'Fournisseur', baseUrl: 'Base URL', apiMode: 'Mode API', maxInputTokens: 'Tokens max', price: 'Prix',
+      useDefault: (name) => `Défaut`, moveUp: (name) => `Monter`, moveDown: (name) => `Descendre`, duplicate: (name) => `Dupliquer`, edit: (name) => `Modifier`, delete: (name) => `Supprimer`, deleteConfirm: (name) => `Supprimer ?`, deletedToast: 'Supprimé.', deleteFailed: 'Échec.', moveFailed: 'Échec.', duplicatedToast: 'Dupliqué.', duplicateFailed: 'Échec.', defaultChangedFailed: 'Échec.',
+    },
+    pageExtraction: {
+      method: { description: 'Extraction', title: 'Extraction' },
+      methods: { 'dom-heuristic': { description: 'DOM', label: 'DOM' }, readability: { description: 'Readability', label: 'Readability' } },
+    },
+    prompts: {
+      create: 'Créer', createFromPreset: 'Du preset:', createdToast: 'Créé.', defaultBadge: 'Défaut', delete: (name) => `Supprimer`, deleteConfirm: (name) => `Supprimer ?`, deleteFailed: 'Échec.', deletedToast: 'Supprimé.', edit: (name) => `Modifier`, emptyDescription: 'Créez un prompt.', emptyTitle: 'Aucun prompt', libraryDescription: 'Templates.', libraryTitle: 'Prompts', loadFailed: 'Échec.', makeDefault: (name) => `Défaut`, missingPromptId: 'Sans ID.', moveDown: (name) => `Descendre`, moveFailed: 'Échec.', moveUp: (name) => `Monter`, name: 'Nom', namePlaceholder: 'Résumé', promptNotFound: 'Non trouvé.', saveFailed: 'Échec.', savedToast: 'Enregistré.', selectDefaultFailed: 'Échec.', systemMessage: 'System', systemMessageDescription: 'Instructions.', templateVariables: 'Variables', templateVariablesDescription: 'Variables.', userMessage: 'User', userMessageDescription: 'Contexte.',
+      variableDescriptions: { articleUrl: 'URL', currentSelection: 'Sélection', summaryLanguage: 'Langue', textContent: 'Contenu' },
+    },
+    pageTitles: { createModel: 'Créer un modèle', createPrompt: 'Créer un prompt', editModel: 'Modifier un modèle', editPrompt: 'Modifier un prompt', exportImport: 'Paramètres', interface: 'Interface', models: 'Modèles', prompts: 'Prompts', siteCustomization: 'Sites', welcome: 'Bienvenue' },
+    popup: { noActiveTab: 'Aucun onglet', openOptions: 'Options', model: 'Modèle', prompt: 'Prompt', summary: 'Résumé', page: 'Page', openPanelAndStartSummary: 'Résumer', copyPageContentToClipboard: 'Copier', extractFailed: 'Échec', copySuccess: 'Copié', copyFailed: 'Échec', invokeSummaryFailed: 'Échec' },
+    siteCustomization: {
+      examplesTitle: 'Exemples', examplesDescription: 'Modèles', examples: [], whitelist: 'Liste Blanche', blacklist: 'Liste Noire', whitelistDescription: 'Seulement ceux-ci.', blacklistDescription: 'Sauf ceux-ci.', patternsLabel: 'Modèles', onePerLine: 'Un par ligne', whitelistPlaceholder: 'ex: www.reddit.com', blacklistPlaceholder: 'ex: www.bing.com',
+      customizationTitle: 'Sélecteurs', customizationDescription: 'CSS.', addRule: 'Ajouter', noRules: 'Aucune règle', noRulesDescription: 'Ajoutez.', newRuleFallback: 'Nouveau', matchPattern: 'Modèle', matchPatternPlaceholder: 'Modèle', useShadowRoot: 'Shadow DOM', selectorsNormal: 'CSS', selectorsHost: 'Hôte', selectorsPlaceholderNormal: 'ex: .text', selectorsPlaceholderHost: 'ex: #app', shadowRootSelectors: 'Shadow Root', shadowRootSelectorsPlaceholder: 'ex: #content', shadowRootTip: 'Shadow DOM.'
+    },
+  },
+  'de': {
+    common: {
+      allChangesSaved: 'Alle Änderungen wurden gespeichert.', back: 'Zurück', loadingSettings: 'Lade...',
+      off: 'Aus', on: 'Ein', save: 'Speichern', saved: 'Gespeichert', saving: 'Speichern...', success: 'Erfolg',
+      unsavedChanges: 'Ungespeicherte Änderungen', unknownError: 'Ein unbekannter Fehler ist aufgetreten.', collapse: 'Zuklappen', more: 'Mehr...',
+      contextMenu: { summarizeThisPage: 'Diese Seite zusammenfassen', addToChat: 'Zum Chat hinzufügen', openSetting: 'Einstellungen öffnen' },
+    },
+    content: {
+      badgeLabel: 'Webpage Summary', summary: 'Zusammenfassung', reSummarize: 'Neu zusammenfassen', untitledPage: 'Unbenannte Seite',
+      contentTokenCount: 'Tokens:', tokenViewerInfoTip: 'Nur Visualisierung.', calculating: 'Berechnung...',
+    },
+    general: {
+      loadFailed: 'Laden fehlgeschlagen.', restoreDefaults: 'Zurücksetzen', saveFailed: 'Speichern fehlgeschlagen.', savedToast: 'Gespeichert.',
+      sections: { contextMenu: { description: 'Kontextmenü.', title: 'Kontextmenü' }, triggers: { description: 'Verhalten.', title: 'Auslöser' } },
+      settings: {
+        enableAutoBeginChatForAddSelectionToChat: { description: 'Sofort senden.', label: 'Senden beim Hinzufügen' },
+        enableAutoBeginSummary: { description: '', label: 'Zusammenfassen beim Öffnen' },
+        enableAutoBeginSummaryByActionOrContextTrigger: { description: '', label: 'Zusammenfassen über Menü' },
+        enableChatInputBox: { description: 'Chat-Box.', label: 'Chat-Box' },
+        enableContextMenuAddSelectionToChat: { description: 'Zum Chat hinzufügen.', label: 'Auswahl zum Chat hinzufügen' },
+        enableContextMenuSummarizeThisPage: { description: 'Diese Seite zusammenfassen.', label: 'Diese Seite zusammenfassen' },
+        enableCreateNewPanelButton: { description: 'Neues Panel-Button.', label: 'Neues Panel' },
+        enableFloatingBall: { description: 'Schwebender Button.', label: 'Schwebender Button' },
+        enableSummaryWindowDefault: { caution: 'Ändert alle Seiten.', description: '', label: 'Auto-Öffnen' },
+        enableTokenUsageView: { description: 'Token-Nutzung.', label: 'Tokens' },
+      },
+      summaryLanguage: { description: 'Sprache.', label: 'Sprache' }, title: 'Allgemein',
+    },
+    exportImport: {
+      exportImportDescription: 'Einstellungen verwalten.',
+      exportConfiguration: 'Exportieren', exportWithApiKeys: 'Mit API-Schlüsseln', copyToClipboard: 'Kopieren',
+      importConfiguration: 'Importieren', importConfigurationDescription: 'Aus Zwischenablage.', readFromClipboard: 'Aus Zwischenablage lesen',
+      dangerZone: 'Gefahrenzone', resetConfigurationDescription: 'Alles löschen.', resetAllConfigurations: 'Zurücksetzen',
+      resetConfirm: 'Sind Sie sicher?', noChanges: 'Keine Änderungen', noChangesDesc: 'Einstellungen sind identisch.',
+      reviewImport: 'Überprüfen', importedSuccess: (count) => `${count} importiert.`,
+      noImportSelected: 'Nichts ausgewählt.', resetSuccess: 'Zurückgesetzt.',
+      importReviewTitle: 'Überprüfung', confirmImport: 'Bestätigen', acceptAll: 'Alle akzeptieren', rejectAll: 'Ablehnen', cancel: 'Abbrechen',
+      configItem: 'Element', oldValue: 'Alt', newValue: 'Neu', action: 'Aktion', conflict: 'Konflikt', addNew: 'Neu', overwrite: 'Überschreiben', accept: 'Akzeptieren', skip: 'Überspringen', discard: 'Verwerfen',
+    },
+    options: {
+      debug: 'Debug', header: { defaultModel: 'Standardmodell', defaultModelFailed: 'Fehlgeschlagen.', defaultPrompt: 'Standard-Prompt', defaultPromptFailed: 'Fehlgeschlagen.', language: 'Sprache', noModels: 'Keine Modelle', noPrompts: 'Keine Prompts' },
+      navigation: { exportImport: 'Einstellungen', general: 'Allgemein', interface: 'Schnittstelle', models: 'Modelle', prompts: 'Prompts', siteCustomization: 'Websites' }, navigationLabel: 'Optionen',
+    },
+    interface: {
+      chatInputBox: { description: 'Chat-Box.', title: 'Chat-Box' },
+      floatingBall: { description: 'Schwebender Button.', title: 'Schwebender Button' },
+      panelLayout: { description: '', dialog: 'Schwebend', sidebar: 'Seitenleiste', title: 'Layout' },
+      shortcuts: { model: 'Modell', prompt: 'Prompt', title: 'Tastenkombinationen' }, title: 'Schnittstelle',
+    },
+    models: {
+      createModelConfig: 'Modell erstellen', noModelConfigsYet: 'Keine Modelle', createOneBeforeBackgroundBridge: 'Erstellen Sie ein Modell.',
+      defaultBadge: 'Standard', provider: 'Anbieter', baseUrl: 'Base URL', apiMode: 'API-Modus', maxInputTokens: 'Max Tokens', price: 'Preis',
+      useDefault: (name) => `Standard`, moveUp: (name) => `Hoch`, moveDown: (name) => `Runter`, duplicate: (name) => `Duplizieren`, edit: (name) => `Bearbeiten`, delete: (name) => `Löschen`, deleteConfirm: (name) => `Löschen?`, deletedToast: 'Gelöscht.', deleteFailed: 'Fehlgeschlagen.', moveFailed: 'Fehlgeschlagen.', duplicatedToast: 'Dupliziert.', duplicateFailed: 'Fehlgeschlagen.', defaultChangedFailed: 'Fehlgeschlagen.',
+    },
+    pageExtraction: {
+      method: { description: 'Extraktion', title: 'Extraktion' },
+      methods: { 'dom-heuristic': { description: 'DOM', label: 'DOM' }, readability: { description: 'Readability', label: 'Readability' } },
+    },
+    prompts: {
+      create: 'Erstellen', createFromPreset: 'Von Preset:', createdToast: 'Erstellt.', defaultBadge: 'Standard', delete: (name) => `Löschen`, deleteConfirm: (name) => `Löschen?`, deleteFailed: 'Fehlgeschlagen.', deletedToast: 'Gelöscht.', edit: (name) => `Bearbeiten`, emptyDescription: 'Erstellen Sie einen Prompt.', emptyTitle: 'Keine Prompts', libraryDescription: 'Templates.', libraryTitle: 'Prompts', loadFailed: 'Fehlgeschlagen.', makeDefault: (name) => `Standard`, missingPromptId: 'Keine ID.', moveDown: (name) => `Runter`, moveFailed: 'Fehlgeschlagen.', moveUp: (name) => `Hoch`, name: 'Name', namePlaceholder: 'Zusammenfassung', promptNotFound: 'Nicht gefunden.', saveFailed: 'Fehlgeschlagen.', savedToast: 'Gespeichert.', selectDefaultFailed: 'Fehlgeschlagen.', systemMessage: 'System', systemMessageDescription: 'Anweisungen.', templateVariables: 'Variablen', templateVariablesDescription: 'Variablen.', userMessage: 'User', userMessageDescription: 'Kontext.',
+      variableDescriptions: { articleUrl: 'URL', currentSelection: 'Auswahl', summaryLanguage: 'Sprache', textContent: 'Inhalt' },
+    },
+    pageTitles: { createModel: 'Modell erstellen', createPrompt: 'Prompt erstellen', editModel: 'Modell bearbeiten', editPrompt: 'Prompt bearbeiten', exportImport: 'Einstellungen', interface: 'Schnittstelle', models: 'Modelle', prompts: 'Prompts', siteCustomization: 'Websites', welcome: 'Willkommen' },
+    popup: { noActiveTab: 'Kein Tab', openOptions: 'Optionen', model: 'Modell', prompt: 'Prompt', summary: 'Zusammenfassung', page: 'Seite', openPanelAndStartSummary: 'Zusammenfassen', copyPageContentToClipboard: 'Kopieren', extractFailed: 'Fehlgeschlagen', copySuccess: 'Kopiert', copyFailed: 'Fehlgeschlagen', invokeSummaryFailed: 'Fehlgeschlagen' },
+    siteCustomization: {
+      examplesTitle: 'Beispiele', examplesDescription: 'Muster', examples: [], whitelist: 'Whitelist', blacklist: 'Blacklist', whitelistDescription: 'Nur diese.', blacklistDescription: 'Außer diese.', patternsLabel: 'Muster', onePerLine: 'Eines pro Zeile', whitelistPlaceholder: 'z.B. www.reddit.com', blacklistPlaceholder: 'z.B. www.bing.com',
+      customizationTitle: 'Selektoren', customizationDescription: 'CSS.', addRule: 'Hinzufügen', noRules: 'Keine Regeln', noRulesDescription: 'Fügen Sie eine hinzu.', newRuleFallback: 'Neu', matchPattern: 'Muster', matchPatternPlaceholder: 'Muster', useShadowRoot: 'Shadow DOM', selectorsNormal: 'CSS', selectorsHost: 'Host', selectorsPlaceholderNormal: 'z.B. .text', selectorsPlaceholderHost: 'z.B. #app', shadowRootSelectors: 'Shadow Root', shadowRootSelectorsPlaceholder: 'z.B. #content', shadowRootTip: 'Shadow DOM.'
+    },
+  },
+
 };
 
 export function resolveUiLocale(language: string | undefined): UiLocale {
-  return language?.toLowerCase().startsWith('zh') ? 'zh-CN' : 'en';
+  if (!language) return 'en';
+  const lang = language.toLowerCase();
+  if (lang.startsWith('zh-tw') || lang.startsWith('zh-hk') || lang.startsWith('zh-hant')) return 'zh-TW';
+  if (lang.startsWith('zh')) return 'zh-CN';
+  if (lang.startsWith('ja')) return 'ja';
+  if (lang.startsWith('ko')) return 'ko';
+  if (lang.startsWith('pt')) return 'pt';
+  if (lang.startsWith('es')) return 'es';
+  if (lang.startsWith('fr')) return 'fr';
+  if (lang.startsWith('de')) return 'de';
+  return 'en';
 }
 
 export function isUiLocale(value: string | null | undefined): value is UiLocale {
-  return value === 'en' || value === 'zh-CN';
+  return value === 'en' || value === 'zh-CN' || value === 'zh-TW' || value === 'ja' || value === 'ko' || value === 'pt' || value === 'es' || value === 'fr' || value === 'de';
 }
 
 function canUseExtensionLocalStorage() {

@@ -1,0 +1,6 @@
+{
+  "extStoreName": { "message": "Webpage Summary - AI|オープンソース|軽量|プライバシー保護" },
+  "extDescription": { "message": "(オープンソース) Webページ要約拡張機能。任意のLLM APIとプロンプトをカスタマイズ可能。軽量、サブスク不要、プライバシーを保護。" },
+  "Commad_Open_Panel_DESC": { "message": "(現在のページで) 要約パネルを開く/隠す" },
+  "add_selection_to_chat": { "message": "選択したテキストをチャットに追加" }
+}
