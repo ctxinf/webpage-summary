@@ -1,6 +1,11 @@
 {
-  "extStoreName": { "message": "웹페이지 요약 - AI|오픈소스|경량|개인정보 보호" },
-  "extDescription": { "message": "(오픈소스) 웹페이지 요약 확장 프로그램. 모든 LLM API/프롬프트 사용자 정의 가능. 가볍고 구독이 필요 없으며 개인정보를 보호합니다." },
-  "Commad_Open_Panel_DESC": { "message": "(현재 페이지에서) 요약 패널 열기/숨기기" },
-  "add_selection_to_chat": { "message": "선택한 텍스트를 채팅에 추가" }
+  "extStoreName": {
+    "message": "웹페이지 요약 - AI|오픈소스|경량|개인정보 보호"
+  },
+  "extDescription": {
+    "message": "(오픈소스) 웹페이지 요약 확장 프로그램. 모든 LLM API/프롬프트 사용자 정의 가능. 가볍고 구독이 필요 없으며 개인정보를 보호합니다."
+  },
+  "Commad_Open_Panel_DESC": {
+    "message": "(현재 페이지에서) 요약 패널 열기/숨기기"
+  }
 }

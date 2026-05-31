@@ -1,6 +1,11 @@
 {
-  "extStoreName": { "message": "Webpage Summary - KI|OpenSource|Leicht|Datenschutz" },
-  "extDescription": { "message": "(OpenSource) Webseiten-Zusammenfassungs-Erweiterung. Anpassbare LLM-APIs und Prompts. Leichtgewichtig, keine Abos, schützt die Privatsphäre." },
-  "Commad_Open_Panel_DESC": { "message": "Zusammenfassungs-Panel auf der aktuellen Seite öffnen/ausblenden" },
-  "add_selection_to_chat": { "message": "Auswahl zum Chat hinzufügen" }
+  "extStoreName": {
+    "message": "Webpage Summary - KI|OpenSource|Leicht|Datenschutz"
+  },
+  "extDescription": {
+    "message": "(OpenSource) Webseiten-Zusammenfassungs-Erweiterung. Anpassbare LLM-APIs und Prompts. Leichtgewichtig, keine Abos, schützt die Privatsphäre."
+  },
+  "Commad_Open_Panel_DESC": {
+    "message": "Zusammenfassungs-Panel auf der aktuellen Seite öffnen/ausblenden"
+  }
 }

@@ -108,10 +108,6 @@ export function initializeControlHandlers() {
     console.debug('[command] received command:', command);
     if (command === 'COMMAND_INVOKE_SUMMARY' && tab) {
       activePageAndInvokeSummary(tab);
-    } else if (command === 'COMMAND_ADD_SELECTION' && tab?.id) {
-      sendMessage('addContentToChatDialog', '', { tabId: tab.id }).catch(e => {
-        console.warn('[command] COMMAND_ADD_SELECTION failed', e);
-      });
     }
   });
 }

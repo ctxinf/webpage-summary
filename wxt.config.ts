@@ -27,13 +27,6 @@ export default defineConfig({
         },
         description: '__MSG_Commad_Open_Panel_DESC__',
       },
-      COMMAND_ADD_SELECTION: {
-        suggested_key: {
-          default: 'Alt+A',
-          mac: 'Command+A',
-        },
-        description: '__MSG_add_selection_to_chat__',
-      },
     },
     web_accessible_resources: [
       {

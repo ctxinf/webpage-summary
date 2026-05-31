@@ -1,4 +1,4 @@
-import { RotateCcw, Save } from 'lucide-react';
+import { RotateCcw, Save, ExternalLink } from 'lucide-react';
 import { useEffect, useMemo, useState, type FormEvent } from 'react';
 import { toast } from 'sonner';
 import { Button } from '@/components/ui/button';
@@ -295,6 +295,32 @@ export function GeneralPage() {
             );
           })}
         </div>
+      </section>
+
+      <section className="grid gap-3 border-b pb-7">
+        <header className="mb-4 flex items-center justify-between">
+          <div>
+            <h2 className="text-xl font-extrabold text-primary">
+              {messages.common?.save === '保存' ? '快捷键' : (messages.common?.save === '儲存' ? '快捷鍵' : 'Shortcuts')}
+            </h2>
+            <p className="mt-1 max-w-2xl text-sm leading-6 text-muted-foreground">
+              {messages.common?.save === '保存' ? '配置浏览器的扩展快捷键' : (messages.common?.save === '儲存' ? '配置瀏覽器的擴充功能快捷鍵' : 'Configure browser extension shortcuts')}
+            </p>
+          </div>
+          <a 
+            href="#" 
+            onClick={(e) => {
+              e.preventDefault();
+              import('wxt/browser').then(({ browser }) => {
+                browser.tabs.create({ url: import.meta.env.FIREFOX ? 'about:addons' : 'chrome://extensions/shortcuts' });
+              });
+            }}
+            className="text-primary hover:bg-muted p-2 rounded-md transition-colors"
+            title={messages.common?.save === '保存' ? '去设置' : (messages.common?.save === '儲存' ? '去設定' : 'Go to settings')}
+          >
+            <ExternalLink className="size-5" />
+          </a>
+        </header>
       </section>
 
       <footer
