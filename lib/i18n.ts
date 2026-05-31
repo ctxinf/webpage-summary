@@ -150,8 +150,6 @@ type UiMessages = {
     title: string;
   };
   pageExtraction: {
-    defaultReadability: string;
-    loadFailed: string;
     method: {
       description: string;
       title: string;
@@ -163,9 +161,6 @@ type UiMessages = {
         label: string;
       }
     >;
-    saveFailed: string;
-    savedToast: string;
-    title: string;
   };
   prompts: {
     create: string;
@@ -188,7 +183,6 @@ type UiMessages = {
     moveFailed: string;
     moveUp: (name: string) => string;
     name: string;
-    nameDescription: string;
     namePlaceholder: string;
     promptNotFound: string;
     saveFailed: string;
@@ -218,21 +212,10 @@ type UiMessages = {
     welcome: string;
   };
   popup: {
-    connected: string;
-    connectingCurrentPage: string;
-    injectionPending: string;
-    injectionStatus: string;
     noActiveTab: string;
-    open: string;
     openOptions: string;
-    pageFallback: string;
-    pageSectionLabel: string;
-    pageUrlFallback: string;
-    textLength: string;
-    unsupportedPage: string;
     model: string;
     prompt: string;
-    sample: string;
     summary: string;
     page: string;
     openPanelAndStartSummary: string;
@@ -447,8 +430,6 @@ const UI_MESSAGES: Record<UiLocale, UiMessages> = {
       defaultChangedFailed: 'Default model could not be changed.',
     },
     pageExtraction: {
-      defaultReadability: 'Default readability',
-      loadFailed: 'Page extraction settings failed to load.',
       method: {
         description:
           'Select the general extraction path used before summary input is assembled.',
@@ -466,9 +447,6 @@ const UI_MESSAGES: Record<UiLocale, UiMessages> = {
           label: 'Readability',
         },
       },
-      saveFailed: 'Page extraction settings failed to save.',
-      savedToast: 'Page extraction settings saved.',
-      title: 'Page Extraction',
     },
     prompts: {
       create: 'Create prompt',
@@ -493,7 +471,6 @@ const UI_MESSAGES: Record<UiLocale, UiMessages> = {
       moveFailed: 'Prompt order could not be changed.',
       moveUp: (name) => `Move ${name} up`,
       name: 'Name',
-      nameDescription: 'Use a short label that works in prompt pickers.',
       namePlaceholder: 'Article summary',
       promptNotFound: 'Prompt was not found.',
       saveFailed: 'Prompt failed to save.',
@@ -528,21 +505,10 @@ const UI_MESSAGES: Record<UiLocale, UiMessages> = {
       welcome: 'Welcome',
     },
     popup: {
-      connected: 'Connected',
-      connectingCurrentPage: 'Connecting to the current page',
-      injectionPending: 'Waiting',
-      injectionStatus: 'Injection status',
       noActiveTab: 'No active tab is available',
-      open: 'Open',
       openOptions: 'Settings',
-      pageFallback: 'Current page',
-      pageSectionLabel: 'Current page',
-      pageUrlFallback: 'Open a webpage to inspect injection status',
-      textLength: 'Text length',
-      unsupportedPage: 'This page does not support injection yet',
       model: 'Model',
       prompt: 'Prompt',
-      sample: 'Sample',
       summary: 'Summary',
       page: 'Page',
       openPanelAndStartSummary: 'Open summary panel and start immediately',
@@ -768,8 +734,6 @@ const UI_MESSAGES: Record<UiLocale, UiMessages> = {
       defaultChangedFailed: '默认模型切换失败。',
     },
     pageExtraction: {
-      defaultReadability: '恢复默认 Readability',
-      loadFailed: '页面提取设置加载失败。',
       method: {
         description: '获取页面内容的算法',
         title: '页面内容提取方式',
@@ -785,9 +749,6 @@ const UI_MESSAGES: Record<UiLocale, UiMessages> = {
           label: 'Readability',
         },
       },
-      saveFailed: '页面提取设置保存失败。',
-      savedToast: '页面提取设置已保存。',
-      title: '页面提取',
     },
     prompts: {
       create: '创建提示词',
@@ -811,7 +772,6 @@ const UI_MESSAGES: Record<UiLocale, UiMessages> = {
       moveFailed: '提示词顺序调整失败。',
       moveUp: (name) => `上移 ${name}`,
       name: '名称',
-      nameDescription: '使用一个适合在提示词选择器中展示的短名称。',
       namePlaceholder: '文章总结',
       promptNotFound: '未找到提示词。',
       saveFailed: '提示词保存失败。',
@@ -843,21 +803,10 @@ const UI_MESSAGES: Record<UiLocale, UiMessages> = {
       welcome: '欢迎',
     },
     popup: {
-      connected: '已连接',
-      connectingCurrentPage: '正在连接当前页面',
-      injectionPending: '等待中',
-      injectionStatus: '注入状态',
       noActiveTab: '没有可用的当前标签页',
-      open: '打开',
       openOptions: '设置',
-      pageFallback: '当前页面',
-      pageSectionLabel: '当前页面',
-      pageUrlFallback: '打开任意网页后查看注入状态',
-      textLength: '文本长度',
-      unsupportedPage: '当前页面暂不支持注入',
       model: '模型',
       prompt: '提示词',
-      sample: 'Sample',
       summary: '总结',
       page: 'Page',
       openPanelAndStartSummary: '打开总结面板并立即开始总结',
