@@ -12,8 +12,10 @@ import { countInputTokens, truncateByTokens } from '@/lib/token-count';
 import type { ModelConfigItem } from '@/constants/model-settings';
 import type { PromptConfigItem } from '@/constants/prompt-settings';
 import type { GeneralSettings } from '@/constants/general-settings';
+import { getUiMessages } from '@/lib/i18n';
 
 export function useContentApp() {
+  const messagesI18n = getUiMessages();
   const [models, setModels] = useState<ModelConfigItem[]>([]);
   const [prompts, setPrompts] = useState<PromptConfigItem[]>([]);
   const [currentModelId, setCurrentModelId] = useState<string>('');
@@ -48,7 +50,7 @@ export function useContentApp() {
 
   useEffect(() => {
     if (error) {
-      toast.error(error.message || '发生未知错误，请重试');
+      toast.error(error.message || messagesI18n.common.unknownError);
     }
   }, [error]);
 
@@ -224,9 +226,9 @@ export function useContentApp() {
         return { role: m.role, content: textContent };
       });
       await navigator.clipboard.writeText(JSON.stringify(formattedMessages, null, 2));
-      toast.success('复制成功');
+      toast.success(messagesI18n.popup.copySuccess);
     } catch (err) {
-      toast.error('复制失败');
+      toast.error(messagesI18n.popup.copyFailed);
       console.error('Failed to copy messages', err);
     }
   };

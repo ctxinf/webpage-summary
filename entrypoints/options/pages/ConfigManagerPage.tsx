@@ -138,12 +138,12 @@ export function ConfigManagerPage() {
       }
 
       if (newDiffs.length === 0) {
-        toast.info('未发现任何变更', { description: '剪贴板中的配置与当前配置完全一致。' });
+        toast.info(messages.exportImport.noChanges, { description: messages.exportImport.noChangesDesc });
         return;
       }
 
       setDiffItems(newDiffs);
-      toast.info('请审阅即将导入的配置');
+      toast.info(messages.exportImport.reviewImport);
     } catch (e) {
       console.error('Import failed:', e);
       toast.error('Import Error', { description: String(e) });
@@ -167,10 +167,10 @@ export function ConfigManagerPage() {
       if (Object.keys(dataToSave).length > 0) {
         await browser.storage.local.set(dataToSave);
         toast.success(messages.common?.success || 'Success', {
-          description: `成功导入了 ${Object.keys(dataToSave).length} 项配置。`,
+          description: messages.exportImport.importedSuccess(Object.keys(dataToSave).length),
         });
       } else {
-        toast.info('未选择任何配置进行导入。');
+        toast.info(messages.exportImport.noImportSelected);
       }
       
       setDiffItems(null);
@@ -183,12 +183,12 @@ export function ConfigManagerPage() {
   };
 
   const handleResetAll = async () => {
-    if (window.confirm('确定要清除所有配置吗？此操作无法撤销。')) {
+    if (window.confirm(messages.exportImport.resetConfirm)) {
       setIsLoading(true);
       try {
         await browser.storage.local.clear();
         toast.success(messages.common?.success || 'Success', {
-          description: '所有配置已被清除。',
+          description: messages.exportImport.resetSuccess,
         });
       } catch (e) {
         console.error('Reset failed:', e);
@@ -241,27 +241,27 @@ export function ConfigManagerPage() {
           {diffItems && (
             <div className="mt-6 space-y-4 bg-muted p-4 rounded-md">
               <div className="flex justify-between items-center">
-                <h3 className="font-semibold">导入审阅 (Import Review)</h3>
+                <h3 className="font-semibold">{messages.exportImport.importReviewTitle}</h3>
                 <div className="space-x-2 flex items-center">
                   <Button size="sm" onClick={handleConfirmImport} disabled={isLoading}>
-                    确认导入
+                    {messages.exportImport.confirmImport}
                   </Button>
                   <Button 
                     size="sm" 
                     className="bg-blue-600 hover:bg-blue-700 text-white" 
                     onClick={() => setDiffItems(diffItems.map(i => ({ ...i, selected: true })))}
                   >
-                    全部接受
+                    {messages.exportImport.acceptAll}
                   </Button>
                   <Button 
                     size="sm" 
                     variant="destructive"
                     onClick={() => setDiffItems(diffItems.map(i => ({ ...i, selected: false })))}
                   >
-                    全部拒绝
+                    {messages.exportImport.rejectAll}
                   </Button>
                   <Button size="sm" variant="outline" onClick={() => setDiffItems(null)}>
-                    取消
+                    {messages.exportImport.cancel}
                   </Button>
                 </div>
               </div>
@@ -269,10 +269,10 @@ export function ConfigManagerPage() {
                 <table className="w-full text-sm text-left table-fixed">
                   <thead className="bg-muted text-muted-foreground">
                     <tr>
-                      <th className="px-4 py-2 font-medium w-[200px]">配置项</th>
-                      <th className="px-4 py-2 font-medium w-1/3">旧的值</th>
-                      <th className="px-4 py-2 font-medium w-1/3">新的值</th>
-                      <th className="px-4 py-2 font-medium text-right w-[180px]">操作</th>
+                      <th className="px-4 py-2 font-medium w-[200px]">{messages.exportImport.configItem}</th>
+                      <th className="px-4 py-2 font-medium w-1/3">{messages.exportImport.oldValue}</th>
+                      <th className="px-4 py-2 font-medium w-1/3">{messages.exportImport.newValue}</th>
+                      <th className="px-4 py-2 font-medium text-right w-[180px]">{messages.exportImport.action}</th>
                     </tr>
                   </thead>
                   <tbody className="divide-y">
@@ -281,7 +281,7 @@ export function ConfigManagerPage() {
                         <td className="px-4 py-2 font-mono text-xs break-all align-top">
                           <div className="flex items-center gap-2">
                             <span className={`shrink-0 text-[10px] whitespace-nowrap px-1.5 py-0.5 rounded-sm ${item.action === 'update' ? 'bg-yellow-100 text-yellow-800' : 'bg-green-100 text-green-800'}`}>
-                              {item.action === 'update' ? '冲突' : '新增'}
+                              {item.action === 'update' ? messages.exportImport.conflict : messages.exportImport.addNew}
                             </span>
                             <span>{item.key}</span>
                           </div>
@@ -312,7 +312,7 @@ export function ConfigManagerPage() {
                                 setDiffItems(newItems);
                               }}
                             >
-                              ✅ {item.action === 'update' ? '覆盖' : '接受'}
+                              ✅ {item.action === 'update' ? messages.exportImport.overwrite : messages.exportImport.accept}
                             </Button>
                             <Button 
                               size="sm" 
@@ -324,7 +324,7 @@ export function ConfigManagerPage() {
                                 setDiffItems(newItems);
                               }}
                             >
-                              ❌ {item.action === 'update' ? '跳过' : '放弃'}
+                              ❌ {item.action === 'update' ? messages.exportImport.skip : messages.exportImport.discard}
                             </Button>
                           </div>
                         </td>

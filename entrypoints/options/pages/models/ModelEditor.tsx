@@ -32,6 +32,7 @@ import {
   type RemoteModelInfo,
 } from '@/lib/model-settings-storage';
 import { cn } from '@/lib/utils';
+import { getUiMessages } from '@/lib/i18n';
 
 type ModelEditorProps = {
   initialDraft: ModelDraft;
@@ -85,6 +86,8 @@ export function ModelEditor({
   const [isApiKeyVisible, setIsApiKeyVisible] = useState(false);
   const [areBaseURLPresetsExpanded, setAreBaseURLPresetsExpanded] =
     useState(false);
+  
+  const messages = getUiMessages();
 
   const provider = useMemo(
     () => getModelProviderDefinition(draft.providerId),
@@ -381,12 +384,12 @@ export function ModelEditor({
                       {areBaseURLPresetsExpanded ? (
                         <>
                           <ChevronUp className="size-3.5" />
-                          收起
+                          {messages.common.collapse}
                         </>
                       ) : (
                         <>
                           <ChevronDown className="size-3.5" />
-                          更多...
+                          {messages.common.more}
                         </>
                       )}
                     </Button>

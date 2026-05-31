@@ -122,7 +122,7 @@ export function ContentAppFrame({ onClose, isMain = true, onAdd }: ContentAppFra
           <button
             className="flex items-center gap-1 px-1.5 bg-background border border-border rounded-lg text-xs hover:bg-emerald-50 dark:hover:bg-emerald-500  dark:border-emerald-500 shadow-sm text-muted-foreground shrink-0 transition-colors"
             onClick={handleSummarize}
-            title={messages.length > 0 ? '重新总结' : '总结'}
+            title={messages.length > 0 ? uiMessages.content.reSummarize : uiMessages.content.summary}
           >
             {isBusy ? (
               <RefreshCw size={14} strokeWidth={1.5} className="text-emerald-700 dark:text-emerald-500 animate-spin" />
@@ -140,7 +140,7 @@ export function ContentAppFrame({ onClose, isMain = true, onAdd }: ContentAppFra
             <button
               className="flex items-center justify-center text-red-500 hover:text-red-600 shrink-0 outline-none"
               title={error.message}
-              onClick={() => toast.error(error.message || '发生未知错误，请重试')}
+              onClick={() => toast.error(error.message || uiMessages.common.unknownError)}
             >
               <Info size={16} strokeWidth={2.5} />
             </button>
@@ -206,7 +206,7 @@ export function ContentAppFrame({ onClose, isMain = true, onAdd }: ContentAppFra
           <div className="flex items-center rounded-lg underline decoration-dashed text-nowrap text-[10px] font-light bg-background/10 px-1.5 py-0.5 text-zinc-500 leading-tight">
             <div title="click the right eye button to View&Change">
               {uiMessages.content.contentTokenCount}{' '}
-              <span>{pageContentTokenCount !== null ? pageContentTokenCount : '计算中...'}</span>
+              <span>{pageContentTokenCount !== null ? pageContentTokenCount : uiMessages.content.calculating}</span>
             </div>
             <button
               className="inline-flex items-center justify-center gap-1 whitespace-nowrap rounded-md text-[10px] font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-3 [&_svg]:shrink-0 hover:bg-zinc-100 hover:text-foreground w-5 h-5 text-zinc-500 ml-1"

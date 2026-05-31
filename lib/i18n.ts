@@ -31,6 +31,9 @@ type UiMessages = {
     saving: string;
     success: string;
     unsavedChanges: string;
+    unknownError: string;
+    collapse: string;
+    more: string;
     contextMenu: {
       summarizeThisPage: string;
       addToChat: string;
@@ -40,9 +43,11 @@ type UiMessages = {
   content: {
     badgeLabel: string;
     summary: string;
+    reSummarize: string;
     untitledPage: string;
     contentTokenCount: string;
     tokenViewerInfoTip: string;
+    calculating: string;
   };
   general: {
     loadFailed: string;
@@ -81,6 +86,28 @@ type UiMessages = {
     dangerZone: string;
     resetConfigurationDescription: string;
     resetAllConfigurations: string;
+    resetConfirm: string;
+    noChanges: string;
+    noChangesDesc: string;
+    reviewImport: string;
+    importedSuccess: (count: number) => string;
+    noImportSelected: string;
+    resetSuccess: string;
+    importReviewTitle: string;
+    confirmImport: string;
+    acceptAll: string;
+    rejectAll: string;
+    cancel: string;
+    configItem: string;
+    oldValue: string;
+    newValue: string;
+    action: string;
+    conflict: string;
+    addNew: string;
+    overwrite: string;
+    accept: string;
+    skip: string;
+    discard: string;
   };
   options: {
     debug: string;
@@ -270,6 +297,9 @@ const UI_MESSAGES: Record<UiLocale, UiMessages> = {
       saving: 'Saving',
       success: 'Success',
       unsavedChanges: 'Unsaved changes',
+      unknownError: 'An unknown error occurred. Please try again.',
+      collapse: 'Collapse',
+      more: 'More...',
       contextMenu: {
         summarizeThisPage: 'Summarize this page',
         addToChat: 'Add selection to chat',
@@ -279,9 +309,11 @@ const UI_MESSAGES: Record<UiLocale, UiMessages> = {
     content: {
       badgeLabel: 'Webpage Summary',
       summary: 'Summary',
+      reSummarize: 'Re-summarize',
       untitledPage: 'Untitled Page',
       contentTokenCount: 'Content Tokens:',
       tokenViewerInfoTip: 'This interface is for visualising tokenisation only. Dragging the slider here does not change the actual text sent to the LLM.',
+      calculating: 'Calculating...',
     },
     general: {
       loadFailed: 'General settings failed to load.',
@@ -363,6 +395,28 @@ const UI_MESSAGES: Record<UiLocale, UiMessages> = {
       dangerZone: 'Danger Zone',
       resetConfigurationDescription: 'Clear all extension configuration from local storage. Please ensure you have exported a backup before proceeding.',
       resetAllConfigurations: 'Reset All Configurations',
+      resetConfirm: 'Are you sure you want to clear all configurations? This action cannot be undone.',
+      noChanges: 'No changes detected',
+      noChangesDesc: 'The configuration in the clipboard is exactly the same as the current configuration.',
+      reviewImport: 'Please review the configuration to be imported',
+      importedSuccess: (count) => `Successfully imported ${count} configuration items.`,
+      noImportSelected: 'No configurations selected for import.',
+      resetSuccess: 'All configurations have been cleared.',
+      importReviewTitle: 'Import Review',
+      confirmImport: 'Confirm Import',
+      acceptAll: 'Accept All',
+      rejectAll: 'Reject All',
+      cancel: 'Cancel',
+      configItem: 'Config Item',
+      oldValue: 'Old Value',
+      newValue: 'New Value',
+      action: 'Action',
+      conflict: 'Conflict',
+      addNew: 'New',
+      overwrite: 'Overwrite',
+      accept: 'Accept',
+      skip: 'Skip',
+      discard: 'Discard',
     },
     options: {
       debug: 'Debug',
@@ -579,6 +633,9 @@ const UI_MESSAGES: Record<UiLocale, UiMessages> = {
       saving: '保存中',
       success: '成功',
       unsavedChanges: '有未保存的更改',
+      unknownError: '发生未知错误，请重试',
+      collapse: '收起',
+      more: '更多...',
       contextMenu: {
         summarizeThisPage: '总结此页',
         addToChat: '添加选中内容到聊天框',
@@ -588,9 +645,11 @@ const UI_MESSAGES: Record<UiLocale, UiMessages> = {
     content: {
       badgeLabel: '网页总结',
       summary: '总结',
+      reSummarize: '重新总结',
       untitledPage: '未命名页面',
       contentTokenCount: '内容 Token 数:',
       tokenViewerInfoTip: '此界面仅用于可视化分词效果。在此处的拖动调节不会改变实际发送给大语言模型的文本内容。',
+      calculating: '计算中...',
     },
     general: {
       loadFailed: '通用设置加载失败。',
@@ -668,6 +727,28 @@ const UI_MESSAGES: Record<UiLocale, UiMessages> = {
       dangerZone: '危险操作',
       resetConfigurationDescription: '清除所有本地存储中的扩展配置。请在操作前确保您已经导出了需要的配置备份。',
       resetAllConfigurations: '重置所有配置',
+      resetConfirm: '确定要清除所有配置吗？此操作无法撤销。',
+      noChanges: '未发现任何变更',
+      noChangesDesc: '剪贴板中的配置与当前配置完全一致。',
+      reviewImport: '请审阅即将导入的配置',
+      importedSuccess: (count) => `成功导入了 ${count} 项配置。`,
+      noImportSelected: '未选择任何配置进行导入。',
+      resetSuccess: '所有配置已被清除。',
+      importReviewTitle: '导入审阅 (Import Review)',
+      confirmImport: '确认导入',
+      acceptAll: '全部接受',
+      rejectAll: '全部拒绝',
+      cancel: '取消',
+      configItem: '配置项',
+      oldValue: '旧的值',
+      newValue: '新的值',
+      action: '操作',
+      conflict: '冲突',
+      addNew: '新增',
+      overwrite: '覆盖',
+      accept: '接受',
+      skip: '跳过',
+      discard: '放弃',
     },
     options: {
       debug: '调试',
