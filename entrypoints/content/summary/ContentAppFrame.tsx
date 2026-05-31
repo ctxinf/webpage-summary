@@ -112,7 +112,7 @@ export function ContentAppFrame({ onClose, isMain = true, onAdd }: ContentAppFra
         className="px-1 py-1 bg-white border-b border-zinc-300 grid grid-cols-[1fr_auto_1fr] items-center cursor-move whitespace-nowrap gap-2 select-none"
         data-drag-handle
       >
-        <div className="flex items-stretch gap-1.5 justify-start overflow-hidden h-full">
+        <div className="flex items-stretch gap-1.5 justify-start shrink-0 h-full">
           <img
             src={browser.runtime.getURL('/icon/32.png')}
             alt="icon"
@@ -161,7 +161,7 @@ export function ContentAppFrame({ onClose, isMain = true, onAdd }: ContentAppFra
           <div />
         )}
 
-        <div className="flex items-center gap-0.5 text-zinc-500 justify-end overflow-hidden h-full">
+        <div className="flex items-center gap-0.5 text-zinc-500 justify-end shrink-0 h-full">
           {mode !== 'sidebar' && (
             <button
               className="flex items-center justify-center border  rounded size-6 hover:bg-zinc-50 shadow-sm shrink-0"
