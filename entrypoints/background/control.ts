@@ -45,7 +45,9 @@ export async function activePageAndInvokeSummary(tab: Browser.tabs.Tab) {
   }
 
   if (shadowRootExist) {
-    sendMessage('invokeSummary', undefined, { tabId: tab.id }).catch(e => {
+    const settings = await loadGeneralSettings();
+    const beginSummary = settings.enableAutoBeginSummaryByActionOrContextTrigger;
+    sendMessage('invokeSummary', { beginSummary }, { tabId: tab.id }).catch(e => {
       console.warn('[activePageAndInvokeSummary] sendMessage failed', e);
     });
   } else {
