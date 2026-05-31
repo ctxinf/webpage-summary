@@ -28,6 +28,7 @@ import {
 } from '@/lib/prompt-settings-storage';
 import { cn } from '@/lib/utils';
 import { OptionsPageTitle } from './OptionsPageTitle';
+import { useTheme } from '@/components/theme-provider';
 
 function PanelPreview({ mode }: { mode: 'dialog' | 'sidebar' }) {
   return (
@@ -171,6 +172,7 @@ function TokenUsagePreview() {
 
 export function InterfacePage() {
   const messages = getUiMessages();
+  const { theme, setTheme } = useTheme();
   const [settings, setSettings] = useState<GeneralSettings | null>(null);
   const [modelSettings, setModelSettings] = useState<ModelSettings | null>(null);
   const [promptSettings, setPromptSettings] = useState<PromptSettings | null>(null);
@@ -259,6 +261,7 @@ export function InterfacePage() {
         <div className="space-y-8">
           
           <div className="flex flex-col gap-6">
+
             {/* Panel Layout Mode */}
             <section className="rounded-xl border bg-card p-6 shadow-sm">
               <header className="mb-6">
@@ -390,6 +393,33 @@ export function InterfacePage() {
 
         {/* Right: Sidebar Shortcuts */}
         <aside className="space-y-6 pt-2">
+          
+          {/* Theme Selection */}
+          <div className="flex flex-col gap-3">
+            <span className="text-sm font-medium text-foreground">
+              Theme Appearance:
+            </span>
+            <RadioGroup
+              className="flex gap-2"
+              onValueChange={(value) => setTheme(value as any)}
+              value={theme}
+            >
+              <label className={cn('cursor-pointer flex-1 flex items-center justify-center rounded-md border p-1.5 transition-colors', theme === 'light' ? 'border-green-500 bg-green-500/10 text-green-700 dark:text-green-400' : 'border-border bg-muted/30 hover:bg-muted text-muted-foreground hover:text-foreground')}>
+                <RadioGroupItem value="light" id="theme-light" className="sr-only" />
+                <span className="text-xs font-medium">Light</span>
+              </label>
+              <label className={cn('cursor-pointer flex-1 flex items-center justify-center rounded-md border p-1.5 transition-colors', theme === 'dark' ? 'border-green-500 bg-green-500/10 text-green-700 dark:text-green-400' : 'border-border bg-muted/30 hover:bg-muted text-muted-foreground hover:text-foreground')}>
+                <RadioGroupItem value="dark" id="theme-dark" className="sr-only" />
+                <span className="text-xs font-medium">Dark</span>
+              </label>
+              <label className={cn('cursor-pointer flex-1 flex items-center justify-center rounded-md border p-1.5 transition-colors', theme === 'system' ? 'border-green-500 bg-green-500/10 text-green-700 dark:text-green-400' : 'border-border bg-muted/30 hover:bg-muted text-muted-foreground hover:text-foreground')}>
+                <RadioGroupItem value="system" id="theme-system" className="sr-only" />
+                <span className="text-xs font-medium">System</span>
+              </label>
+            </RadioGroup>
+          </div>
+          
+          <hr className="border-border my-2" />
           
           {/* Model Shortcut */}
           <div className="flex items-center justify-between gap-2">

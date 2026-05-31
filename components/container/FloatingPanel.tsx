@@ -66,7 +66,7 @@ export function FloatingPanel({
       } : undefined}
       onMouseDown={startDrag}
       className={cn(
-        "fixed top-[4em] right-[4em] bg-white rounded-xl shadow-[0_12px_48px_rgba(0,0,0,0.12)] border border-zinc-200/60 flex flex-col z-[2147483647] max-w-[100vw] max-h-[100vh]",
+        "fixed top-[4em] right-[4em] bg-background rounded-xl shadow-[0_12px_48px_rgba(0,0,0,0.12)] border border-zinc-200/60 flex flex-col z-[2147483647] max-w-[100vw] max-h-[100vh]",
         className
       )}
     >

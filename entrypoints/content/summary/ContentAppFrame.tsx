@@ -96,7 +96,7 @@ export function ContentAppFrame({ onClose, isMain = true, onAdd }: ContentAppFra
   const isBusy = status === 'streaming' || status === 'submitted';
 
   return (
-    <div className={cn("flex flex-col w-full h-full bg-white text-zinc-900 overflow-hidden relative pointer-events-auto", mode === 'floating' && 'rounded-xl')}>
+    <div className={cn("flex flex-col w-full h-full bg-background text-foreground overflow-hidden relative pointer-events-auto", mode === 'floating' && 'rounded-xl')}>
       <Toaster
         position="bottom-right"
         duration={6000}
@@ -109,7 +109,7 @@ export function ContentAppFrame({ onClose, isMain = true, onAdd }: ContentAppFra
       />
       {/* 顶部栏 / Top Bar */}
       <header
-        className="px-1 py-1 bg-white border-b border-zinc-300 grid grid-cols-[1fr_auto_1fr] items-center cursor-move whitespace-nowrap gap-2 select-none"
+        className="px-1 py-1 bg-background border-b border-border grid grid-cols-[1fr_auto_1fr] items-center cursor-move whitespace-nowrap gap-2 select-none"
         data-drag-handle
       >
         <div className="flex items-stretch gap-1.5 justify-start shrink-0 h-full">
@@ -120,7 +120,7 @@ export function ContentAppFrame({ onClose, isMain = true, onAdd }: ContentAppFra
           />
 
           <button
-            className="flex items-center gap-1 px-1.5 bg-white border border-zinc-300 rounded-lg text-xs hover:bg-emerald-50 shadow-sm text-zinc-700 shrink-0 transition-colors"
+            className="flex items-center gap-1 px-1.5 bg-background border border-border rounded-lg text-xs hover:bg-emerald-50 shadow-sm text-muted-foreground shrink-0 transition-colors"
             onClick={handleSummarize}
             title={messages.length > 0 ? '重新总结' : '总结'}
           >
@@ -203,13 +203,13 @@ export function ContentAppFrame({ onClose, isMain = true, onAdd }: ContentAppFra
           data-section="top-sticky-line"
           className="absolute top-0.5 left-1 right-3 flex justify-between flex-row z-10 pointer-events-none [&>*]:pointer-events-auto"
         >
-          <div className="flex items-center rounded-lg underline decoration-dashed text-nowrap text-[10px] font-light bg-white/10 px-1.5 py-0.5 text-zinc-500 leading-tight">
+          <div className="flex items-center rounded-lg underline decoration-dashed text-nowrap text-[10px] font-light bg-background/10 px-1.5 py-0.5 text-zinc-500 leading-tight">
             <div title="click the right eye button to View&Change">
               {uiMessages.content.contentTokenCount}{' '}
               <span>{pageContentTokenCount !== null ? pageContentTokenCount : '计算中...'}</span>
             </div>
             <button
-              className="inline-flex items-center justify-center gap-1 whitespace-nowrap rounded-md text-[10px] font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-3 [&_svg]:shrink-0 hover:bg-zinc-100 hover:text-zinc-900 w-5 h-5 text-zinc-500 ml-1"
+              className="inline-flex items-center justify-center gap-1 whitespace-nowrap rounded-md text-[10px] font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-3 [&_svg]:shrink-0 hover:bg-zinc-100 hover:text-foreground w-5 h-5 text-zinc-500 ml-1"
               onClick={() => setIsTokenViewerOpen(true)}
             >
               <ScanEye size={12} strokeWidth={2} />
@@ -222,7 +222,7 @@ export function ContentAppFrame({ onClose, isMain = true, onAdd }: ContentAppFra
               </div>
             )}
             <button
-              className="inline-flex items-center justify-center gap-1 whitespace-nowrap rounded-md text-[10px] font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-3 [&_svg]:shrink-0 bg-white/80 backdrop-blur-sm border border-zinc-200 hover:bg-zinc-50 text-zinc-700 w-6 h-6"
+              className="inline-flex items-center justify-center gap-1 whitespace-nowrap rounded-md text-[10px] font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-3 [&_svg]:shrink-0 bg-background/80 backdrop-blur-sm border border-zinc-200 hover:bg-zinc-50 text-muted-foreground w-6 h-6"
               title="copy all"
               onClick={handleCopyMessages}
             >
@@ -270,7 +270,7 @@ export function ContentAppFrame({ onClose, isMain = true, onAdd }: ContentAppFra
               <Message from="assistant">
                 <MessageContent>
                   <div className="flex items-center gap-2">
-                    <div className="size-4 animate-spin rounded-full border-2 border-zinc-300 border-t-zinc-900" />
+                    <div className="size-4 animate-spin rounded-full border-2 border-border border-t-zinc-900" />
                     <span className="text-sm text-zinc-500">Thinking...</span>
                   </div>
                 </MessageContent>
@@ -288,14 +288,14 @@ export function ContentAppFrame({ onClose, isMain = true, onAdd }: ContentAppFra
           )}
         >
           <button
-            className="p-1.5 rounded-full border border-zinc-200 text-zinc-400 hover:text-zinc-600 shadow-sm bg-white/90 backdrop-blur"
+            className="p-1.5 rounded-full border border-zinc-200 text-zinc-400 hover:text-zinc-600 shadow-sm bg-background/90 backdrop-blur"
             onClick={scrollToTop}
             title="Go to top"
           >
             <ArrowUpToLine size={14} />
           </button>
           <button
-            className="p-1.5 rounded-full border border-zinc-200 text-zinc-400 hover:text-zinc-600 shadow-sm bg-white/90 backdrop-blur"
+            className="p-1.5 rounded-full border border-zinc-200 text-zinc-400 hover:text-zinc-600 shadow-sm bg-background/90 backdrop-blur"
             onClick={scrollToBottom}
             title="Go to bottom"
           >
@@ -334,7 +334,7 @@ export function ContentAppFrame({ onClose, isMain = true, onAdd }: ContentAppFra
       >
         <button
           onClick={() => setShowBottom(!showBottom)}
-          className="bg-white/30 backdrop-blur-sm border border-zinc-200/50 rounded-full p-1 text-zinc-400/70 hover:bg-white/90 hover:border-zinc-300 hover:text-zinc-700 hover:shadow-md shadow-sm flex items-center justify-center transition-all pointer-events-auto"
+          className="bg-background/30 backdrop-blur-sm border border-zinc-200/50 rounded-full p-1 text-zinc-400/70 hover:bg-background/90 hover:border-border hover:text-muted-foreground hover:shadow-md shadow-sm flex items-center justify-center transition-all pointer-events-auto"
           title={showBottom ? 'Close input' : 'Open input'}
         >
           {showBottom ? <ChevronUp size={14} /> : <PlusCircleIcon size={14} />}
@@ -350,7 +350,7 @@ export function ContentAppFrame({ onClose, isMain = true, onAdd }: ContentAppFra
                 onChange={(e) => setInputText(e.target.value)}
                 value={inputText}
                 placeholder="Type your message here... Enter to send, Shift+Enter to insert new line."
-                className="bg-white min-h-[60px]"
+                className="bg-background min-h-[60px]"
               />
             </PromptInputBody>
             <PromptInputFooter>
@@ -359,7 +359,7 @@ export function ContentAppFrame({ onClose, isMain = true, onAdd }: ContentAppFra
                 disabled={!inputText && !status} 
                 status={status as any} 
                 variant="outline" 
-                className="bg-transparent border border-zinc-300 text-zinc-600 hover:bg-zinc-50 hover:text-zinc-900 disabled:opacity-50" 
+                className="bg-transparent border border-border text-zinc-600 hover:bg-zinc-50 hover:text-foreground disabled:opacity-50" 
               />
             </PromptInputFooter>
           </PromptInput>

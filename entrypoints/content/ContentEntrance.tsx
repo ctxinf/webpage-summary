@@ -8,6 +8,7 @@ import { ContentAppFrame } from '@/entrypoints/content/summary/ContentAppFrame';
 // import { useSummaryChatController } from '@/hooks/useSummaryChatController';
 import { loadGeneralSettings } from '@/lib/general-settings-storage';
 import iconUrl from '@/assets/16.png';
+import { ThemeProvider } from '@/components/theme-provider';
 import { iso } from 'zod/v4-mini';
 
 export function ContentEntrance() {
@@ -73,8 +74,10 @@ export function ContentEntrance() {
     };
   }, []);
 
+  const shadowHost = typeof document !== 'undefined' ? document.querySelector('webpage-summary-entrance') as HTMLElement | null : null;
+
   return (
-    <>
+    <ThemeProvider container={shadowHost}>
       {/* Switchable summary panel layout — controller is shared from parent */}
       {
         mainPanelOpen && (
@@ -132,6 +135,6 @@ export function ContentEntrance() {
           </div>
         </RightFloatingBallContainer>
       )}
-    </>
+    </ThemeProvider>
   );
 }

@@ -169,7 +169,7 @@ function App() {
           type="button"
           onClick={() => browser.runtime.openOptionsPage()}
           title={messages.popup.openOptions}
-          className="flex size-9 shrink-0 items-center justify-center rounded-md border border-zinc-300 bg-white text-zinc-700 shadow-sm transition-colors hover:bg-zinc-50 hover:text-zinc-900"
+          className="flex size-9 shrink-0 items-center justify-center rounded-md border border-border bg-background text-muted-foreground shadow-sm transition-colors hover:bg-zinc-50 hover:text-foreground"
         >
           <Settings size={18} />
         </button>
@@ -211,7 +211,7 @@ function App() {
           disabled={copying || !isContentPage}
           title={messages.popup.copyPageContentToClipboard}
           className={cn(
-            'flex items-center gap-1.5 rounded-md border border-zinc-300 bg-white px-3 py-1.5 text-sm font-medium text-zinc-700 shadow-sm transition-colors hover:bg-zinc-50',
+            'flex items-center gap-1.5 rounded-md border border-border bg-background px-3 py-1.5 text-sm font-medium text-muted-foreground shadow-sm transition-colors hover:bg-zinc-50',
             (copying || !isContentPage) && 'cursor-not-allowed opacity-60',
           )}
         >
@@ -259,7 +259,7 @@ function SelectRow({ label, value, onChange, options, icon }: SelectRowProps) {
         )}
         <select
           className={cn(
-            'w-full appearance-none truncate rounded-md border border-zinc-300 bg-white py-1.5 pr-7 text-sm text-zinc-700 shadow-sm outline-none transition-colors hover:bg-zinc-50',
+            'w-full appearance-none truncate rounded-md border border-border bg-background py-1.5 pr-7 text-sm text-muted-foreground shadow-sm outline-none transition-colors hover:bg-zinc-50',
             icon ? 'pl-7' : 'pl-2.5',
           )}
           value={value}

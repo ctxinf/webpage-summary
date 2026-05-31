@@ -123,7 +123,7 @@ export function SidebarPanel({
       style={savedWidth !== null ? { width: `${savedWidth}px` } : undefined}
       className={cn(
         "fixed right-0 top-0 bottom-0 h-screen flex flex-col z-[2147483647]",
-        "bg-white/95 backdrop-blur-xl border-l border-zinc-200 shadow-2xl text-zinc-950",
+        "bg-background/95 backdrop-blur-xl border-l border-zinc-200 shadow-2xl text-zinc-950",
         // Animation
         "animate-in slide-in-from-right duration-300",
         className

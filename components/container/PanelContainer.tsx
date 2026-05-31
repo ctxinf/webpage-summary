@@ -173,8 +173,8 @@ function UnifiedPanelRenderer({ children, storageKey, initialOffset }: { childre
       className={cn(
         "flex flex-col z-[2147483647]",
         isFloating 
-          ? "fixed bg-white rounded-xl shadow-[0_12px_48px_rgba(0,0,0,0.12)] border border-zinc-200/60 max-w-[100vw] max-h-[100vh] min-w-[24rem] min-h-[25rem]"
-          : "fixed right-0 top-0 bottom-0 h-screen bg-white/95 backdrop-blur-xl border-l border-zinc-200 shadow-2xl text-zinc-950 min-w-[20rem]"
+          ? "fixed bg-background rounded-xl shadow-[0_12px_48px_rgba(0,0,0,0.12)] border border-zinc-200/60 max-w-[100vw] max-h-[100vh] min-w-[24rem] min-h-[25rem]"
+          : "fixed right-0 top-0 bottom-0 h-screen bg-background/95 backdrop-blur-xl border-l border-zinc-200 shadow-2xl text-zinc-950 min-w-[20rem]"
       )}
     >
       {isFloating ? (
