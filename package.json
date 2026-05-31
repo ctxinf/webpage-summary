@@ -2,7 +2,7 @@
   "name": "webpage-summary-ext",
   "description": "(open source) webpage summary with AI, customization of llm-provider/prompt-template, no worries abound privacy",
   "private": false,
-  "version": "0.7.0",
+  "version": "0.7.1",
   "type": "module",
   "scripts": {
     "dev": "wxt",
