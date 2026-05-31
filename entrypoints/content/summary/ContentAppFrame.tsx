@@ -96,7 +96,7 @@ export function ContentAppFrame({ onClose, isMain = true, onAdd }: ContentAppFra
   const isBusy = status === 'streaming' || status === 'submitted';
 
   return (
-    <div className="flex flex-col w-full h-full bg-white text-zinc-900 overflow-hidden relative pointer-events-auto">
+    <div className={cn("flex flex-col w-full h-full bg-white text-zinc-900 overflow-hidden relative pointer-events-auto", mode === 'floating' && 'rounded-xl')}>
       <Toaster
         position="bottom-right"
         duration={6000}
@@ -129,7 +129,7 @@ export function ContentAppFrame({ onClose, isMain = true, onAdd }: ContentAppFra
             ) : messages.length > 0 ? (
               <RefreshCw size={14} strokeWidth={3.5} className="text-emerald-700" />
             ) : (
-              <Play size={14} strokeWidth={3.5} className="text-emerald-700 fill-emerald-700" />
+              <Play size={14} strokeWidth={2.5} className="text-emerald-700" />
             )}
             {messages.length === 0 && !isBusy ? (
               <span className="font-medium text-emerald-900 pr-0.5">{uiMessages.content.summary}</span>
@@ -201,32 +201,32 @@ export function ContentAppFrame({ onClose, isMain = true, onAdd }: ContentAppFra
         {/* 悬浮在右上角的工具栏 */}
         <div
           data-section="top-sticky-line"
-          className="absolute top-1 left-1 right-3 flex justify-between flex-row z-10 pointer-events-none [&>*]:pointer-events-auto"
+          className="absolute top-0.5 left-1 right-3 flex justify-between flex-row z-10 pointer-events-none [&>*]:pointer-events-auto"
         >
-          <div className="flex items-center rounded-lg underline decoration-dashed text-nowrap text-xs font-light bg-white/10 px-2 py-1 text-zinc-500">
+          <div className="flex items-center rounded-lg underline decoration-dashed text-nowrap text-[10px] font-light bg-white/10 px-1.5 py-0.5 text-zinc-500 leading-tight">
             <div title="click the right eye button to View&Change">
               {uiMessages.content.contentTokenCount}{' '}
               <span>{pageContentTokenCount !== null ? pageContentTokenCount : '计算中...'}</span>
             </div>
             <button
-              className="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 hover:bg-zinc-100 hover:text-zinc-900 w-6 h-6 text-zinc-500 ml-1"
+              className="inline-flex items-center justify-center gap-1 whitespace-nowrap rounded-md text-[10px] font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-3 [&_svg]:shrink-0 hover:bg-zinc-100 hover:text-zinc-900 w-5 h-5 text-zinc-500 ml-1"
               onClick={() => setIsTokenViewerOpen(true)}
             >
-              <ScanEye size={16} strokeWidth={2} />
+              <ScanEye size={12} strokeWidth={2} />
             </button>
           </div>
-          <div className="flex items-center gap-1.5 pointer-events-none [&>*]:pointer-events-auto">
+          <div className="flex items-center gap-1 pointer-events-none [&>*]:pointer-events-auto">
             {messages.length > 0 && !isBusy && (
-              <div className="px-2 py-1 bg-zinc-300/80 backdrop-blur-md rounded-md text-xs text-zinc-600 font-mono tracking-tight flex items-center gap-1.5">
+              <div className="px-1.5 py-0.5 bg-zinc-300/80 backdrop-blur-md rounded-md text-[10px] text-zinc-600 font-mono tracking-tight flex items-center gap-1 leading-tight">
                 <UsageDisplay messages={messages} currentModel={currentModel} />
               </div>
             )}
             <button
-              className="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 bg-white/80 backdrop-blur-sm border border-zinc-200 hover:bg-zinc-50 text-zinc-700 w-8 h-8"
+              className="inline-flex items-center justify-center gap-1 whitespace-nowrap rounded-md text-[10px] font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-3 [&_svg]:shrink-0 bg-white/80 backdrop-blur-sm border border-zinc-200 hover:bg-zinc-50 text-zinc-700 w-6 h-6"
               title="copy all"
               onClick={handleCopyMessages}
             >
-              <Copy size={14} />
+              <Copy size={12} />
             </button>
           </div>
         </div>
@@ -355,7 +355,12 @@ export function ContentAppFrame({ onClose, isMain = true, onAdd }: ContentAppFra
             </PromptInputBody>
             <PromptInputFooter>
               <PromptInputTools />
-              <PromptInputSubmit disabled={!inputText && !status} status={status as any} />
+              <PromptInputSubmit 
+                disabled={!inputText && !status} 
+                status={status as any} 
+                variant="outline" 
+                className="bg-transparent border border-zinc-300 text-zinc-600 hover:bg-zinc-50 hover:text-zinc-900 disabled:opacity-50" 
+              />
             </PromptInputFooter>
           </PromptInput>
         </div>
