@@ -110,6 +110,13 @@ async function streamMessages(
       allowSystemInMessages: true,
       model: createLanguageModelFromConfig(modelConfig),
       system: request.system,
+      onError({ error: streamError }) {
+        // streamText catches errors that occur mid-stream and routes them here
+        // instead of throwing. The outer try/catch never sees them.
+        // Forward explicitly so the frontend actually receives the error.
+        console.error('[AI SDK Bridge] streamText onError:', streamError);
+        postMessage({ type: 'error', message: getErrorMessage(streamError) });
+      },
     });
     console.debug(`[AI SDK Bridge streamMessages] streamText called, beginning iteration...`);
 
@@ -161,10 +168,49 @@ async function streamMessages(
   }
 }
 
-function getErrorMessage(error: unknown) {
-  if (error instanceof Error) {
-    return error.message;
+/**
+ * Extract a concise, human-readable error message from whatever the AI SDK throws.
+ *
+ * AI SDK structured errors (APICallError) carry `statusCode` and `responseBody`.
+ * `responseBody` can be a JSON API error or a raw HTML page (e.g. Cloudflare
+ * error pages). We parse JSON to pull the actual API message; HTML bodies are
+ * intentionally skipped — they're noise, not signal.
+ */
+function getErrorMessage(error: unknown): string {
+  if (!(error instanceof Error)) {
+    return String(error);
   }
 
-  return String(error);
+  const e = error as any;
+  const status: number | undefined = e.statusCode ?? e.status;
+  const rawBody: string | undefined = e.responseBody ?? e.body;
+
+  if (status !== undefined) {
+    // Try to extract a short message from a JSON response body.
+    if (rawBody && !rawBody.trimStart().startsWith('<')) {
+      try {
+        const parsed = JSON.parse(rawBody);
+        // Different providers nest the message differently.
+        const apiMsg: unknown =
+          parsed?.error?.message ??
+          parsed?.error?.msg ??
+          parsed?.message ??
+          (typeof parsed?.error === 'string' ? parsed.error : undefined);
+        if (typeof apiMsg === 'string' && apiMsg.length > 0) {
+          return `[HTTP ${status}] ${apiMsg}`;
+        }
+      } catch {
+        // Body is not valid JSON — fall through.
+      }
+    }
+
+    // HTML or unparseable body — truncate to avoid flooding the error display.
+    if (rawBody) {
+      const truncated = rawBody.length > 300 ? rawBody.slice(0, 300) + '…' : rawBody;
+      return `[HTTP ${status}] ${truncated}`;
+    }
+    return `[HTTP ${status}] ${error.message || 'Request failed'}`;
+  }
+
+  return error.message;
 }

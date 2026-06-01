@@ -5,6 +5,7 @@ import { registerAiSdkConnectBridge } from './ai-sdk-connect-bridge';
 import { registerTokenCountMessages } from './token-count-bg';
 import { setupOnInstallHook } from './onInstall';
 import { registerControlMessages, addContextMenus, initializeControlHandlers } from './control';
+import { setupCorsFixRule } from './cors-fix';
 
 export default defineBackground(() => {
   console.log('Hello background!', { id: browser.runtime.id });
@@ -17,6 +18,7 @@ export default defineBackground(() => {
 
   setupOnInstallHook();
   seedPromptLibrary();
+  setupCorsFixRule().catch((err) => console.error('Failed to setup CORS fix rule:', err));
   registerAiSdkConnectBridge();
   registerTokenCountMessages();
   registerControlMessages();

@@ -349,7 +349,16 @@ export function ModelEditor({
                             : 'bg-background text-muted-foreground',
                         )}
                         key={`${provider.id}-${preset.url}`}
-                        onClick={() => updateDraft('baseURL', preset.url)}
+                        onClick={() => {
+                          const isAutoName =
+                            draft.name === provider.label ||
+                            provider.baseURLPresets.some((p) => p.label === draft.name);
+                          setDraft((current) => ({
+                            ...current,
+                            baseURL: preset.url,
+                            ...(isAutoName ? { name: preset.label } : {}),
+                          }));
+                        }}
                         type="button"
                       >
                         {preset.iconPath && (

@@ -241,12 +241,18 @@ export async function createModelConfig(draft: ModelDraft) {
   const settings = await loadModelSettings();
   const normalizedDraft = validateDraft(draft);
 
-  if (isDuplicateName(settings.models, normalizedDraft.name)) {
-    throw new Error('Model name already exists.');
+  let finalName = normalizedDraft.name;
+  if (isDuplicateName(settings.models, finalName)) {
+    let suffix = 1;
+    while (isDuplicateName(settings.models, `${normalizedDraft.name} (${suffix})`)) {
+      suffix++;
+    }
+    finalName = `${normalizedDraft.name} (${suffix})`;
   }
 
   const model: ModelConfigItem = {
     ...normalizedDraft,
+    name: finalName,
     at: Date.now(),
     id: uid(16),
   };
