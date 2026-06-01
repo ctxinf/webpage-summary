@@ -1,16 +1,13 @@
-import React, { useRef, useState } from 'react';
+import React, { useState } from 'react';
 import { browser } from 'wxt/browser';
 import { usePanel } from '@/components/container/PanelContext';
 import { sendMessage as sendExtMessage } from '@/lib/messaging';
 import {
-  Play,
   Settings,
   PlusSquare,
   PanelRight,
   PictureInPicture2,
   Copy,
-  ArrowUpToLine,
-  ArrowDownToLine,
   ChevronUp,
   ScanEye,
   X,
@@ -33,6 +30,7 @@ import {
   Conversation,
   ConversationContent,
   ConversationScrollButton,
+  ConversationScrollControls,
 } from '@/components/ai-elements/conversation';
 import {
   Message,
@@ -61,7 +59,6 @@ export function ContentAppFrame({ onClose, isMain = true, onAdd }: ContentAppFra
   const uiMessages = getUiMessages();
   const { mode, setMode } = usePanel();
   const [isTokenViewerOpen, setIsTokenViewerOpen] = useState(false);
-  const scrollRef = useRef<HTMLDivElement>(null);
 
   const {
     messages,
@@ -85,15 +82,9 @@ export function ContentAppFrame({ onClose, isMain = true, onAdd }: ContentAppFra
     handleCopyMessages,
   } = useContentApp();
 
-  const scrollToTop = () => {
-    scrollRef.current?.scrollTo({ top: 0, behavior: 'smooth' });
-  };
-
-  const scrollToBottom = () => {
-    scrollRef.current?.scrollTo({ top: scrollRef.current.scrollHeight, behavior: 'smooth' });
-  };
-
   const isBusy = status === 'streaming' || status === 'submitted';
+  const hasMessages = messages.length > 0;
+
 
   return (
     <div className={cn("flex flex-col w-full h-full bg-background text-foreground overflow-hidden relative pointer-events-auto", mode === 'floating' && 'rounded-xl')}>
@@ -113,26 +104,25 @@ export function ContentAppFrame({ onClose, isMain = true, onAdd }: ContentAppFra
         data-drag-handle
       >
         <div className="flex items-stretch gap-1.5 justify-start shrink-0 h-full">
-          <img
-            src={browser.runtime.getURL('/icon/32.png')}
-            alt="icon"
-            className="size-6 rounded-lg object-contain shrink-0 self-center transition-all dark:brightness-110 dark:drop-shadow-[0_0_6px_rgba(255,255,255,0.3)]"
-          />
-
           <button
-            className="flex items-center gap-1 px-1.5 bg-background border border-border rounded-lg text-xs hover:bg-emerald-50 dark:hover:bg-emerald-500  dark:border-emerald-500 shadow-sm text-muted-foreground shrink-0 transition-colors"
+            className="flex items-center gap-0.5 px-1 bg-background border border-border rounded-lg text-xs hover:border-foreground/40 shadow-sm text-foreground shrink-0 transition-colors"
             onClick={handleSummarize}
             title={messages.length > 0 ? uiMessages.content.reSummarize : uiMessages.content.summary}
           >
             {isBusy ? (
-              <RefreshCw size={14} strokeWidth={1.5} className="text-emerald-700 dark:text-emerald-500 animate-spin" />
+              <RefreshCw size={16} strokeWidth={1.5} className="animate-spin" />
             ) : messages.length > 0 ? (
-              <RefreshCw size={14} strokeWidth={1.5} className="text-emerald-700 dark:text-emerald-500" />
+              <RefreshCw size={16} strokeWidth={1.5} />
             ) : (
-              <Play size={14} strokeWidth={2.5} className="text-emerald-700 dark:text-emerald-500 dark:fill-white" />
+              <img
+                src={browser.runtime.getURL('/icon/32.png')}
+                alt="icon"
+                className="size-[18px] rounded-md object-contain shrink-0 transition-all dark:brightness-110"
+                draggable={false}
+              />
             )}
             {messages.length === 0 && !isBusy ? (
-              <span className="font-medium text-emerald-900 dark:text-emerald-500 pr-0.5">{uiMessages.content.summary}</span>
+              <span className="font-medium pr-0.5 pl-0.5 inline-block translate-y-px opacity-80">{uiMessages.content.summary}</span>
             ) : null}
           </button>
 
@@ -221,13 +211,15 @@ export function ContentAppFrame({ onClose, isMain = true, onAdd }: ContentAppFra
                 <UsageDisplay messages={messages} currentModel={currentModel} />
               </div>
             )}
-            <button
-              className="inline-flex items-center justify-center gap-1 whitespace-nowrap rounded-md text-[10px] font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-3 [&_svg]:shrink-0 bg-background/80 backdrop-blur-sm border border-border hover:bg-muted text-muted-foreground dark:text-zinc-300 hover:text-foreground w-6 h-6"
-              title="copy all"
-              onClick={handleCopyMessages}
-            >
-              <Copy size={12} />
-            </button>
+            {hasMessages && !isBusy && (
+              <button
+                className="inline-flex items-center justify-center gap-1 whitespace-nowrap rounded-md text-[10px] font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-3 [&_svg]:shrink-0 bg-background/80 backdrop-blur-sm border border-border hover:bg-muted text-muted-foreground dark:text-zinc-300 hover:text-foreground w-6 h-6"
+                title="copy all"
+                onClick={handleCopyMessages}
+              >
+                <Copy size={12} />
+              </button>
+            )}
           </div>
         </div>
 
@@ -278,30 +270,10 @@ export function ContentAppFrame({ onClose, isMain = true, onAdd }: ContentAppFra
             )}
           </ConversationContent>
           <ConversationScrollButton />
+          <ConversationScrollControls
+            bottomOffset={showBottom ? 16 : 40}
+          />
         </Conversation>
-
-        {/* Scroll buttons anchored to the conversation area */}
-        <div
-          className={cn(
-            'absolute right-4 flex flex-col gap-1.5 z-10 pointer-events-none [&_button]:pointer-events-auto',
-            showBottom ? 'bottom-4' : 'bottom-10',
-          )}
-        >
-          <button
-            className="p-1.5 rounded-full border border-border text-muted-foreground hover:text-foreground shadow-sm bg-background/90 backdrop-blur transition-colors hover:bg-muted"
-            onClick={scrollToTop}
-            title="Go to top"
-          >
-            <ArrowUpToLine size={14} />
-          </button>
-          <button
-            className="p-1.5 rounded-full border border-border text-muted-foreground hover:text-foreground shadow-sm bg-background/90 backdrop-blur transition-colors hover:bg-muted"
-            onClick={scrollToBottom}
-            title="Go to bottom"
-          >
-            <ArrowDownToLine size={14} />
-          </button>
-        </div>
 
         {/* Dropdowns anchored to the bottom-left of the conversation area */}
         {mode === 'sidebar' && (

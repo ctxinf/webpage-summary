@@ -3,9 +3,9 @@
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import type { UIMessage } from "ai";
-import { ArrowDownIcon, DownloadIcon } from "lucide-react";
+import { ArrowDownIcon, ArrowDownToLine, ArrowUpToLine, DownloadIcon } from "lucide-react";
 import type { ComponentProps } from "react";
-import { useCallback } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { StickToBottom, useStickToBottomContext } from "use-stick-to-bottom";
 
 export type ConversationProps = ComponentProps<typeof StickToBottom>;
@@ -97,6 +97,76 @@ export const ConversationScrollButton = ({
         <ArrowDownIcon className="size-4" />
       </Button>
     )
+  );
+};
+
+// Scroll up/down controls that actually work via StickToBottom's scrollRef
+export type ConversationScrollControlsProps = {
+  className?: string;
+  /** Additional bottom offset to avoid overlapping other UI elements */
+  bottomOffset?: number;
+};
+
+export const ConversationScrollControls = ({
+  className,
+  bottomOffset = 16,
+}: ConversationScrollControlsProps) => {
+  const { scrollRef, isAtBottom } = useStickToBottomContext();
+  const [isAtTop, setIsAtTop] = useState(true);
+
+  // Track scroll position to know if we're at the top
+  useEffect(() => {
+    const el = scrollRef.current;
+    if (!el) return;
+
+    const handleScroll = () => {
+      setIsAtTop(el.scrollTop <= 4);
+    };
+
+    // Initial check
+    handleScroll();
+    el.addEventListener('scroll', handleScroll, { passive: true });
+    return () => el.removeEventListener('scroll', handleScroll);
+  }, [scrollRef.current]);
+
+  const handleScrollToTop = useCallback(() => {
+    scrollRef.current?.scrollTo({ top: 0, behavior: 'smooth' });
+  }, [scrollRef]);
+
+  const handleScrollToBottom = useCallback(() => {
+    scrollRef.current?.scrollTo({ top: scrollRef.current.scrollHeight, behavior: 'smooth' });
+  }, [scrollRef]);
+
+  // Hide both buttons when content is not scrollable (at both top and bottom)
+  if (isAtTop && isAtBottom) return null;
+
+  return (
+    <div
+      className={cn(
+        'absolute right-4 flex flex-col gap-1.5 z-10 pointer-events-none [&_button]:pointer-events-auto',
+        className,
+      )}
+      style={{ bottom: bottomOffset }}
+    >
+      {!isAtTop && (
+        <button
+          className="p-1.5 rounded-full border border-border text-muted-foreground hover:text-foreground shadow-sm bg-background/90 backdrop-blur transition-colors hover:bg-muted"
+          onClick={handleScrollToTop}
+          title="Go to top"
+        >
+          <ArrowUpToLine size={14} />
+        </button>
+      )}
+      {!isAtBottom && (
+        <button
+          className="p-1.5 rounded-full border border-border text-muted-foreground hover:text-foreground shadow-sm bg-background/90 backdrop-blur transition-colors hover:bg-muted"
+          onClick={handleScrollToBottom}
+          title="Go to bottom"
+        >
+          <ArrowDownToLine size={14} />
+        </button>
+      )}
+    </div>
   );
 };
 
