@@ -178,7 +178,7 @@ export function ContentAppFrame({ onClose, isMain = true, onAdd }: ContentAppFra
             <Settings size={14} />
           </button>
           <button
-            className="flex items-center justify-center size-6 border border-border rounded hover:bg-muted shadow-sm hover:text-foreground shrink-0 transition-colors"
+            className="flex items-center justify-center size-6 border border-border rounded hover:bg-muted shadow-sm hover:text-foreground shrink-0 transition-colors mr-1"
             onClick={onClose}
             title="Close"
           >
