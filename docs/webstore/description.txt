@@ -1,0 +1,55 @@
+[English]
+
+⚡ Webpage Summary: Open-Source AI Summarization with Your Favorite Models and Methods! 🤖
+
+
+
+Try this open-source, single-purpose light extension to summarize the webpages in comfortable and secure way! 🚀 No complex features and cluttered interface, just one-click summarization. 📚
+
+Key Advantages:
+
+*   ✅ Simple & Easy: Focuses on one thing - summarizing webpages.
+*   🔓 Open Source on Github: Worry-free privacy,free, light, no login no serverside and runs entirely in your browser!  🛡️
+*   ⚙️ Fully Customizable: Configure your own AI provider, prompts, trigger method, and customized appearance. 🎛️
+
+
+-----------------------------------------------------------------------
+⏳repository: https://github.com/slow-groovin/webpage-summary
+📝quickstart: https://github.com/slow-groovin/webpage-summary/blob/main/README.md#31-quick-start
+🔑privacy policy: https://github.com/slow-groovin/webpage-summary/blob/main/docs/webstore/privacy.md
+
+[Chinese]
+
+⚡ 网页总结 Webpage Summary: 开源的网页AI总结, 用你喜欢的大模型和操作方式！ 🤖
+
+使用这个开源、单一职责(总结)的扩展，用最舒服和安全的方式总结你浏览的网页！ 🚀 没有复杂的功能和眼花缭乱的界面，只有毫不费力的一键总结。 📚
+
+主要优势：
+
+*   ✅ 简单易用：专注于一件事 - 总结网页。
+*   🔓 Github开源：隐私无忧, 开源免费, 轻量不臃肿, 没有登录注册和服务端, 完全在浏览器中运行! 🛡️
+*   ⚙️ 完全可定制：配置你自己的AI提供商、提示词、打开方式和定制外观。 🎛️
+
+-----------------------------------------------------------------------
+⏳项目地址: https://github.com/slow-groovin/webpage-summary
+📝入门指南: https://github.com/slow-groovin/webpage-summary/blob/main/docs/README_zh.md#31-quick-start
+🔑隐私协议: https://github.com/slow-groovin/webpage-summary/blob/main/docs/webstore/privacy.md
+
+
+
+[Traditional Chinese]
+
+⚡ 網頁摘要 Webpage Summary: 開源的網頁AI摘要, 用你喜歡的大模型和操作方式！ 🤖
+
+使用這個開源、單一職責(摘要)的擴充功能，用最舒服和安全的方式摘要你瀏覽的網頁！ 🚀 沒有複雜的功能和眼花撩亂的介面，只有毫不費力的一鍵摘要。 📚
+
+主要優勢：
+
+*   ✅ 簡單易用：專注於一件事 - 摘要網頁。
+*   🔓 Github開源：隱私無憂, 開源免費, 輕量不臃腫, 沒有登入註冊和伺服器端, 完全在瀏覽器中運行! 🛡️
+*   ⚙️ 完全可定制：配置你自己的AI提供商、提示詞、打開方式和定制外觀。 🎛️
+
+-----------------------------------------------------------------------
+⏳專案地址: https://github.com/slow-groovin/webpage-summary
+📝入門指南: https://github.com/slow-groovin/webpage-summary/blob/main/docs/README_zh.md#31-quick-start
+🔑隱私協議: https://github.com/slow-groovin/webpage-summary/blob/main/docs/webstore/privacy.md
