@@ -307,7 +307,7 @@ export function ModelEditor({
                 className="h-9 flex-1 rounded-md border bg-background px-3 text-sm shadow-sm outline-none focus-visible:ring-1 focus-visible:ring-ring"
                 id="model-name"
                 onChange={(event) => updateDraft('name', event.currentTarget.value)}
-                placeholder="DashScope Qwen"
+                placeholder="My Custom Model"
                 required
                 spellCheck={false}
                 value={draft.name}
@@ -328,7 +328,11 @@ export function ModelEditor({
                 onChange={(event) =>
                   updateDraft('baseURL', event.currentTarget.value)
                 }
-                placeholder={provider.defaultBaseURL}
+                placeholder={
+                  provider.id === 'openai-compatible'
+                    ? 'https://api.openai.com/v1'
+                    : provider.defaultBaseURL
+                }
                 spellCheck={false}
                 value={draft.baseURL}
               />
