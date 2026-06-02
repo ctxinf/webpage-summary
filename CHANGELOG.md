@@ -1,4 +1,28 @@
 # Changelog
+## [0.7.3] - 2026-06-01
+彻底的重构!
+主要功能:
+1. 全新的界面, 全面提升的用户体验
+2. 新增siderbar模式(在悬浮面板/侧边栏之间的切换)
+3. 字符串计数 -> token计数
+4. 更优化的ai providers设置, 增加支持response api
+5. 全新设计的设置方式
+
+更多:
+1. model config 支持自定义body
+2. 支持在model config页面获取 ai provider 的models列表
+3. token占用可视化面板
+
+
+依赖切换:
+1. vue3 -> react
+2. ai-sdk@4.x -> ai-sdk@6.x
+3. 自实现对话界面 -> ai-elements
+4. 自实现content<->background通信协议支撑对话 -> ai-sdk-ui + custom transport over connect API
+5. 字符串计数 -> token计数 (t带来额外的3MB bundle size)
+ 
+
+
 
 ## [0.6.2] - 2026-02-01
 feature: shadowRoot support for selectors in site customization setting. @linkecoding
