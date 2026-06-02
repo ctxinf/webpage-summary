@@ -3,7 +3,7 @@
     "message": "網頁摘要: AI 摘要|開源|隱私無虞"
   },
   "extDescription": {
-    "message": "(開源)網頁摘要外掛，可配置任意大模型 API/個人化 Prompt 範本，輕量無服務純外掛, 隱私無虞"
+    "message": "(開源)網頁摘要外掛，快捷 AI 摘要頁面，支援個人化提示詞/接入任意大模型 API，輕量無服務純外掛，隱私無虞 https://github.com/ctxinf/webpage-summary"
   },
   "Commad_Open_Panel_DESC": {
     "message": "開啟面板"

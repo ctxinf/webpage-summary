@@ -1,8 +1,8 @@
 {
-  "name": "webpage-summary-ext",
-  "description": "(open source) webpage summary with AI, customization of llm-provider/prompt-template, no worries abound privacy",
+  "name": "webpage-summary",
+  "description": "summarize text content with LLM Api, api/prompt customization, lightweight, no sub/service,  pure extension, no privacy worries",
   "private": false,
-  "version": "0.7.2",
+  "version": "0.7.3",
   "type": "module",
   "scripts": {
     "dev": "wxt",

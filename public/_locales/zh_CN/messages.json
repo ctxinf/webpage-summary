@@ -3,7 +3,7 @@
     "message": "网页总结: AI总结|开源|轻量|隐私无忧"
   },
   "extDescription": {
-    "message": "(开源)网页总结插件, 可配置任意大模型API/个性化Prompt模板, 轻量无服务纯插件, 隐私无忧"
+    "message": "(开源)网页总结插件, 快捷AI总结页面, 支持个性化提示词/接入任意大模型API, 轻量无服务纯插件, 隐私无忧 https://github.com/ctxinf/webpage-summary"
   },
   "Commad_Open_Panel_DESC": {
     "message": "打开面板"
