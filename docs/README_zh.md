@@ -65,7 +65,7 @@
 - ⚪ **简单纯粹**: 简单、轻量、没有登录、没有远程后台服务、隐私优先（无遥测或数据收集）。
 - ⚙ **配置选项**:
   - 🔧 自定义 LLM API（自带密钥）
-  - 📝 自定义 Prompt 模板
+  - 📝 定制 Prompt 模板
   - 📏 限制上下文长度
   - 🎛️ 多种触发方式：自动打开 / 悬浮球 / 右键菜单 / 快捷键 / 图标点击
   - ⚡ 自动开始总结 (启用/禁用)
@@ -83,7 +83,7 @@
 
 [![](/docs/img/firefox.svg) Firefox Addons](https://addons.mozilla.org/firefox/addon/webpage-summary/)
 
-或者手动下载安装 [Github Releases](https://github.com/slow-groovin/webpage-summary/releases)
+或者手动下载安装 [Github Releases](https://github.com/ctxinf/webpage-summary/releases)
 
 ## 3. 核心定位
 

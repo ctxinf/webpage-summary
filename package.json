@@ -1,6 +1,6 @@
 {
   "name": "webpage-summary",
-  "description": "summarize text content with LLM Api, api/prompt customization, lightweight, no sub/service,  pure extension, no privacy worries",
+  "description": "summarize text content with LLM Api, customized api/prompts, lightweight, no sub/service,  pure extension, no privacy worries",
   "private": false,
   "version": "0.7.3",
   "type": "module",

@@ -97,7 +97,7 @@ export function OptionsLayout() {
           <a
             aria-label="GitHub"
             className="grid size-8 shrink-0 place-items-center text-neutral-600 transition-colors hover:text-black focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
-            href="https://github.com/slow-groovin/webpage-summary"
+            href="https://github.com/ctxinf/webpage-summary"
             rel="noreferrer noopener"
             target="_blank"
             title="GitHub"

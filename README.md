@@ -86,7 +86,7 @@
 [![](/docs/img/firefox.svg) Firefox Addons](https://addons.mozilla.org/firefox/addon/webpage-summary/)
 
 
-or download from [Github Releases](https://github.com/slow-groovin/webpage-summary/releases) and manually install
+or download from [Github Releases](https://github.com/ctxinf/webpage-summary/releases) and manually install
 
 ## 3. Core Focus
 
