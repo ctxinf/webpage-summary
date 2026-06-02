@@ -1,5 +1,9 @@
 import { onMessage } from '@/lib/messaging';
 
+import { createLogger } from '@/lib/logger';
+
+const logger = createLogger('background:token-count-bg');
+
 export const INPUT_TOKEN_COUNT_MODEL = 'gpt-5';
 
 type Gpt5Tokenizer = typeof import('gpt-tokenizer/model/gpt-5');
@@ -22,14 +26,14 @@ export async function truncateByTokens(text: string, maxTokens: number): Promise
   const originalTokens = tokens.length;
 
   if (originalTokens <= maxTokens) {
-    console.log(`[TokenCount] No truncation needed: String length ${originalLength}, Tokens ${originalTokens}`);
+    logger.info(`[TokenCount] No truncation needed: String length ${originalLength}, Tokens ${originalTokens}`);
     return text;
   }
 
   const truncatedText = tokenizer.decode(tokens.slice(0, maxTokens));
   const truncatedLength = truncatedText.length;
 
-  console.log(`[TokenCount] Truncated: String length ${originalLength} -> ${truncatedLength}, Tokens ${originalTokens} -> ${maxTokens}`);
+  logger.info(`[TokenCount] Truncated: String length ${originalLength} -> ${truncatedLength}, Tokens ${originalTokens} -> ${maxTokens}`);
 
   return truncatedText;
 }

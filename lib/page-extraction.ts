@@ -1,5 +1,9 @@
 import { Readability } from '@mozilla/readability';
 import type { PageTextExtractMethod } from '@/constants/page-extraction';
+import { createLogger } from '@/lib/logger';
+
+const logger = createLogger('lib:page-extraction');
+
 import {
   findMatchingCustomization,
   loadSiteCustomization,
@@ -420,7 +424,7 @@ export async function extractWebpageContent(
   const customizations = await loadSiteCustomization();
   const url = sourceDocument.location ?? location;
   const matchedRule = findMatchingCustomization(url, customizations);
-  // console.debug('site custom:',url,matchedRule)s
+  // logger.debug('site custom:',url,matchedRule)s
 
   if (matchedRule) {
     return textsBySelectors(
@@ -472,7 +476,7 @@ export function textsBySelectors(
                 ?.querySelectorAll(shadowSelector)
                 .forEach(collectText);
             } catch {
-              console.warn(`Invalid shadow root selector: ${shadowSelector}`);
+              logger.warn(`Invalid shadow root selector: ${shadowSelector}`);
             }
           }
         });
@@ -480,7 +484,7 @@ export function textsBySelectors(
         sourceDocument.querySelectorAll(selector).forEach(collectText);
       }
     } catch {
-      console.warn(`Invalid selector: ${selector}`);
+      logger.warn(`Invalid selector: ${selector}`);
     }
   }
 

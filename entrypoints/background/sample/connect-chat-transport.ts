@@ -1,6 +1,10 @@
 import { createOpenAICompatible } from '@ai-sdk/openai-compatible';
 import { convertToModelMessages, streamText, type UIMessageChunk } from 'ai';
 import { browser } from 'wxt/browser';
+import { createLogger } from '@/lib/logger';
+
+const logger = createLogger('background:connect-chat-transport');
+
 import {
   CONNECT_CHAT_TRANSPORT_PORT,
   type ConnectChatTransportClientMessage,
@@ -9,7 +13,7 @@ import {
 } from '../../options/sample/connect-chat-transport/port-protocol';
 
 export function registerConnectChatTransportSample() {
-  console.debug('[ConnectChatTransport:bg] register sample listeners');
+  logger.debug('[ConnectChatTransport:bg] register sample listeners');
 
   browser.runtime.onConnect.addListener((port) => {
     if (port.name !== CONNECT_CHAT_TRANSPORT_PORT) {
@@ -164,5 +168,5 @@ function logBackground(
   event: string,
   detail?: Record<string, unknown>,
 ) {
-  console.debug('[ConnectChatTransport:bg]', requestId, event, detail ?? '');
+  logger.debug('[ConnectChatTransport:bg]', requestId, event, detail ?? '');
 }

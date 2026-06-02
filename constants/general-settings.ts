@@ -10,6 +10,13 @@ type GeneralSettingDefinition<T> = {
   storageKey: StorageItemKey;
 };
 
+export type LogLevel = 'debug' | 'info' | 'warn' | 'error' | 'silent';
+const LOG_LEVELS: Record<LogLevel, number> = { debug: 0, info: 1, warn: 2, error: 3, silent: 4 };
+
+export function isLogLevel(value: unknown): value is LogLevel {
+  return typeof value === 'string' && value in LOG_LEVELS;
+}
+
 function booleanSetting(
   storageKey: StorageItemKey,
   defaultValue: boolean,
@@ -41,6 +48,17 @@ function pageTextExtractMethodSetting(
     defaultValue,
     parse: (value, fallback) =>
       isPageTextExtractMethod(value) ? value : fallback,
+    storageKey,
+  };
+}
+
+function logLevelSetting(
+  storageKey: StorageItemKey,
+  defaultValue: LogLevel,
+): GeneralSettingDefinition<LogLevel> {
+  return {
+    defaultValue,
+    parse: (value, fallback) => (isLogLevel(value) ? value : fallback),
     storageKey,
   };
 }
@@ -89,6 +107,7 @@ export const GENERAL_SETTING_DEFINITIONS = {
     true,
   ),
   panelLayoutMode: stringSetting('local:panel-layout-mode', 'dialog'),
+  logLevel: logLevelSetting('local:log-level', 'info'),
 } as const;
 
 type GeneralSettingDefinitionMap = typeof GENERAL_SETTING_DEFINITIONS;

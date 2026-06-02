@@ -21,6 +21,10 @@ import {
 import { sendMessage as sendExtMessage } from '@/lib/messaging';
 import { getUiMessages } from '@/lib/i18n';
 
+import { createLogger } from '@/lib/logger';
+
+const logger = createLogger('popup:App');
+
 type ExtractResult =
   | { ok: true; title: string; url: string; text: string }
   | { ok: false; error?: string };
@@ -78,7 +82,7 @@ function App() {
           if (active) setIsContentPage(false);
         }
       } catch (e) {
-        console.warn('[popup] failed to query active tab', e);
+        logger.warn('[popup] failed to query active tab', e);
       }
     })();
     return () => {
@@ -97,35 +101,35 @@ function App() {
   };
 
   const handleCopyPage = async () => {
-    console.log('[popup] handleCopyPage clicked', { copying, activeTabId, isContentPage });
+    logger.info('[popup] handleCopyPage clicked', { copying, activeTabId, isContentPage });
     if (copying) {
-      console.log('[popup] already copying, skip');
+      logger.info('[popup] already copying, skip');
       return;
     }
     if (!activeTabId) {
-      console.warn('[popup] no active tab id');
+      logger.warn('[popup] no active tab id');
       toast.error(messages.popup.noActiveTab);
       return;
     }
     setCopying(true);
     try {
-      console.log('[popup] sending WEBPAGE_SUMMARY_EXTRACT_TEXT to tab', activeTabId);
+      logger.info('[popup] sending WEBPAGE_SUMMARY_EXTRACT_TEXT to tab', activeTabId);
       const result = (await browser.tabs.sendMessage(activeTabId, {
         type: 'WEBPAGE_SUMMARY_EXTRACT_TEXT',
       })) as ExtractResult | undefined;
-      console.log('[popup] extract result', result);
+      logger.info('[popup] extract result', result);
 
       if (!result?.ok || !('text' in result) || !result.text) {
-        console.warn('[popup] extract returned no text', result);
+        logger.warn('[popup] extract returned no text', result);
         toast.error(messages.popup.extractFailed);
         return;
       }
-      console.log('[popup] writing to clipboard, length=', result.text.length);
+      logger.info('[popup] writing to clipboard, length=', result.text.length);
       await navigator.clipboard.writeText(result.text);
-      console.log('[popup] clipboard write success');
+      logger.info('[popup] clipboard write success');
       toast.success(messages.popup.copySuccess);
     } catch (e) {
-      console.error('[popup] copy page failed', e);
+      logger.error('[popup] copy page failed', e);
       toast.error(`${messages.popup.copyFailed}: ${(e as Error)?.message ?? e}`);
     } finally {
       setCopying(false);
@@ -142,7 +146,7 @@ function App() {
       );
       window.close();
     } catch (e) {
-      console.error('[popup] invoke summary failed', e);
+      logger.error('[popup] invoke summary failed', e);
       toast.error(messages.popup.invokeSummaryFailed);
     }
   };

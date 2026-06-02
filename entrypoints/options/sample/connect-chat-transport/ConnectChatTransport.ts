@@ -1,5 +1,9 @@
 import type { ChatTransport, UIMessage, UIMessageChunk } from 'ai';
 import { browser } from 'wxt/browser';
+import { createLogger } from '@/lib/logger';
+
+const logger = createLogger('options:ConnectChatTransport');
+
 import {
   CONNECT_CHAT_TRANSPORT_PORT,
   type ConnectChatTransportClientMessage,
@@ -182,5 +186,5 @@ function logTransport(
   event: string,
   detail?: Record<string, unknown>,
 ) {
-  console.debug('[ConnectChatTransport]', requestId, event, detail ?? '');
+  logger.debug('[ConnectChatTransport]', requestId, event, detail ?? '');
 }

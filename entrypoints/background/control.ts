@@ -4,14 +4,18 @@ import { browser, type Browser } from 'wxt/browser';
 import { sleep } from 'radash';
 import { getUiMessages } from '@/lib/i18n';
 
+import { createLogger } from '@/lib/logger';
+
+const logger = createLogger('background:control');
+
 export function registerControlMessages() {
   onMessage('openOptionPage', async (msg) => {
-    console.debug('[openOptionPage]', msg.data);
+    logger.debug('[openOptionPage]', msg.data);
     return void browser.tabs.create({ url: msg.data });
   });
 
   onMessage('openPopupPage', async (msg) => {
-    console.debug('[openPopupPage]', msg.data);
+    logger.debug('[openPopupPage]', msg.data);
     const { query } = msg.data;
     browser.action.setPopup({
       popup: '/popup.html?' + query,
@@ -40,7 +44,7 @@ export async function activePageAndInvokeSummary(tab: Browser.tabs.Tab) {
         break;
       }
     } catch (e) {
-      console.warn('[activePageAndInvokeSummary] script execution failed', e);
+      logger.warn('[activePageAndInvokeSummary] script execution failed', e);
     }
   }
 
@@ -48,10 +52,10 @@ export async function activePageAndInvokeSummary(tab: Browser.tabs.Tab) {
     const settings = await loadGeneralSettings();
     const beginSummary = settings.enableAutoBeginSummaryByActionOrContextTrigger;
     sendMessage('invokeSummary', { beginSummary }, { tabId: tab.id }).catch(e => {
-      console.warn('[activePageAndInvokeSummary] sendMessage failed', e);
+      logger.warn('[activePageAndInvokeSummary] sendMessage failed', e);
     });
   } else {
-    console.error("Cannot find webpage-summary-entrance shadow root, check if extension is enabled on this page.");
+    logger.error("Cannot find webpage-summary-entrance shadow root, check if extension is enabled on this page.");
   }
 }
 
@@ -62,7 +66,7 @@ export async function addContextMenus() {
   await browser.contextMenus.removeAll();
 
   if (settings.enableContextMenuSummarizeThisPage) {
-    console.debug('[contextMenu] adding summarize-this-page');
+    logger.debug('[contextMenu] adding summarize-this-page');
     browser.contextMenus.create({
       id: 'summarize-this-page',
       title: messages.common.contextMenu.summarizeThisPage,
@@ -71,7 +75,7 @@ export async function addContextMenus() {
   }
 
   if (settings.enableContextMenuAddSelectionToChat) {
-    console.debug('[contextMenu] adding add-to-chat');
+    logger.debug('[contextMenu] adding add-to-chat');
     browser.contextMenus.create({
       id: 'add-to-chat',
       title: messages.common.contextMenu.addToChat,
@@ -90,7 +94,7 @@ export async function addContextMenus() {
 // Set up event listeners for context menu and commands click
 export function initializeControlHandlers() {
   browser.contextMenus.onClicked.addListener(async (info, tab) => {
-    console.debug('[contextMenu] onClicked, menuItemId:', info.menuItemId);
+    logger.debug('[contextMenu] onClicked, menuItemId:', info.menuItemId);
     if (info.menuItemId === 'summarize-this-page' && tab) {
       activePageAndInvokeSummary(tab);
     }
@@ -101,13 +105,13 @@ export function initializeControlHandlers() {
 
     if (info.menuItemId === 'add-to-chat' && tab?.id) {
       sendMessage('addContentToChatDialog', info.selectionText ?? '', { tabId: tab.id }).catch(e => {
-        console.warn('[contextMenu] addContentToChatDialog failed', e);
+        logger.warn('[contextMenu] addContentToChatDialog failed', e);
       });
     }
   });
 
   browser.commands.onCommand.addListener((command, tab) => {
-    console.debug('[command] received command:', command);
+    logger.debug('[command] received command:', command);
     if (command === 'COMMAND_INVOKE_SUMMARY' && tab) {
       activePageAndInvokeSummary(tab);
     }

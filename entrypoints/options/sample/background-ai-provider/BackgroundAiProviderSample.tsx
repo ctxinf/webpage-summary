@@ -1,6 +1,10 @@
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 
+import { createLogger } from '@/lib/logger';
+
+const logger = createLogger('options:BackgroundAiProviderSample');
+
 export function BackgroundAiProviderSample() {
   const [apiKey, setApiKey] = useState('');
 
@@ -14,7 +18,7 @@ export function BackgroundAiProviderSample() {
       apiKey: apiKey.trim(),
     });
 
-    console.log("call suc.",rs)
+    logger.info("call suc.",rs)
   }
 
   return (

@@ -2,6 +2,10 @@ import { createOpenAICompatible } from '@ai-sdk/openai-compatible';
 import { generateText } from 'ai';
 import { browser } from 'wxt/browser';
 
+import { createLogger } from '@/lib/logger';
+
+const logger = createLogger('background:background-ai-provider');
+
 export function registerBackgroundAiProviderSample() {
   browser.runtime.onMessage.addListener(
     (message: { type?: string; apiKey?: string }) => {
@@ -12,7 +16,7 @@ export function registerBackgroundAiProviderSample() {
       return requestBackgroundAiProviderSample(message.apiKey ?? '');
     },
   );
-  console.log("registerBackgroundAiProviderSample done.")
+  logger.info("registerBackgroundAiProviderSample done.")
 }
 
 async function requestBackgroundAiProviderSample(apiKey: string) {

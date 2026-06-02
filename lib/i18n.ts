@@ -1,3 +1,6 @@
+import { createLogger } from '@/lib/logger';
+
+const logger = createLogger('lib:i18n');
 export type UiLocale = 'en' | 'zh-CN' | 'zh-TW' | 'ja' | 'ko' | 'pt' | 'es' | 'fr' | 'de';
 
 export const UI_LOCALE_OPTIONS = [
@@ -1570,7 +1573,7 @@ export function getUiLocale() {
   const resolved = resolveUiLocale(browserLang);
   const finalLocale = override ?? resolved;
   
-  // console.log('[i18n Debug]', {
+  // logger.info('[i18n Debug]', {
   //   override,
   //   browserLang,
   //   resolved,

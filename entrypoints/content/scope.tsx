@@ -11,6 +11,10 @@ import {
 } from '@/lib/site-rules-storage';
 import { ContentEntrance } from './ContentEntrance';
 
+import { createLogger } from '@/lib/logger';
+
+const logger = createLogger('content:scope');
+
 type PingMessage = {
   type: 'WEBPAGE_SUMMARY_PING';
 };
@@ -26,10 +30,10 @@ function collectPageTextLength() {
 }
 
 async function mountSummaryBadge(ctx: ContentScriptContext) {
-  // console.log('[ContentScope] mountSummaryBadge running');
+  // logger.info('[ContentScope] mountSummaryBadge running');
   const hostId = 'webpage-summary-react-root';
   if (document.getElementById(hostId)) {
-    // console.log('[ContentScope] hostId already exists, skipping');
+    // logger.info('[ContentScope] hostId already exists, skipping');
     return;
   }
 
@@ -41,23 +45,23 @@ async function mountSummaryBadge(ctx: ContentScriptContext) {
     append: 'last',
     zIndex: 2147483647,
     onMount(container) {
-      // console.log('[ContentScope] UI container mounted, rendering React root');
+      // logger.info('[ContentScope] UI container mounted, rendering React root');
       const root = createRoot(container);
       root.render(createElement(ContentEntrance));
       return root;
     },
     onRemove(root) {
-      // console.log('[ContentScope] UI container unmounted');
+      // logger.info('[ContentScope] UI container unmounted');
       root?.unmount();
     },
   });
 
   ui.mount();
-  // console.log('[ContentScope] ui.mount() called');
+  // logger.info('[ContentScope] ui.mount() called');
 }
 
 export async function mountContentScope(ctx: ContentScriptContext) {
-  // console.log('[ContentScope] mountContentScope called');
+  // logger.info('[ContentScope] mountContentScope called');
   const messages = getUiMessages();
 
   const { whitelist, blacklist } = await loadSiteRules();
@@ -65,7 +69,7 @@ export async function mountContentScope(ctx: ContentScriptContext) {
   if (urlAllowed) {
     await mountSummaryBadge(ctx);
   } else {
-    // console.log('[ContentScope] site rules blocked UI mount for', location.hostname);
+    // logger.info('[ContentScope] site rules blocked UI mount for', location.hostname);
   }
 
   browser.runtime.onMessage.addListener((message: IncomingMessage) => {
@@ -87,7 +91,7 @@ export async function mountContentScope(ctx: ContentScriptContext) {
           ]);
 
           const matchedRule = findMatchingCustomization(location, siteCustomization);
-          // console.log('matchedRule',matchedRule)
+          // logger.info('matchedRule',matchedRule)
           const extracted = matchedRule
             ? textsBySelectors(
                 matchedRule.selectors,

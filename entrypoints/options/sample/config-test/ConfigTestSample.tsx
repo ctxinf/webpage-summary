@@ -6,6 +6,10 @@ import { toast } from 'sonner';
 import { migrateModelConfigs, runFullMigration } from '@/lib/migration';
 import { MODEL_CONFIGS_V2_STORAGE_KEY } from '@/constants/model-settings';
 
+import { createLogger } from '@/lib/logger';
+
+const logger = createLogger('options:ConfigTestSample');
+
 const compatibilityVersion = 20250224;
 
 const importSchema = z.object({
@@ -59,7 +63,7 @@ export function ConfigTestSample() {
       setImportLog(logs);
       toast.success('Successfully executed migration process!');
     } catch (e) {
-      console.error('Migration failed:', e);
+      logger.error('Migration failed:', e);
       toast.error('Migration Error: ' + String(e));
     } finally {
       setIsLoading(false);

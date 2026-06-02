@@ -4,6 +4,10 @@ import { sendMessage } from '@/lib/messaging';
 import { getUiMessages } from '@/lib/i18n';
 import type { TokenPiece } from '@/lib/token-count';
 
+import { createLogger } from '@/lib/logger';
+
+const logger = createLogger('content:TokenViewerModal');
+
 const TOKEN_COLORS = [
   'bg-red-200', 'bg-orange-200', 'bg-amber-200', 'bg-yellow-200', 
   'bg-lime-200', 'bg-green-200', 'bg-emerald-200', 'bg-teal-200', 
@@ -38,7 +42,7 @@ export function TokenViewerModal({ isOpen, onClose, textContent, maxInputTokens 
         setLoading(false);
       })
       .catch(e => {
-        console.error('Failed to split tokens:', e);
+        logger.error('Failed to split tokens:', e);
         if (active) setLoading(false);
       });
       

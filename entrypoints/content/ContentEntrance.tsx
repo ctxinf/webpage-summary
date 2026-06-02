@@ -11,6 +11,10 @@ import iconUrl from '@/assets/16.png';
 import { ThemeProvider } from '@/components/theme-provider';
 import { iso } from 'zod/v4-mini';
 
+import { createLogger } from '@/lib/logger';
+
+const logger = createLogger('content:ContentEntrance');
+
 export function ContentEntrance() {
   const [enableFloatingBall, setEnableFloatingBall] = useWxtStorage<boolean>(
     'local:enable-floating-ball',
@@ -75,7 +79,7 @@ export function ContentEntrance() {
   }, []);
 
   const shadowHost = typeof document !== 'undefined' ? document.querySelector('webpage-summary-entrance') as HTMLElement | null : null;
-  // console.log('[ContentEntrance] document.querySelector("webpage-summary-entrance"):', shadowHost);
+  // logger.info('[ContentEntrance] document.querySelector("webpage-summary-entrance"):', shadowHost);
 
   return (
     <ThemeProvider container={shadowHost}>

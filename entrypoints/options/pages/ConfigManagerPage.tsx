@@ -8,6 +8,10 @@ import { Switch } from '@/components/ui/switch';
 import { toast } from 'sonner';
 import { MODEL_CONFIGS_V2_STORAGE_KEY } from '@/constants/model-settings';
 
+import { createLogger } from '@/lib/logger';
+
+const logger = createLogger('options:ConfigManagerPage');
+
 const compatibilityVersion = 20250224;
 
 const importSchema = z.object({
@@ -68,7 +72,7 @@ export function ConfigManagerPage() {
       };
 
       // TODO: remove this debug log later
-      console.log('Exported Data Object:', data);
+      logger.info('Exported Data Object:', data);
 
       const jsonString = JSON.stringify(data);
       // UTF-8 friendly base64 encoding
@@ -79,7 +83,7 @@ export function ConfigManagerPage() {
         description: 'Configuration copied to clipboard. You can now paste it in another extension instance.',
       });
     } catch (e) {
-      console.error('Export failed:', e);
+      logger.error('Export failed:', e);
       toast.error('Export Error', { description: String(e) });
     } finally {
       setIsLoading(false);
@@ -145,7 +149,7 @@ export function ConfigManagerPage() {
       setDiffItems(newDiffs);
       toast.info(messages.exportImport.reviewImport);
     } catch (e) {
-      console.error('Import failed:', e);
+      logger.error('Import failed:', e);
       toast.error('Import Error', { description: String(e) });
     } finally {
       setIsLoading(false);
@@ -175,7 +179,7 @@ export function ConfigManagerPage() {
       
       setDiffItems(null);
     } catch (e) {
-      console.error('Import confirmation failed:', e);
+      logger.error('Import confirmation failed:', e);
       toast.error('Import Error', { description: String(e) });
     } finally {
       setIsLoading(false);
@@ -191,7 +195,7 @@ export function ConfigManagerPage() {
           description: messages.exportImport.resetSuccess,
         });
       } catch (e) {
-        console.error('Reset failed:', e);
+        logger.error('Reset failed:', e);
         toast.error('Reset Error', { description: String(e) });
       } finally {
         setIsLoading(false);

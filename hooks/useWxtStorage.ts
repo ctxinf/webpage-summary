@@ -1,6 +1,10 @@
 import { useEffect, useState, useRef, useCallback } from 'react';
 import { storage, type StorageItemKey } from '#imports';
 
+import { createLogger } from '@/lib/logger';
+
+const logger = createLogger('hooks:useWxtStorage');
+
 /**
  * A React hook to read, write, and synchronize state with WXT storage.
  * Supports cross-context updates automatically.
@@ -37,7 +41,7 @@ export default function useWxtStorage<T>(key: StorageItemKey | null | undefined,
           setIsLoaded(true);
         }
       } catch (error) {
-        console.error(`[useWxtStorage] Failed to get storage key "${key}":`, error);
+        logger.error(`[useWxtStorage] Failed to get storage key "${key}":`, error);
         if (active) {
           setIsLoaded(true);
         }
@@ -77,7 +81,7 @@ export default function useWxtStorage<T>(key: StorageItemKey | null | undefined,
       try {
         await storage.setItem(key as StorageItemKey, resolvedValue);
       } catch (error) {
-        console.error(`[useWxtStorage] Failed to set storage key "${key}":`, error);
+        logger.error(`[useWxtStorage] Failed to set storage key "${key}":`, error);
       }
     },
     [key, value]

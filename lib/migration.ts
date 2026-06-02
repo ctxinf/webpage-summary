@@ -1,5 +1,9 @@
 import { MODEL_PROVIDER_DEFINITIONS } from '@/constants/model-settings';
 
+import { createLogger } from '@/lib/logger';
+
+const logger = createLogger('lib:migration');
+
 export function migrateModelConfigs(models: any[]): { models: any[], updated: boolean } {
   let updated = false;
 
@@ -176,7 +180,7 @@ export async function runFullMigration(): Promise<string[]> {
     
   } catch (error) {
     logs.push(`Migration error: ${String(error)}`);
-    console.error('Migration error:', error);
+    logger.error('Migration error:', error);
   }
 
   return logs;

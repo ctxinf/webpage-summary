@@ -8,6 +8,10 @@ import {
 } from '@/constants/model-settings';
 import type { PromptConfigItem } from '@/constants/prompt-settings';
 
+import { createLogger } from '@/lib/logger';
+
+const logger = createLogger('content:ModelPromptSelector');
+
 interface ModelPromptSelectorProps {
   models: ModelConfigItem[];
   prompts: PromptConfigItem[];
@@ -64,7 +68,7 @@ export function ModelPromptSelector({
           value={currentModelId}
           onChange={(e) => {
             onModelChange(e.target.value);
-            // console.log('[ModelPromptSelector] Switched model to', e.target.value);
+            // logger.info('[ModelPromptSelector] Switched model to', e.target.value);
           }}
         >
           {models.map((m) => (
@@ -89,7 +93,7 @@ export function ModelPromptSelector({
           value={currentPromptId}
           onChange={(e) => {
             onPromptChange(e.target.value);
-            // console.log('[ModelPromptSelector] Switched prompt to', e.target.value);
+            // logger.info('[ModelPromptSelector] Switched prompt to', e.target.value);
           }}
         >
           {prompts.map((p) => (

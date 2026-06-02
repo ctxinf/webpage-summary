@@ -14,6 +14,10 @@ import type { PromptConfigItem } from '@/constants/prompt-settings';
 import type { GeneralSettings } from '@/constants/general-settings';
 import { getUiMessages } from '@/lib/i18n';
 
+import { createLogger } from '@/lib/logger';
+
+const logger = createLogger('content:useContentApp');
+
 export function useContentApp() {
   const messagesI18n = getUiMessages();
   const [models, setModels] = useState<ModelConfigItem[]>([]);
@@ -58,7 +62,7 @@ export function useContentApp() {
   useEffect(() => {
     let active = true;
     async function init() {
-      // console.log('[useContentApp] Initializing...');
+      // logger.info('[useContentApp] Initializing...');
       await seedDefaultPromptIfNeeded();
       const [modelSettings, promptSettings, generalSettings] = await Promise.all([
         loadModelSettings(),
@@ -75,7 +79,7 @@ export function useContentApp() {
       setSettings(generalSettings);
       setShowBottom(generalSettings.enableChatInputBox);
 
-      // console.log('[useContentApp] Extracting page content...');
+      // logger.info('[useContentApp] Extracting page content...');
       const extracted = await extractWebpageContent(generalSettings.pageTextExtractMethod, document);
       if (!active) return;
       if (extracted) {
@@ -84,17 +88,17 @@ export function useContentApp() {
           .then((count) => {
             if (active) setPageContentTokenCount(count);
           })
-          .catch((e) => console.error('Failed to count tokens', e));
+          .catch((e) => logger.error('Failed to count tokens', e));
       }
 
-      /* console.log('[useContentApp] Init finished.', {
+      /* logger.info('[useContentApp] Init finished.', {
         models: modelSettings.models,
         prompts: promptSettings.prompts,
         extracted,
       }); */
 
       if (generalSettings.enableAutoBeginSummary) {
-        // console.log('[useContentApp] Auto trigger summarize by settings is enabled');
+        // logger.info('[useContentApp] Auto trigger summarize by settings is enabled');
         setAutoSummarizePending(true);
       }
     }
@@ -107,7 +111,7 @@ export function useContentApp() {
   // External trigger (e.g. popup "summarize" button)
   useEffect(() => {
     const handleBegin = () => {
-      // console.log('[useContentApp] External WEBPAGE_SUMMARY_BEGIN received');
+      // logger.info('[useContentApp] External WEBPAGE_SUMMARY_BEGIN received');
       setAutoSummarizePending(true);
     };
     window.addEventListener('WEBPAGE_SUMMARY_BEGIN', handleBegin);
@@ -189,11 +193,11 @@ export function useContentApp() {
 
     const texts = await getContextMessageTexts();
     if (!texts) {
-      console.warn('[useContentApp] Missing prompt, content, or settings');
+      logger.warn('[useContentApp] Missing prompt, content, or settings');
       return;
     }
 
-    // console.log('[useContentApp] Triggering summarize...');
+    // logger.info('[useContentApp] Triggering summarize...');
 
     setMessages([
       {
@@ -229,7 +233,7 @@ export function useContentApp() {
       toast.success(messagesI18n.popup.copySuccess);
     } catch (err) {
       toast.error(messagesI18n.popup.copyFailed);
-      console.error('Failed to copy messages', err);
+      logger.error('Failed to copy messages', err);
     }
   };
 

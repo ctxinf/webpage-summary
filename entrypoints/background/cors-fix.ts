@@ -82,6 +82,10 @@
 
 import { browser,  } from 'wxt/browser';
 
+import { createLogger } from '@/lib/logger';
+
+const logger = createLogger('background:cors-fix');
+
 /**
  * Stable rule ID for the CORS fix rule.
  * Must not collide with other dynamic rules in this extension.
@@ -177,7 +181,7 @@ export async function setupCorsFixRule() {
       addRules: [rule],
     });
 
-    console.log(
+    logger.info(
       '[cors-fix] Response CORS headers rule registered via declarativeNetRequest',
       '(rule id:', CORS_FIX_RULE_ID, ', origin:', extensionOrigin, ')',
     );
@@ -185,6 +189,6 @@ export async function setupCorsFixRule() {
     // Non-fatal: without this rule the extension still works when the user has
     // "On all sites" access. It only fails when access is restricted to
     // specific sites. Log and continue rather than crashing the background.
-    console.error('[cors-fix] Failed to register CORS fix rule:', err);
+    logger.error('[cors-fix] Failed to register CORS fix rule:', err);
   }
 }

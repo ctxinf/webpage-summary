@@ -7,28 +7,32 @@ import { setupOnInstallHook } from './onInstall';
 import { registerControlMessages, addContextMenus, initializeControlHandlers } from './control';
 import { setupCorsFixRule } from './cors-fix';
 
+import { createLogger } from '@/lib/logger';
+
+const logger = createLogger('background:index');
+
 export default defineBackground(() => {
-  console.log('Hello background!', { id: browser.runtime.id });
+  logger.info('Hello background!', { id: browser.runtime.id });
 
   function seedPromptLibrary() {
     seedDefaultPromptIfNeeded().catch((error) => {
-      console.error('Failed to create initial prompt.', error);
+      logger.error('Failed to create initial prompt.', error);
     });
   }
 
   setupOnInstallHook();
   seedPromptLibrary();
-  setupCorsFixRule().catch((err) => console.error('Failed to setup CORS fix rule:', err));
+  setupCorsFixRule().catch((err) => logger.error('Failed to setup CORS fix rule:', err));
   registerAiSdkConnectBridge();
   registerTokenCountMessages();
   registerControlMessages();
-  addContextMenus().catch((err) => console.error('Failed to setup context menus:', err));
+  addContextMenus().catch((err) => logger.error('Failed to setup context menus:', err));
   initializeControlHandlers();
 
   if (ENABLE_SAMPLES) {
     Promise.all([
       import('./sample/background-ai-provider').then((m) => m.registerBackgroundAiProviderSample()),
       import('./sample/connect-chat-transport').then((m) => m.registerConnectChatTransportSample()),
-    ]).catch((err) => console.error('Failed to load samples:', err));
+    ]).catch((err) => logger.error('Failed to load samples:', err));
   }
 });
