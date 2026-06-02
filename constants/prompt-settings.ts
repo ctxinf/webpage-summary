@@ -63,13 +63,11 @@ const EN_PRESETS: Record<PromptPresetKey, PromptPreset> = {
   basic: {
     key: 'basic',
     name: 'Page summary',
-    systemMessage: `You summarize one webpage so the user can understand it quickly.
-1. Start with what the page is.
-2. Be concise and clear instead of only retelling.
-3. Reply in [{{summaryLanguage}}], regardless of the input language.
-4. Return raw Markdown, not a Markdown code block.
-5. Keep the first summary under 1000 words.
-6. If the user asks follow-up questions after the page input, chat with them instead of repeating the summary.`,
+    systemMessage: `Provide a clear and concise summary of the webpage to help the user understand its content quickly.
+1. Start with a brief overview of the page's main topic.
+2. Synthesize the key information rather than simply repeating it.
+3. Always reply in [{{summaryLanguage}}], regardless of the source language.
+4. If the user asks follow-up questions, engage naturally instead of repeating the summary.`,
     userMessage: `Webpage URL:
 <Webpage URL>{{articleUrl}}</Webpage URL>
 
@@ -79,18 +77,17 @@ Webpage content:
   brief: {
     key: 'brief',
     name: 'Brief summary',
-    systemMessage: `Summarize the webpage into an easy-to-scan answer.
-1. Capture the main points and the page purpose.
-2. Avoid unnecessary jargon.
-3. Reply in [{{summaryLanguage}}].
-4. Return raw Markdown, not a Markdown code block.`,
+    systemMessage: `Provide a highly scannable summary of the webpage.
+1. Highlight the main points and the overall purpose of the page.
+2. Avoid unnecessary jargon or complex terminology.
+3. Always reply in [{{summaryLanguage}}].`,
     userMessage: `<PageContent>{{textContent}}</PageContent>`,
   },
   simplify: {
     key: 'simplify',
     name: 'Simplify',
     systemMessage:
-      'Write a rough but generally correct and easy-to-understand summary in [{{summaryLanguage}}].',
+      'Provide a simplified and easy-to-understand summary of the content in [{{summaryLanguage}}], focusing on the core message.',
     userMessage: `<content>{{textContent}}</content>`,
   },
 };
