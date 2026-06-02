@@ -81,7 +81,7 @@ export function TokenViewerModal({ isOpen, onClose, textContent, maxInputTokens 
         ) : (
           pieces.map((p, i) => {
             const isExcluded = i >= sliderValue;
-            const colorClass = TOKEN_COLORS[p.id % TOKEN_COLORS.length];
+            const colorClass = TOKEN_COLORS[(i * 7) % TOKEN_COLORS.length];
             return (
               <span 
                 key={i} 

@@ -207,9 +207,7 @@ export function ContentAppFrame({ onClose, isMain = true, onAdd }: ContentAppFra
           </div>
           <div className="flex items-center gap-1 pointer-events-none [&>*]:pointer-events-auto">
             {messages.length > 0 && !isBusy && (
-              <div className="px-1.5 py-0.5 bg-zinc-300/80 backdrop-blur-md rounded-md text-[10px] text-zinc-600 font-mono tracking-tight flex items-center gap-1 leading-tight">
-                <UsageDisplay messages={messages} currentModel={currentModel} />
-              </div>
+              <UsageDisplay messages={messages} currentModel={currentModel} />
             )}
             {hasMessages && !isBusy && (
               <button

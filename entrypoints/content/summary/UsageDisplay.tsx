@@ -21,7 +21,7 @@ export function UsageDisplay({ messages, currentModel }: UsageDisplayProps) {
     }
   }
 
-  if (totalInput === 0 && totalOutput === 0) return <span>Ready</span>;
+  if (totalInput === 0 && totalOutput === 0) return null;
 
   const rawInput = totalInput - totalCached;
 
@@ -45,10 +45,10 @@ export function UsageDisplay({ messages, currentModel }: UsageDisplayProps) {
     `    ↓out: ${totalOutput} ${priceUnit}${formatCost(outputCost)}`;
 
   return (
-    <span title={hoverText} className="cursor-help flex items-center gap-1.5">
+    <div title={hoverText} className="px-1.5 py-0.5 bg-zinc-300/80 backdrop-blur-md rounded-md text-[10px] text-zinc-600 font-mono tracking-tight flex items-center gap-1.5 leading-tight">
       <span>↑{totalInput}</span>
       <span>↓{totalOutput}</span>
       {totalCost > 0 && <span>{priceUnit}{formatCost(totalCost)}</span>}
-    </span>
+    </div>
   );
 }
