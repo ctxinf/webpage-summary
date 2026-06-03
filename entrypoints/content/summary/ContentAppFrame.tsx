@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { browser } from 'wxt/browser';
 import { usePanel } from '@/components/container/PanelContext';
+import useWxtStorage from '@/hooks/useWxtStorage';
 import { sendMessage as sendExtMessage } from '@/lib/messaging';
 import {
   Settings,
@@ -59,6 +60,10 @@ export function ContentAppFrame({ onClose, isMain = true, onAdd }: ContentAppFra
   const uiMessages = getUiMessages();
   const { mode, setMode } = usePanel();
   const [isTokenViewerOpen, setIsTokenViewerOpen] = useState(false);
+  const [enableCreateNewPanelButton] = useWxtStorage<boolean>(
+    'local:enable-create-new-panel-button',
+    false
+  );
 
   const {
     messages,
@@ -152,7 +157,7 @@ export function ContentAppFrame({ onClose, isMain = true, onAdd }: ContentAppFra
         )}
 
         <div className="flex items-center gap-0.5 text-zinc-500 dark:text-zinc-300 justify-end shrink-0 h-full">
-          {mode !== 'sidebar' && (
+          {mode !== 'sidebar' && enableCreateNewPanelButton && (
             <button
               className="flex items-center justify-center border border-border rounded size-6 hover:bg-muted shadow-sm shrink-0 transition-colors hover:text-foreground"
               title="Add"
@@ -320,7 +325,7 @@ export function ContentAppFrame({ onClose, isMain = true, onAdd }: ContentAppFra
                 onChange={(e) => setInputText(e.target.value)}
                 value={inputText}
                 placeholder="Type your message here... Enter to send, Shift+Enter to insert new line."
-                className="bg-background min-h-[60px]"
+                className="bg-background min-h-8"
               />
             </PromptInputBody>
             <PromptInputFooter>
