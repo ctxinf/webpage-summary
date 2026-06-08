@@ -3,7 +3,7 @@
     "message": "Webpage Summary - AI|オープンソース|軽量|プライバシー保護"
   },
   "extDescription": {
-    "message": "(オープンソース) Webページ要約拡張機能、AIでページを素早く要約。プロンプトのカスタマイズ/任意のLLM API接続をサポート。軽量、サブスク不要の純粋な拡張機能でプライバシーを保護。 https://github.com/ctxinf/webpage-summary"
+    "message": "(オープンソース) WebページのAI要約、軽量、カスタマイズ可能、BYOK、サブスクなし。"
   },
   "Commad_Open_Panel_DESC": {
     "message": "(現在のページで) 要約パネルを開く/隠す"

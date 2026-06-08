@@ -3,7 +3,7 @@
     "message": "Webpage Summary - IA|OpenSource|Léger|Confidentialité"
   },
   "extDescription": {
-    "message": "(OpenSource) Extension de résumé de pages web, résumé rapide de page par IA, prend en charge les prompts personnalisables/toute API LLM, léger, sans abonnement, extension pure, protège la vie privée. https://github.com/ctxinf/webpage-summary"
+    "message": "(OpenSource) Résumé d'IA pour page web, léger, personnalisable, BYOK sans abonnement."
   },
   "Commad_Open_Panel_DESC": {
     "message": "Ouvrir/masquer le panneau de résumé sur la page actuelle"

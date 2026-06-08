@@ -3,7 +3,7 @@
     "message": "Webpage Summary- AI|OpenSource|Light|Privacy"
   },
   "extDescription": {
-    "message": "(OpenSource) Webpage summary extension, quick AI page summary, customizable prompts/any LLM API, lightweight, no subscriptions, pure extension, privacy protected https://github.com/ctxinf/webpage-summary"
+    "message": "(OpenSource) AI summary for webpage, lightweight, customizable, BYOK no subscriptions. "
   },
   "Commad_Open_Panel_DESC": {
     "message": "Open summary panel"
