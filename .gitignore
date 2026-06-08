@@ -1,3 +1,4 @@
+reference
 # Logs
 logs
 *.log
@@ -9,7 +10,6 @@ lerna-debug.log*
 
 node_modules
 .output
-.doc
 stats.html
 stats-*.json
 .wxt
@@ -25,6 +25,5 @@ web-ext.config.ts
 *.njsproj
 *.sln
 *.sw?
-
-.env
-
+.agents
+.antigravitycli/

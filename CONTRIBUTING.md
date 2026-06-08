@@ -39,5 +39,5 @@
 ## dev locally
 ```sh
 cp web-ext.config.ts.exmaple web-ext.config.ts
-bun install
-bun run dev
+npm install
+npm run dev

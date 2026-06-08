@@ -1,0 +1,11 @@
+{
+  "extStoreName": {
+    "message": "Webpage Summary - IA|OpenSource|Leve|Privacidade"
+  },
+  "extDescription": {
+    "message": "(OpenSource) Extensão de resumo de páginas da web, resumo rápido de página por IA, suporta prompts personalizáveis/qualquer API LLM, leve, sem assinaturas, extensão pura, protege a privacidade. https://github.com/ctxinf/webpage-summary"
+  },
+  "Commad_Open_Panel_DESC": {
+    "message": "Abrir/ocultar painel de resumo na página atual"
+  }
+}

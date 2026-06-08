@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=440, initial-scale=1.0">
+  <title>Promo Small Tile</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@500;700;900&display=swap');
+
+    body {
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      background-color: #e5e7eb;
+      font-family: 'Inter', -apple-system, sans-serif;
+    }
+
+    /* 如果你需要输出真正的 440x280，可以保持这个尺寸。
+       由于浏览器原生对 3D 变换元素的截图会产生抗锯齿模糊，
+       我们在下面的截图上使用了 4 倍超采样技术（Super Sampling）。
+    */
+    .promo-container {
+      width: 440px;
+      height: 280px;
+      background: linear-gradient(135deg, #ffffff 0%, #f3f4f6 100%);
+      position: relative;
+      overflow: hidden;
+      padding: 24px;
+      box-sizing: border-box;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+      display: flex;
+      flex-direction: column;
+    }
+
+    .glow-1 {
+      position: absolute;
+      top: -50px;
+      left: -50px;
+      width: 250px;
+      height: 250px;
+      background: radial-gradient(circle, rgba(139,92,246,0.12) 0%, rgba(255,255,255,0) 70%);
+      z-index: 1;
+    }
+
+    .glow-2 {
+      position: absolute;
+      bottom: -50px;
+      right: -50px;
+      width: 300px;
+      height: 300px;
+      background: radial-gradient(circle, rgba(59,130,246,0.15) 0%, rgba(255,255,255,0) 70%);
+      z-index: 1;
+    }
+
+    .content-layer {
+      position: relative;
+      z-index: 2;
+      width: 100%;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .header {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 28px;
+      font-weight: 900;
+      color: #111827;
+      letter-spacing: -0.04em;
+      line-height: 1.1;
+      width: 100%;
+      z-index: 3;
+    }
+
+    .header svg {
+      width: 28px;
+      height: 28px;
+      fill: #111827;
+      flex-shrink: 0;
+    }
+
+    .features {
+      list-style: none;
+      padding: 0;
+      margin: 24px 0 0 -20px;
+      display: flex;
+      flex-direction: column;
+      gap: 22px;
+      z-index: 3;
+    }
+
+    .features li {
+      font-size: 16px;
+      font-weight: 700;
+      color: #374151;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .features li::before {
+      content: "";
+      display: block;
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: linear-gradient(90deg, #3b82f6, #8b5cf6);
+    }
+
+    .screenshot-wrapper {
+      position: absolute;
+      top: 70px;
+      right: 30px; 
+      /* 让截图明显变大 */
+      width: 300px; 
+      height: 240px; 
+      z-index: 2;
+    }
+
+    /* 
+       魔法抗锯齿超采样技巧：
+       让图片放大 4 倍渲染 (1200px)，然后再用 scale(0.25) 缩小回 300px。
+    */
+    .screenshot-wrapper img {
+      width: 1200px; /* 300px * 4 */
+      height: auto;
+      border-radius: 32px; /* 8px * 4 */
+      border: 4px solid rgba(0, 0, 0, 0.08); 
+      box-shadow: -40px 60px 100px rgba(140, 0, 255, 0.12); 
+      
+      transform-origin: top left;
+      transform: scale(0.24) perspective(3000px) rotateY(-20deg);
+      
+      display: block;
+      image-rendering: high-quality;
+    }
+  </style>
+</head>
+<body>
+  <div class="promo-container">
+    <div class="glow-1"></div>
+    <div class="glow-2"></div>
+    
+    <div class="content-layer">
+      <div class="header">
+        <svg viewBox="0 0 24 24">
+          <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/>
+        </svg>
+        ctxinf/webpage-summary
+      </div>
+      
+      <ul class="features">
+        <li>ai summary</li>
+        <li>lightweight</li>
+        <li>BYOK   </li>
+        <li>cus prompts</li>
+      </ul>
+    </div>
+
+    <div class="screenshot-wrapper">
+      <img src="screenshot.png" alt="App Screenshot">
+    </div>
+  </div>
+</body>
+</html>

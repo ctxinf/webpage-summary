@@ -1,0 +1,8 @@
+{
+  "headed": true,
+  "profile": "./.wxt/browser-data",
+  "extensions":[
+    "./.output/chrome-mv3-dev"
+  ]
+
+}

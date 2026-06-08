@@ -1,38 +1,27 @@
-import { usePromptConfigStorage } from "@/src/composables/prompt";
-import { presetPrompts } from "@/src/presets/prompts";
-import { browser, Browser } from "wxt/browser";
-import { storage } from "#imports";
+import { browser } from 'wxt/browser';
+import { storage } from '#imports';
+import { MODEL_CONFIGS_V2_STORAGE_KEY, MODEL_PROVIDER_DEFINITIONS } from '@/constants/model-settings';
+import { migrateModelConfigs, runFullMigration } from '@/lib/migration';
 
-export function onInstallHook(detail: Browser.runtime.InstalledDetails) {
-  addDefaultPrompt()
-  openWelcomeOnFirstInstall()
-}
+import { createLogger } from '@/lib/logger';
 
+const logger = createLogger('background:onInstall');
 
-async function addDefaultPrompt() {
-  const { createItem, listItem } = usePromptConfigStorage()
-  listItem().then((res) => {
-    if (res.length === 0) {
-      const [sys, user] = presetPrompts['basic']
-      createItem({
-        id: '',
-        name: "Sample",
-        systemMessage: sys.content as string,
-        userMessage: user.content as string,
-        at: Date.now()
-      })
+export function setupOnInstallHook() {
+  browser.runtime.onInstalled.addListener(async (details) => {
+    if (details.reason === 'install') {
+      // First install logic if needed
+    } else if (details.reason === 'update') {
+      await handleExtensionUpdate(details.previousVersion);
     }
-  })
-
+  });
 }
 
-
-async function openWelcomeOnFirstInstall() {
-  const isFirstInstall = !(await storage.getItem('local:is-first-install'))
-  if (isFirstInstall) {
-    storage.setItem('local:is-first-install', true)
-    browser.tabs.create({ url: '/options.html#/welcome' })
+async function handleExtensionUpdate(previousVersion?: string) {
+  try {
+    const logs = await runFullMigration();
+    logger.info('Migration during extension update completed:', logs);
+  } catch (err) {
+    logger.error('Failed to run migration during update:', err);
   }
-
-
 }

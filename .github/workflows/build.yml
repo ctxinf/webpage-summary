@@ -17,30 +17,47 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - uses: oven-sh/setup-bun@v1
-        with:
-          bun-version: latest
-
       - uses: actions/setup-node@v4
         with:
           node-version: 20
 
       - name: Install dependencies
-        run: bun install
+        run: npm install
         working-directory: .
 
       - name: Zip extensions
         run: |
-          bun run zip
-          bun run zip:edge
-          bun run zip:firefox
+          npm run zip
+          npm run zip:edge
+          npm run zip:firefox
         working-directory: .
+
+      - name: Detect prerelease tag
+        id: check_prerelease
+        if: startsWith(github.ref, 'refs/tags/')
+        run: |
+          if [[ "${{ github.ref_name }}" =~ ^v?[0-9]+\.[0-9]+\.[0-9]+-.+ ]]; then
+            echo "is_prerelease=true" >> $GITHUB_OUTPUT
+          else
+            echo "is_prerelease=false" >> $GITHUB_OUTPUT
+          fi
 
       - name: Create Release
         id: create_release
         uses: softprops/action-gh-release@v2
-        if: startsWith(github.ref, 'refs/tags/')
+        if: startsWith(github.ref, 'refs/tags/') && steps.check_prerelease.outputs.is_prerelease == 'false'
         with:
+          files: |
+            .output/*-chrome.zip
+            .output/*-edge.zip
+            .output/*-firefox.zip
+
+      - name: Create Prerelease
+        id: create_prerelease
+        uses: softprops/action-gh-release@v2
+        if: startsWith(github.ref, 'refs/tags/') && steps.check_prerelease.outputs.is_prerelease == 'true'
+        with:
+          prerelease: true
           files: |
             .output/*-chrome.zip
             .output/*-edge.zip

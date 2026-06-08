@@ -1,0 +1,11 @@
+{
+  "extStoreName": {
+    "message": "웹페이지 요약 - AI|오픈소스|경량|개인정보 보호"
+  },
+  "extDescription": {
+    "message": "(오픈소스) 웹페이지 요약 확장 프로그램, 빠른 AI 페이지 요약, 사용자 정의 프롬프트/모든 LLM API 지원, 가볍고 구독이 필요 없는 순수 확장 프로그램, 개인정보를 보호합니다. https://github.com/ctxinf/webpage-summary"
+  },
+  "Commad_Open_Panel_DESC": {
+    "message": "(현재 페이지에서) 요약 패널 열기/숨기기"
+  }
+}

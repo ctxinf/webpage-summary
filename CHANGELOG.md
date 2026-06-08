@@ -1,4 +1,29 @@
 # Changelog
+## [0.7.3] - 2026-06-01
+Complete refactoring!
+Main features:
+1. Brand new UI, comprehensively improved user experience
+2. Added sidebar mode (switching between floating panel and sidebar)
+3. String counting -> token counting
+4. More optimized AI providers settings, added support for response APIs
+5. Completely redesigned settings interface
+
+More:
+1. Model config supports custom body
+2. Support for fetching AI provider's models list on the model config page
+3. Token usage visualization panel
+
+
+Dependency changes:
+1. vue3 -> react
+2. ai-sdk@4.x -> ai-sdk@6.x
+3. Self-implemented chat UI -> ai-elements
+4. Self-implemented content<->background communication protocol supporting chat -> ai-sdk-ui + custom transport over connect API
+5. String counting -> token counting (brings an extra 3MB bundle size)
+ 
+
+
+
 ## [0.6.2] - 2026-02-01
 feature: shadowRoot support for selectors in site customization setting. @linkecoding
 

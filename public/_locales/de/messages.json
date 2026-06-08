@@ -1,0 +1,11 @@
+{
+  "extStoreName": {
+    "message": "Webpage Summary - KI|OpenSource|Leicht|Datenschutz"
+  },
+  "extDescription": {
+    "message": "(OpenSource) Webseiten-Zusammenfassungs-Erweiterung, schnelle KI-Seitenzusammenfassung, unterstützt anpassbare Prompts/jede LLM-API, leichtgewichtig, keine Abos, reine Erweiterung, schützt die Privatsphäre. https://github.com/ctxinf/webpage-summary"
+  },
+  "Commad_Open_Panel_DESC": {
+    "message": "Zusammenfassungs-Panel auf der aktuellen Seite öffnen/ausblenden"
+  }
+}

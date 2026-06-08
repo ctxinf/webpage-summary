@@ -26,47 +26,55 @@
 </a>]
 </p>
 
-<img src="/docs/img/screenshot.png">
+<img src="/docs/video/screenshot.webp">
 
 <details>
-  <summary>
-    👉 Demo GIFs & Videos
-  </summary>
+  <summary>👉 1. Create model config</summary>
+  <img src="/docs/video/add-model.webp">
+</details>
 
-  ![summary](/docs/img/summary-anim.webp)
-  
-  https://github.com/user-attachments/assets/2a610cb2-e268-46a5-ab06-064a2037abfe
+<details>
+  <summary>👉 2. Basic summary</summary>
+  <img src="/docs/video/basic-summary.webp">
+</details>
 
+<details>
+  <summary>👉 3. More usage</summary>
+  <img src="/docs/video/more-usage.webp">
+</details>
+
+<details>
+  <summary>👉 4. One click summary</summary>
+  <img src="/docs/video/one-click-summary.webp">
+</details>
+
+<details>
+  <summary>👉 5. Auto begin summary</summary>
+  <img src="/docs/video/autobegin-summary.webp">
 </details>
 
 
 - [1. Features](#1-features)
 - [2. Install](#2-install)
-- [3. Usage](#3-usage)
-  - [3.1. Quick Start](#31-quick-start)
-  - [3.2. Trigger](#32-trigger)
-  - [3.3. Error Inspect](#33-error-inspect)
-  - [3.4. Proxy for LLM Requests](#34-proxy-for-llm-requests)
-- [4. Inspiration](#4-inspiration)
-- [5. Feedback\&Suggestions](#5-feedbacksuggestions)
-- [6. Contribution](#6-contribution)
-- [7. Update History](#7-update-history)
+- [3. Core Focus](#3-core-focus)
+- [4. Feedback\&Suggestions](#4-feedbacksuggestions)
+- [5. Contribution](#5-contribution)
+- [6. Update History](#6-update-history)
 
 ## 1. Features
 
-- 🔧 Custom LLM API
-- 📝 Custom prompt templates
-- ⚪ Simple, lightweight(1.9MB), no login, no service
-- 🔒 Privacy-first – no telemetry or data collection
-- ⚙ Configs
-  - 📏 Limit context length
+- **Core Focus**: The BEST web summarizer in your browser. Fast. Simple. No bloated AI garbage. Believe me.
+- ⚪ **Simple & Pure**: No telemetry, no backend service, privacy first. No bloated agent loops. 
+- ⚙ **Configs**:
+  - 🔧 Custom AI providers (BYOK)
+  - 📝 Custom prompt templates
+  - 📏 Limit max context length
   - 🎛️ Multiple triggers: Auto Open / Floating Ball / Context Menu / Shortcut / Action Click
   - ⚡ Auto-start summary (Enable/Disable)
   - 🛠️ Site customization (glob, selectors, whitelist/blacklist)
-  - ......
-- 🌊Other
-  -  👀 Token usage view
-  -  🌐 Works with different site permissions setting
+- 🌊 **Other**:
+  - 👀 Token usage view
+  - 🌐 Works with different site permissions setting
 
 
 
@@ -78,80 +86,26 @@
 [![](/docs/img/firefox.svg) Firefox Addons](https://addons.mozilla.org/firefox/addon/webpage-summary/)
 
 
-or download from [Github Releases](https://github.com/slow-groovin/webpage-summary/releases) and manually install
+or download from [Github Releases](https://github.com/ctxinf/webpage-summary/releases) and manually install
 
-## 3. Usage
+## 3. Core Focus
 
-### 3.1. Quick Start
+- The most convenient web page summarization tool in the browser.
+- A pure and lightweight alternative to built-in AI tools.
+- We will NOT implement bloated agent loops. We keep it simple and pure. We don't compete with complex products like sider.ai or monica.ai.
 
-1.  Configure a model
-![create model](/docs/img/create-model-anim.webp?width=500&height=300)
-2.  Open a page, click summary
-![summary](/docs/img/summary-anim.webp)
-3.  Continue to chat, or try modifying configurations
+*Inspiration: [chatGPTBox](https://github.com/josStorer/chatGPTBox)* 
 
-### 3.2. Trigger
-
-By default, the summary panel does not open automatically. You can open it in the following four ways:
-
-1.  Click the floating ball in the lower right corner of the page (configurable: `Yes (default) / No` display)
-2.  Click the action (popup) button, then click the "Summarize" button on the page (configurable: clicking the action (popup) button can `Open the panel directly / Open the popup page (default)`)
-3.  Click "Summarize This Page" in the page's context menu
-4.  (Manual configuration required) Configure a keyboard shortcut through the browser extension settings (not the plugin's options page). You can configure a shortcut trigger (recommended `Alt+S`)
-
-> You can also configure `Auto open summary panel on new tab`
-
-<br>
-
-By default, the summary does not start automatically after opening the panel. You need to click the "Sum" button in the panel to start summarizing.
-
-> You can configure `Auto begin summary` to automatically start summarizing when the panel is opened.
-
-<br>
-
-By default, the plugin has access to all sites.
-
-> You can change the plugin's access permission to `On Click` in the browser settings:
-> - Some browsers (such as Edge) can directly run the plugin's functionality on the page with one click of the action icon.
-> - Other browsers (such as Chrome) acquire page permissions after clicking the action icon, but need to refresh the page to run the plugin's functionality on the page. However, it doesn't matter, you can one step run by the `Summarize This Page ⚡` button in the right-click menu (like `Immersive Translate` extension).
-
-### 3.3. Error Inspect
-
-Some errors may not be displayed through the UI. You can view the errors of the summary panel through the developer console of the current webpage.
-
-View the logs of the plugin background through the developer console of the background (options) page.
-
-Requests sent to the LLM API can also be viewed in the developer console of the background page.
-
-### 3.4. Proxy for LLM Requests
-
-This plugin does not provide proxy functionality itself. It can be used with other browser proxy plugins (similar to ProxySwitchOmega) to implement proxying of specified URL traffic.
-
-## 4. Inspiration
-
-Copying webpage content into a llm website, then entering prompts and viewing the results is a common workflow for many people today. A browser plugin is needed to replace this process.
-
-Currently(*~2025.1), the following provide this functionality:
-
-| Type                                                      | Product                                                | Cost            | Overview                                                                                                                 | Open Source | User Experience |
-| --------------------------------------------------------- | ------------------------------------------------------ | --------------- | ------------------------------------------------------------------------------------------------------------------------ | ----------- | --------------- |
-| Small company commercial products                         | sider.ai, briefy.ai, monica.ai                         | ≈10$/m          | Want to create a complex all-in-one system, with endless telemetry                                                       | No          | Good            |
-| Large model vendor plugin ends                            | Doubao plugin, Kimi plugin                             | Completely free | Doubao: Wants to create a complex all-in-one system, laggy, endless telemetry, cannot even be put on the extension store | No          | Good+           |
-| Products listed in the app store by individual developers |                                                        | Free or ≈4$/m   | No maintenance, many are unavailable                                                                                     | No          | Poor            |
-| Open source                                               | [chatGPTBox⚡](https://github.com/josStorer/chatGPTBox) | Free            | Supports multiple model configurations and has made specific website customizations                                      | **Yes**     | Good            |
-
-[chatGPTBox](https://github.com/josStorer/chatGPTBox) is the only open-source, fully functional webpage summary plugin I found. It is a great project. The interface design of this project is inspired by it, but it lacks prompt customization features. In addition, its technology stack (React) is different from mine, so I decided to develop a new webpage summary browser plugin with my own technology stack (Vue, [wxt](https://github.com/wxt-dev/wxt), [vercel-ai-sdk](https://sdk.vercel.ai/)).
-
-## 5. Feedback&Suggestions
+## 4. Feedback&Suggestions
 
 🙌 Welcome any feedback or suggestions
 
 If you have any suggestions for features, interface suggestions, bugs, questions, usage feedback, or any ideas, please submit them in the issue.
 
-## 6. Contribution
+## 5. Contribution
 
 Welcome to contribute to documentation, i18n support, UI, and features. Please refer to [CONTRIBUTING.md](CONTRIBUTING.md)
 
-## 7. Update History
+## 6. Update History
 
 Please refer to [CHANGELOG](/CHANGELOG.md)

@@ -1,0 +1,9 @@
+[de]: Webpage Summary - KI|OpenSource|Leicht|Datenschutz
+[en]: Webpage Summary- AI|OpenSource|Light|Privacy
+[es]: Webpage Summary - IA|OpenSource|Ligero|Privacidad
+[fr]: Webpage Summary - IA|OpenSource|Léger|Confidentialité
+[ja]: Webpage Summary - AI|オープンソース|軽量|プライバシー保護
+[ko]: 웹페이지 요약 - AI|오픈소스|경량|개인정보 보호
+[pt]: Webpage Summary - IA|OpenSource|Leve|Privacidade
+[zh_CN]: 网页总结: AI总结|开源|轻量|隐私无忧
+[zh_TW]: 網頁摘要: AI 摘要|開源|隱私無虞
