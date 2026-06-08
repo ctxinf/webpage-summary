@@ -6,8 +6,6 @@
 <p align="center">使用AI对网页文本内容进行总结的浏览器扩展 (使用您自己的Apikey)</p>
 
 
-[![wakatime](https://wakatime.com/badge/user/6476bd96-6b6e-4943-b20d-e7f34889cb5a/project/34d281d5-2656-4ac2-a17c-4141f46d06f7.svg)](https://wakatime.com/badge/user/6476bd96-6b6e-4943-b20d-e7f34889cb5a/project/34d281d5-2656-4ac2-a17c-4141f46d06f7)
-
 <p align="center">
   [<a href="/README.md">English</a>]
   [<span>简体中文</span>]

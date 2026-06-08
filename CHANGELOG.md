@@ -3,9 +3,9 @@
 Complete refactoring!
 Main features:
 1. Brand new UI, comprehensively improved user experience
-2. Added sidebar mode (switching between floating panel and sidebar)
-3. String counting -> token counting
-4. More optimized AI providers settings, added support for response APIs
+2. Sidebar mode (switching between floating panel and sidebar)
+3. Clip content by token count now (by string length before)
+4. Optimized AI providers settings, added support for response APIs
 5. Completely redesigned settings interface
 
 More:

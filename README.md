@@ -6,9 +6,6 @@
 
 
 
-
-[![wakatime](https://wakatime.com/badge/user/6476bd96-6b6e-4943-b20d-e7f34889cb5a/project/34d281d5-2656-4ac2-a17c-4141f46d06f7.svg)](https://wakatime.com/badge/user/6476bd96-6b6e-4943-b20d-e7f34889cb5a/project/34d281d5-2656-4ac2-a17c-4141f46d06f7)
-
 <p align="center">
   [<span>English</span>]
   [<a href="./docs/README_zh.md">简体中文</a>]
@@ -54,12 +51,6 @@
 </details>
 
 
-- [1. Features](#1-features)
-- [2. Install](#2-install)
-- [3. Core Focus](#3-core-focus)
-- [4. Feedback\&Suggestions](#4-feedbacksuggestions)
-- [5. Contribution](#5-contribution)
-- [6. Update History](#6-update-history)
 
 ## 1. Features
 
