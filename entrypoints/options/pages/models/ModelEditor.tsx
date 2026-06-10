@@ -514,27 +514,25 @@ export function ModelEditor({
           />
         </section>
 
-        {draft.providerId !== 'browser-ai' ? (
-          <section className="grid max-w-2xl gap-3 border-b pb-7">
-            <JsonDetails
-              id="model-extra-body"
-              label="Extra Body JSON"
-              optional
-              onChange={setExtraBodyText}
-              placeholder={'{\n  "enable_search": true\n}'}
-              value={extraBodyText}
-            />
+        <section className="grid max-w-2xl gap-3 border-b pb-7">
+          <JsonDetails
+            id="model-extra-body"
+            label="Extra Body JSON"
+            optional
+            onChange={setExtraBodyText}
+            placeholder={'{\n  "enable_search": true\n}'}
+            value={extraBodyText}
+          />
 
-            <JsonDetails
-              id="model-headers"
-              label="Custom Headers JSON"
-              optional
-              onChange={setHeadersText}
-              placeholder={'{\n  "HTTP-Referer": "https://example.com"\n}'}
-              value={headersText}
-            />
-          </section>
-        ) : null}
+          <JsonDetails
+            id="model-headers"
+            label="Custom Headers JSON"
+            optional
+            onChange={setHeadersText}
+            placeholder={'{\n  "HTTP-Referer": "https://example.com"\n}'}
+            value={headersText}
+          />
+        </section>
 
         <details className="grid max-w-2xl rounded-md border px-3 py-2">
           <summary className="cursor-pointer select-none text-base font-semibold">

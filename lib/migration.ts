@@ -21,7 +21,7 @@ export function migrateModelConfigs(models: any[]): { models: any[], updated: bo
       }
 
       // If it's not a standard provider, map to openai-compatible
-      const standardProviders = ['openai', 'anthropic', 'google', 'ollama', 'browser-ai', 'open-responses', 'openai-compatible'];
+      const standardProviders = ['openai', 'anthropic', 'google', 'ollama', 'open-responses', 'openai-compatible'];
       if (!standardProviders.includes(type)) {
         let urlToAssign: string | undefined = undefined;
 

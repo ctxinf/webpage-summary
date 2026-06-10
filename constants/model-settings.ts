@@ -214,21 +214,6 @@ export const MODEL_PROVIDER_DEFINITIONS: {
     supportsModelFetch: true,
   },
   {
-    baseURLPresets: [],
-    defaultBaseURL: '',
-    defaultModelId: 'text',
-    desc: 'Browser AI provider for local browser-backed AI features. It does not use API key, Base URL, headers, or extra body.',
-    docsUrl: 'https://ai-sdk.dev/providers/community-providers/browser-ai',
-    iconPath: '/llm-icons/gemini.svg',
-    id: 'browser-ai',
-    label: 'Browser AI',
-    modelsPath: '',
-    requiresApiKey: false,
-    supportsApiMode: false,
-    supportsBaseURL: false,
-    supportsModelFetch: false,
-  },
-  {
     baseURLPresets: [
       // { label: 'OpenAI', url: 'https://api.openai.com/v1/responses' },
     ],

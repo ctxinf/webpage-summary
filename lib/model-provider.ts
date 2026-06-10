@@ -1,5 +1,4 @@
 import { createAnthropic } from '@ai-sdk/anthropic';
-import { createBrowserAI } from '@browser-ai/core';
 import { createGoogleGenerativeAI } from '@ai-sdk/google';
 import { createOpenAI } from '@ai-sdk/openai';
 import { createOpenAICompatible } from '@ai-sdk/openai-compatible';
@@ -50,8 +49,6 @@ export function createLanguageModelFromConfig(
       return createGoogleGenerativeAI(settings).languageModel(config.modelId);
     case 'ollama':
       return createOllama(settings).languageModel(config.modelId) as unknown as LanguageModel;
-    case 'browser-ai':
-      return createBrowserAI().languageModel(config.modelId as 'text');
     default:
       throw new Error('Unsupported provider.');
   }

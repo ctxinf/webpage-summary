@@ -18,7 +18,7 @@ export default defineConfig({
     description: '__MSG_extDescription__',
     default_locale: 'en',
     host_permissions: ['<all_urls>'],
-    permissions: ['activeTab', 'storage', 'contextMenus', 'scripting', 'cookies', 'declarativeNetRequest'],
+    permissions: ['activeTab', 'storage', 'contextMenus', 'scripting', 'declarativeNetRequest'],
     commands: {
       COMMAND_INVOKE_SUMMARY: {
         suggested_key: {

@@ -1,4 +1,8 @@
 # Changelog
+## [0.7.5] - 2026-06-10
+1. remove browser-ai provider
+2. remove cookies permissons (unused)
+
 ## [0.7.3] - 2026-06-01
 Complete refactoring!
 Main features:
