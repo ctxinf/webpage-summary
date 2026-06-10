@@ -14,7 +14,7 @@
       justify-content: center;
       align-items: center;
       height: 100vh;
-      background-color: #e5e7eb;
+      background-color: #111111;
       font-family: 'Inter', -apple-system, sans-serif;
     }
 
@@ -25,33 +25,34 @@
     .promo-container {
       width: 440px;
       height: 280px;
-      background: linear-gradient(135deg, #ffffff 0%, #f3f4f6 100%);
+      background: radial-gradient(circle at 30% 20%, #170b33 0%, #080312 80%);
       position: relative;
       overflow: hidden;
-      padding: 24px;
+      padding: 16px 24px 24px 24px;
       box-sizing: border-box;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+      border: 1px solid rgba(139, 92, 246, 0.3);
+      box-shadow: 0 15px 40px rgba(0,0,0,0.4);
       display: flex;
       flex-direction: column;
     }
 
     .glow-1 {
       position: absolute;
-      top: -50px;
-      left: -50px;
-      width: 250px;
-      height: 250px;
-      background: radial-gradient(circle, rgba(139,92,246,0.12) 0%, rgba(255,255,255,0) 70%);
+      top: -150px;
+      left: -150px;
+      width: 400px;
+      height: 400px;
+      background: radial-gradient(circle, rgba(139,92,246,0.2) 0%, rgba(255,255,255,0) 70%);
       z-index: 1;
     }
 
     .glow-2 {
       position: absolute;
-      bottom: -50px;
-      right: -50px;
-      width: 300px;
-      height: 300px;
-      background: radial-gradient(circle, rgba(59,130,246,0.15) 0%, rgba(255,255,255,0) 70%);
+      bottom: -150px;
+      right: -150px;
+      width: 500px;
+      height: 500px;
+      background: radial-gradient(circle, rgba(99,102,241,0.15) 0%, rgba(255,255,255,0) 70%);
       z-index: 1;
     }
 
@@ -67,27 +68,38 @@
     .header {
       display: flex;
       align-items: center;
-      gap: 8px;
-      font-size: 28px;
+      gap: 6px;
+      font-size: 22px;
       font-weight: 900;
-      color: #111827;
+      color: #ffffff;
+      text-shadow: 0 0 8px rgba(59, 130, 246, 0.7), 0 0 15px rgba(139, 92, 246, 0.5);
       letter-spacing: -0.04em;
       line-height: 1.1;
       width: 100%;
       z-index: 3;
+      white-space: nowrap;
     }
 
     .header svg {
-      width: 28px;
-      height: 28px;
-      fill: #111827;
+      width: 22px;
+      height: 22px;
+      fill: #ffffff;
+      filter: drop-shadow(0 0 6px rgba(59, 130, 246, 0.6));
       flex-shrink: 0;
+    }
+
+    .product-icon {
+      width: 36px;
+      height: 36px;
+      border-radius: 8px;
+      flex-shrink: 0;
+      filter: invert(1) drop-shadow(0 0 8px rgba(139, 92, 246, 0.8));
     }
 
     .features {
       list-style: none;
       padding: 0;
-      margin: 24px 0 0 -20px;
+      margin: 16px 0 0 -20px;
       display: flex;
       flex-direction: column;
       gap: 22px;
@@ -96,8 +108,9 @@
 
     .features li {
       font-size: 16px;
-      font-weight: 700;
-      color: #374151;
+      font-weight: 900;
+      color: #ffffff;
+      text-shadow: 0 0 6px rgba(59, 130, 246, 0.7), 0 0 12px rgba(139, 92, 246, 0.5);
       display: flex;
       align-items: center;
       gap: 8px;
@@ -130,8 +143,8 @@
       width: 1200px; /* 300px * 4 */
       height: auto;
       border-radius: 32px; /* 8px * 4 */
-      border: 4px solid rgba(0, 0, 0, 0.08); 
-      box-shadow: -40px 60px 100px rgba(140, 0, 255, 0.12); 
+      border: 10px solid rgba(59, 130, 246, 0.7); 
+      box-shadow: -20px 30px 60px rgba(0, 0, 0, 0.4), 0 0 50px rgba(59, 130, 246, 0.5); 
       
       transform-origin: top left;
       transform: scale(0.24) perspective(3000px) rotateY(-20deg);
@@ -148,6 +161,7 @@
     
     <div class="content-layer">
       <div class="header">
+        <img class="product-icon" src="../../../public/icon/128.png" alt="Product Icon">
         <svg viewBox="0 0 24 24">
           <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/>
         </svg>

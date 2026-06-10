@@ -20,6 +20,8 @@ Key Advantages:
 
 ⚡ 网页总结 Webpage Summary: 开源的网页AI总结，接入任意大模型API，支持定制提示词！ 🤖
 
+⏳ 项目地址: https://github.com/ctxinf/webpage-summary
+
 使用这个开源、轻量的纯插件，用最舒服和安全的方式总结你浏览的网页！ 🚀 它是浏览器内置AI功能及各商业化AI插件的最佳轻量级替代品。没有复杂的订阅，没有后端服务，界面清爽，完全保护您的隐私。 📚
 
 主要优势：
@@ -30,13 +32,15 @@ Key Advantages:
 *   🔒 隐私无忧：数据完全在本地处理，绝不收集您的隐私。
 
 -----------------------------------------------------------------------
-⏳ 项目地址: https://github.com/ctxinf/webpage-summary
+
 📝 入门指南: https://github.com/ctxinf/webpage-summary/blob/main/docs/README_zh.md#31-quick-start
 🔑 隐私协议: https://github.com/ctxinf/webpage-summary/blob/main/docs/webstore/privacy.md
 
 [Traditional Chinese]
 
 ⚡ 網頁摘要 Webpage Summary: 開源的網頁AI摘要，接入任意大模型API，支援定制提示詞！ 🤖
+
+https://github.com/ctxinf/webpage-summary
 
 使用這個開源、輕量的純外掛，用最舒服和安全的方式摘要你瀏覽的網頁！ 🚀 它是瀏覽器內建AI功能及各商業化AI外掛的最佳輕量級替代品。沒有複雜的訂閱，沒有後端服務，介面清爽，完全保護您的隱私。 📚
 
@@ -48,13 +52,15 @@ Key Advantages:
 *   🔒 隱私無虞：數據完全在本地處理，絕不收集您的隱私。
 
 -----------------------------------------------------------------------
-⏳ 專案地址: https://github.com/ctxinf/webpage-summary
+
 📝 入門指南: https://github.com/ctxinf/webpage-summary/blob/main/docs/README_zh.md#31-quick-start
 🔑 隱私協議: https://github.com/ctxinf/webpage-summary/blob/main/docs/webstore/privacy.md
 
 [Japanese]
 
 ⚡ Webpage Summary: オープンソースの迅速なAIページ要約、任意のLLM API接続、プロンプトのカスタマイズ！ 🤖
+
+https://github.com/ctxinf/webpage-summary
 
 このオープンソースで軽量な純粋な拡張機能を使用して、快適かつ安全にWebページを要約しましょう！ 🚀 これは、ブラウザ内蔵のAI機能や商用AI拡張機能に代わる最適な軽量の代替手段です。サブスクリプションなし、バックエンドサーバーなし、すっきりとしたインターフェースで、プライバシーを完全に保護します。 📚
 
@@ -66,13 +72,15 @@ Key Advantages:
 *   🔒 プライバシー保護：データはローカルで完全に処理され、プライバシーを保護します。
 
 -----------------------------------------------------------------------
-⏳ リポジトリ: https://github.com/ctxinf/webpage-summary
+
 📝 クイックスタート: https://github.com/ctxinf/webpage-summary/blob/main/README.md#31-quick-start
 🔑 プライバシーポリシー: https://github.com/ctxinf/webpage-summary/blob/main/docs/webstore/privacy.md
 
 [Korean]
 
 ⚡ Webpage Summary: 오픈소스 기반의 빠른 AI 페이지 요약, 모든 LLM API 연결, 프롬프트 사용자 정의! 🤖
+
+https://github.com/ctxinf/webpage-summary
 
 이 오픈소스 기반의 가볍고 순수한 확장 프로그램을 사용하여 편안하고 안전하게 웹페이지를 요약하세요! 🚀 이 확장 프로그램은 브라우저 내장 AI 기능 및 상용 AI 확장 프로그램의 완벽하고 가벼운 대안입니다. 구독이나 백엔드 서버 없이 깔끔한 인터페이스를 제공하며 개인정보를 완벽하게 보호합니다. 📚
 
@@ -92,6 +100,8 @@ Key Advantages:
 
 ⚡ Webpage Summary: Quelloffene schnelle KI-Seitenzusammenfassung, beliebige LLM-API, anpassbare Prompts! 🤖
 
+https://github.com/ctxinf/webpage-summary
+
 Probieren Sie diese quelloffene, leichte und reine Erweiterung aus, um Webseiten komfortabel und sicher zusammenzufassen! 🚀 Sie ist die perfekte, ressourcenschonende Alternative zu den integrierten KI-Funktionen von Browsern und kommerziellen KI-Erweiterungen. Keine Abonnements, keine Backend-Server und eine aufgeräumte Benutzeroberfläche – und Ihre Privatsphäre ist vollständig geschützt. 📚
 
 Hauptvorteile:
@@ -109,6 +119,10 @@ Hauptvorteile:
 [Spanish]
 
 ⚡ Webpage Summary: ¡Resumen rápido de páginas con IA de código abierto, cualquier API de LLM y prompts personalizables! 🤖
+
+
+https://github.com/ctxinf/webpage-summary
+
 
 ¡Pruebe esta extensión pura, de código abierto y ligera para resumir páginas web de manera cómoda y segura! 🚀 Es la alternativa ligera perfecta a las funciones de IA integradas en el navegador y a las extensiones comerciales de IA. Sin suscripciones, sin servidores backend y con una interfaz limpia, protegiendo totalmente su privacidad. 📚
 
@@ -128,6 +142,10 @@ Ventajas principales:
 
 ⚡ Webpage Summary: Résumé rapide de page par IA open source, toute API LLM, prompts personnalisables ! 🤖
 
+
+https://github.com/ctxinf/webpage-summary
+
+
 Essayez cette extension pure, open source et légère pour résumer les pages web de manière confortable et sécurisée ! 🚀 Elle constitue une alternative légère et parfaite aux fonctionnalités d'IA intégrées au navigateur et aux extensions d'IA commerciales. Sans abonnement, sans serveur backend et avec une interface épurée, protégeant totalement votre vie privée. 📚
 
 Principaux avantages :
@@ -145,6 +163,10 @@ Principaux avantages :
 [Portuguese]
 
 ⚡ Webpage Summary: Resumo rápido de página por IA de código aberto, qualquer API LLM e prompts personalizáveis! 🤖
+
+
+https://github.com/ctxinf/webpage-summary
+
 
 Experimente esta extensão pura, de código aberto e leve para resumir páginas da web de forma confortável e segura! 🚀 É a alternativa leve perfeita aos recursos de IA integrados no navegador e às extensões de IA comerciais. Sem assinaturas, sem servidores de backend e com uma interface limpa, protegendo totalmente a sua privacidade. 📚
 
