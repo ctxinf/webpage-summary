@@ -16,6 +16,7 @@ import type { GeneralSettings } from '@/constants/general-settings';
 import { getUiMessages } from '@/lib/i18n';
 
 import { createLogger } from '@/lib/logger';
+import { waitForPageDomReady } from '@/lib/content-ui-isolation';
 
 const logger = createLogger('content:useContentApp');
 
@@ -74,6 +75,7 @@ export function useContentApp() {
   // Initialization
   useEffect(() => {
     let active = true;
+    const domReadyController = new AbortController();
     async function init() {
       // logger.info('[useContentApp] Initializing...');
       await seedDefaultPromptIfNeeded();
@@ -91,6 +93,9 @@ export function useContentApp() {
       setCurrentPromptId(promptSettings.defaultPromptId || (promptSettings.prompts[0]?.id ?? ''));
       setSettings(generalSettings);
       setShowBottom(generalSettings.enableChatInputBox);
+
+      await waitForPageDomReady(domReadyController.signal);
+      if (!active) return;
 
       // logger.info('[useContentApp] Extracting page content...');
       const extracted = await extractWebpageContent(generalSettings.pageTextExtractMethod, document);
@@ -118,6 +123,7 @@ export function useContentApp() {
     init();
     return () => {
       active = false;
+      domReadyController.abort();
     };
   }, []);
 

@@ -1,14 +1,17 @@
 import './polyfill';
 import { ENABLE_CONTENT_SAMPLES } from '@/constants/flag';
-import { mountContentScope } from './scope';
+import { waitForContentUiReady } from '@/lib/content-ui-isolation';
 import 'sonner/dist/styles.css';
 import './style.css';
 
 export default defineContentScript({
   matches: ['<all_urls>'],
-  runAt: 'document_idle',
+  // The entrance must not wait for slow page scripts or subresources.
+  runAt: 'document_start',
   cssInjectionMode: 'ui',
   async main(ctx) {
+    if (!(await waitForContentUiReady(ctx))) return;
+    const { mountContentScope } = await import('./scope');
     await mountContentScope(ctx);
 
     if (ENABLE_CONTENT_SAMPLES) {

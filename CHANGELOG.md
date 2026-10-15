@@ -1,4 +1,10 @@
 # Changelog
+
+## [0.8.0] - 2026-10-15
+
+- fix: show the content entrance before slow pages finish loading, retain DOM-ready content extraction, and protect host visibility and stacking order from page styles and WXT resets.
+- fix: restore the content panel's independent size anchor after the React rewrite, keeping panel geometry, typography, and spacing consistent across host root font sizes.
+
 ## [0.7.5] - 2026-06-10
 1. remove browser-ai provider
 2. remove cookies permissons (unused)

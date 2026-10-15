@@ -134,15 +134,15 @@ function UnifiedPanelRenderer({ children, storageKey, initialOffset }: { childre
         el.style.right = floatingState.right || '';
         el.style.bottom = floatingState.bottom || '';
       } else {
-        el.style.width = '30em';
-        el.style.height = '36em';
+        el.style.width = 'var(--webpage-summary-panel-width)';
+        el.style.height = 'var(--webpage-summary-panel-height)';
         el.style.left = '';
         if (initialOffset) {
-          el.style.top = `clamp(16px, calc(4em + ${initialOffset.y}px), calc(100vh - 37em))`;
-          el.style.right = `clamp(16px, calc(4em + ${initialOffset.x}px), calc(100vw - 31em))`;
+          el.style.top = `clamp(16px, calc(var(--webpage-summary-panel-top) + ${initialOffset.y}px), calc(100vh - 37 * var(--webpage-summary-panel-srem)))`;
+          el.style.right = `clamp(16px, calc(var(--webpage-summary-panel-right) + ${initialOffset.x}px), calc(100vw - 31 * var(--webpage-summary-panel-srem)))`;
         } else {
-          el.style.top = '4em';
-          el.style.right = '4em';
+          el.style.top = 'var(--webpage-summary-panel-top)';
+          el.style.right = 'var(--webpage-summary-panel-right)';
         }
         el.style.bottom = '';
       }
@@ -151,7 +151,7 @@ function UnifiedPanelRenderer({ children, storageKey, initialOffset }: { childre
       if (sidebarWidth) {
         el.style.width = `${sidebarWidth}px`;
       } else {
-        el.style.width = '24rem';
+        el.style.width = 'var(--webpage-summary-panel-sidebar-width)';
       }
       el.style.height = '';
       el.style.left = '';
@@ -173,8 +173,8 @@ function UnifiedPanelRenderer({ children, storageKey, initialOffset }: { childre
       className={cn(
         "flex flex-col z-[2147483647]",
         isFloating 
-          ? "fixed bg-background rounded-xl shadow-[0_12px_48px_rgba(0,0,0,0.12)] border border-zinc-200/60 max-w-[100vw] max-h-[100vh] min-w-[24rem] min-h-[14rem]"
-          : "fixed right-0 top-0 bottom-0 h-screen bg-background/95 backdrop-blur-xl border-l border-zinc-200 shadow-2xl text-zinc-950 min-w-[20rem]"
+          ? "fixed bg-background rounded-xl shadow-[0_12px_48px_rgba(0,0,0,0.12)] border border-zinc-200/60 max-w-[100vw] max-h-[100vh] min-w-[calc(24*var(--webpage-summary-panel-srem))] min-h-[calc(14*var(--webpage-summary-panel-srem))]"
+          : "fixed right-0 top-0 bottom-0 h-screen bg-background/95 backdrop-blur-xl border-l border-zinc-200 shadow-2xl text-zinc-950 min-w-[calc(20*var(--webpage-summary-panel-srem))]"
       )}
     >
       {isFloating ? (

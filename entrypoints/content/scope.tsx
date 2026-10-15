@@ -13,6 +13,7 @@ import { ContentEntrance } from './ContentEntrance';
 
 import { onMessage } from '@/lib/messaging';
 import { createLogger } from '@/lib/logger';
+import { mountProtectedContentUi } from '@/lib/content-ui-isolation';
 
 const logger = createLogger('content:scope');
 
@@ -23,34 +24,18 @@ function collectPageTextLength() {
 }
 
 async function mountSummaryBadge(ctx: ContentScriptContext) {
-  // logger.info('[ContentScope] mountSummaryBadge running');
-  const hostId = 'webpage-summary-react-root';
-  if (document.getElementById(hostId)) {
-    // logger.info('[ContentScope] hostId already exists, skipping');
-    return;
-  }
-
-  const ui = await createShadowRootUi<Root>(ctx, {
+  await mountProtectedContentUi<Root>(ctx, {
+    id: 'webpage-summary-react-root',
     name: 'webpage-summary-entrance',
-    position: 'overlay',
-    alignment: 'bottom-right',
-    anchor: 'body',
-    append: 'last',
-    zIndex: 2147483647,
     onMount(container) {
-      // logger.info('[ContentScope] UI container mounted, rendering React root');
       const root = createRoot(container);
       root.render(createElement(ContentEntrance));
       return root;
     },
     onRemove(root) {
-      // logger.info('[ContentScope] UI container unmounted');
       root?.unmount();
     },
   });
-
-  ui.mount();
-  // logger.info('[ContentScope] ui.mount() called');
 }
 
 export async function mountContentScope(ctx: ContentScriptContext) {
