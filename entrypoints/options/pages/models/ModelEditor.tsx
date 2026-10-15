@@ -38,6 +38,7 @@ import {
 import { cn } from '@/lib/utils';
 import { getUiMessages } from '@/lib/i18n';
 import { createLanguageModelFromConfig } from '@/lib/model-provider';
+import { fetchModelPricing } from '@/lib/model-pricing';
 
 type ModelEditorProps = {
   initialDraft: ModelDraft;
@@ -91,12 +92,17 @@ export function ModelEditor({
   const [isApiKeyVisible, setIsApiKeyVisible] = useState(false);
   const [isTesting, setIsTesting] = useState(false);
   const testController = useRef<AbortController | null>(null);
+  const [isFetchingPrice, setIsFetchingPrice] = useState(false);
+  const priceController = useRef<AbortController | null>(null);
+  const currentDraft = useRef(draft);
+  currentDraft.current = draft;
   const [areBaseURLPresetsExpanded, setAreBaseURLPresetsExpanded] =
     useState(false);
   
   const messages = getUiMessages();
 
   useEffect(() => () => testController.current?.abort(), []);
+  useEffect(() => () => priceController.current?.abort(), []);
 
   const provider = useMemo(
     () => getModelProviderDefinition(draft.providerId),
@@ -171,6 +177,31 @@ export function ModelEditor({
   function selectRemoteModel(modelId: string) {
     updateDraft('modelId', modelId);
     setIsModelPickerOpen(false);
+  }
+
+  async function loadPricing() {
+    if (priceController.current) return;
+    const controller = new AbortController();
+    priceController.current = controller;
+    setIsFetchingPrice(true);
+    const timeout = setTimeout(() => controller.abort(), 30_000);
+    try {
+      const price = await fetchModelPricing(draft, controller.signal);
+      const latest = currentDraft.current;
+      if (latest.modelId !== draft.modelId || latest.providerId !== draft.providerId || latest.baseURL !== draft.baseURL) {
+        throw new Error('Model configuration changed. Please try fetching again.');
+      }
+      setDraft((current) => ({ ...current, inputTokenPrice: price.input, outputTokenPrice: price.output, priceUnit: '$' }));
+      toast.success('Prices fetched.', { description: `models.dev (${price.provider}): $${price.input} input / $${price.output} output per 1M tokens.` });
+    } catch (error) {
+      toast.error('Failed to fetch prices.', { description: controller.signal.aborted
+        ? 'The request was cancelled or timed out after 30 seconds.'
+        : error instanceof Error ? error.message : 'Unable to fetch prices from models.dev.' });
+    } finally {
+      clearTimeout(timeout);
+      priceController.current = null;
+      setIsFetchingPrice(false);
+    }
   }
 
   async function testModel() {
@@ -583,8 +614,8 @@ export function ModelEditor({
         </section>
 
         <details className="grid max-w-2xl rounded-md border px-3 py-2">
-          <summary className="cursor-pointer select-none text-base font-semibold">
-            Limits and Pricing
+          <summary className="list-item cursor-pointer select-none text-base font-semibold">
+            <FieldLabel optional>Price</FieldLabel>
           </summary>
           <div className="mt-4 grid gap-4 md:grid-cols-2">
             <NumberField
@@ -613,6 +644,19 @@ export function ModelEditor({
                 value={draft.priceUnit}
               />
             </label>
+            <div className="md:col-span-2">
+              <Button
+                type="button"
+                variant="outline"
+                size="sm"
+                disabled={isFetchingPrice || isSaving}
+                title="Try fetching prices in USD ($) from models.dev."
+                onClick={loadPricing}
+              >
+                <RefreshCcw className={cn('size-4', isFetchingPrice && 'animate-spin')} />
+                {isFetchingPrice ? 'Fetching…' : 'try fetch'}
+              </Button>
+            </div>
           </div>
         </details>
 

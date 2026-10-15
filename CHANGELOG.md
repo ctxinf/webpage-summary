@@ -1,7 +1,8 @@
 # Changelog
 
-## [Unreleased]
+## [0.8.1] - 2026-10-15
 
+- feat: rename Limits and Pricing to Price and add a try fetch button to fill USD input/output token prices from models.dev, with provider-aware matching and success/error notifications.
 - feat: add a Test button beside Save on model creation and editing pages to verify unsaved provider settings with an echo request, show the response in double quotes, and report errors or a 60-second timeout.
 
 ## [0.8.0] - 2026-10-15
