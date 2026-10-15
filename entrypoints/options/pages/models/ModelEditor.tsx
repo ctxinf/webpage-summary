@@ -4,11 +4,14 @@ import {
   ExternalLink,
   Eye,
   EyeOff,
+  FlaskConical,
+  LoaderCircle,
   RefreshCcw,
   Save,
   X,
 } from 'lucide-react';
-import { useEffect, useMemo, useState, type FormEvent } from 'react';
+import { useEffect, useMemo, useRef, useState, type FormEvent } from 'react';
+import { generateText } from 'ai';
 import { toast } from 'sonner';
 import { Button } from '@/components/ui/button';
 import {
@@ -29,10 +32,12 @@ import {
 } from '@/constants/model-settings';
 import {
   fetchRemoteModels,
+  validateModelDraft,
   type RemoteModelInfo,
 } from '@/lib/model-settings-storage';
 import { cn } from '@/lib/utils';
 import { getUiMessages } from '@/lib/i18n';
+import { createLanguageModelFromConfig } from '@/lib/model-provider';
 
 type ModelEditorProps = {
   initialDraft: ModelDraft;
@@ -84,10 +89,14 @@ export function ModelEditor({
   const [isModelPickerOpen, setIsModelPickerOpen] = useState(false);
   const [isLoadingModels, setIsLoadingModels] = useState(false);
   const [isApiKeyVisible, setIsApiKeyVisible] = useState(false);
+  const [isTesting, setIsTesting] = useState(false);
+  const testController = useRef<AbortController | null>(null);
   const [areBaseURLPresetsExpanded, setAreBaseURLPresetsExpanded] =
     useState(false);
   
   const messages = getUiMessages();
+
+  useEffect(() => () => testController.current?.abort(), []);
 
   const provider = useMemo(
     () => getModelProviderDefinition(draft.providerId),
@@ -162,6 +171,45 @@ export function ModelEditor({
   function selectRemoteModel(modelId: string) {
     updateDraft('modelId', modelId);
     setIsModelPickerOpen(false);
+  }
+
+  async function testModel() {
+    if (testController.current) return;
+
+    const controller = new AbortController();
+    testController.current = controller;
+    setIsTesting(true);
+    const timeout = setTimeout(() => controller.abort(), 60_000);
+
+    try {
+      const config = validateModelDraft({
+        ...draft,
+        extraBody: parseJsonObject(extraBodyText, 'Extra body'),
+        headers: parseJsonObject(headersText, 'Headers') as Record<string, string>,
+      });
+      const result = await generateText({
+        model: createLanguageModelFromConfig({ ...config, id: 'test', at: Date.now() }),
+        prompt: "echo 'The quick brown fox jumps over the lazy dog.'",
+        maxRetries: 0,
+        abortSignal: controller.signal,
+      });
+
+      if (!result.text.trim()) {
+        throw new Error('The model returned an empty response.');
+      }
+
+      toast.success('Model test succeeded.', { description: `"${result.text}"` });
+    } catch (error) {
+      toast.error('Model test failed.', {
+        description: controller.signal.aborted
+          ? 'The test was cancelled or timed out after 60 seconds.'
+          : error instanceof Error ? error.message : 'Unable to connect to the model.',
+      });
+    } finally {
+      clearTimeout(timeout);
+      testController.current = null;
+      setIsTesting(false);
+    }
   }
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
@@ -569,6 +617,10 @@ export function ModelEditor({
         </details>
 
         <footer className="sticky bottom-0 flex items-center gap-3 border-t bg-background/95 py-4 backdrop-blur">
+          <Button disabled={isSaving || isTesting} onClick={testModel} type="button" variant="outline">
+            {isTesting ? <LoaderCircle className="animate-spin" /> : <FlaskConical />}
+            {isTesting ? 'Testing…' : 'Test'}
+          </Button>
           <Button disabled={isSaving} type="submit">
             <Save />
             {isSaving ? 'Saving' : submitLabel}

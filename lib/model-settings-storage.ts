@@ -143,7 +143,7 @@ function isDuplicateName(
   );
 }
 
-function validateDraft(draft: ModelDraft): ModelDraft {
+export function validateModelDraft(draft: ModelDraft): ModelDraft {
   const provider = getModelProviderDefinition(draft.providerId);
   const name = cleanString(draft.name);
   const modelId = cleanString(draft.modelId);
@@ -239,7 +239,7 @@ export async function getModelConfigById(id: string | null | undefined) {
 
 export async function createModelConfig(draft: ModelDraft) {
   const settings = await loadModelSettings();
-  const normalizedDraft = validateDraft(draft);
+  const normalizedDraft = validateModelDraft(draft);
 
   let finalName = normalizedDraft.name;
   if (isDuplicateName(settings.models, finalName)) {
@@ -275,7 +275,7 @@ export async function updateModelConfig(id: string, draft: ModelDraft) {
     throw new Error('Model not found.');
   }
 
-  const normalizedDraft = validateDraft(draft);
+  const normalizedDraft = validateModelDraft(draft);
 
   if (isDuplicateName(settings.models, normalizedDraft.name, id)) {
     throw new Error('Model name already exists.');

@@ -1,5 +1,9 @@
 # Changelog
 
+## [Unreleased]
+
+- feat: add a Test button beside Save on model creation and editing pages to verify unsaved provider settings with an echo request, show the response in double quotes, and report errors or a 60-second timeout.
+
 ## [0.8.0] - 2026-10-15
 
 - fix: show the content entrance before slow pages finish loading, retain DOM-ready content extraction, and protect host visibility and stacking order from page styles and WXT resets.
