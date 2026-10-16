@@ -34,6 +34,7 @@ export function ContentEntrance() {
   const defaultMode = panelLayoutMode === 'sidebar' ? 'sidebar' : 'floating';
 
   const [mainPanelOpen, setMainPanelOpen] = useState(false);
+  const [summaryRequest, setSummaryRequest] = useState(0);
   const [copies, setCopies] = useState<string[]>([]);
 
   const handleAddCopy = () => {
@@ -56,9 +57,7 @@ export function ContentEntrance() {
     const unbindInvoke = onMessage('invokeSummary', (msg) => {
       setMainPanelOpen(true);
       if (msg.data?.beginSummary) {
-        setTimeout(() => {
-          window.dispatchEvent(new CustomEvent('WEBPAGE_SUMMARY_BEGIN'));
-        }, 150);
+        setSummaryRequest((request) => request + 1);
       }
     });
 
@@ -89,7 +88,11 @@ export function ContentEntrance() {
           <PanelContainer defaultMode={defaultMode} storageKey="main-panel">
             <ContentAppFrame 
               isMain={true} 
-              onClose={() => setMainPanelOpen(false)} 
+              summaryRequest={summaryRequest}
+              onClose={() => {
+                setMainPanelOpen(false);
+                setSummaryRequest(0);
+              }}
               onAdd={handleAddCopy}
             />
           </PanelContainer>

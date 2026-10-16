@@ -59,12 +59,13 @@ const formatTokens = (val: number) => {
 };
 
 interface ContentAppFrameProps {
+  summaryRequest?: number;
   onClose: () => void;
   isMain?: boolean;
   onAdd?: () => void;
 }
 
-export function ContentAppFrame({ onClose, isMain = true, onAdd }: ContentAppFrameProps) {
+export function ContentAppFrame({ onClose, isMain = true, onAdd, summaryRequest = 0 }: ContentAppFrameProps) {
   const uiMessages = getUiMessages();
   const { mode, setMode } = usePanel();
   const [isTokenViewerOpen, setIsTokenViewerOpen] = useState(false);
@@ -94,7 +95,7 @@ export function ContentAppFrame({ onClose, isMain = true, onAdd }: ContentAppFra
     handleStop,
     handleMessageSubmit,
     handleCopyMessages,
-  } = useContentApp();
+  } = useContentApp(summaryRequest);
 
   const isBusy = status === 'streaming' || status === 'submitted';
   const hasMessages = messages.length > 0;

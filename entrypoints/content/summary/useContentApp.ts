@@ -20,7 +20,7 @@ import { waitForPageDomReady } from '@/lib/content-ui-isolation';
 
 const logger = createLogger('content:useContentApp');
 
-export function useContentApp() {
+export function useContentApp(summaryRequest = 0) {
   const messagesI18n = getUiMessages();
   const [models, setModels] = useState<ModelConfigItem[]>([]);
   const [prompts, setPrompts] = useState<PromptConfigItem[]>([]);
@@ -127,17 +127,10 @@ export function useContentApp() {
     };
   }, []);
 
-  // External trigger (e.g. popup "summarize" button)
+  // React preserves the request until this panel mounts; no timed window event.
   useEffect(() => {
-    const handleBegin = () => {
-      // logger.info('[useContentApp] External WEBPAGE_SUMMARY_BEGIN received');
-      setAutoSummarizePending(true);
-    };
-    window.addEventListener('WEBPAGE_SUMMARY_BEGIN', handleBegin);
-    return () => {
-      window.removeEventListener('WEBPAGE_SUMMARY_BEGIN', handleBegin);
-    };
-  }, []);
+    if (summaryRequest > 0) setAutoSummarizePending(true);
+  }, [summaryRequest]);
 
   // External text injection (e.g. context menu "add selection to chat")
   useEffect(() => {
@@ -272,7 +265,10 @@ export function useContentApp() {
       currentPromptId
     ) {
       setAutoSummarizePending(false);
-      handleSummarize();
+      // An automatic or external start must never toggle an active stream off.
+      if (status !== 'streaming' && status !== 'submitted') {
+        void handleSummarize();
+      }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [autoSummarizePending, pageContent, settings, prompts, currentModelId, currentPromptId]);

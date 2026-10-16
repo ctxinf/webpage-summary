@@ -1,5 +1,10 @@
 # Changelog
 
+## [0.8.2] - 2026-10-16
+
+- fix: pass summary requests to the main content panel through React state instead of a delayed window event, so requests survive panel mounting and do not trigger copied panels.
+- fix: ignore duplicate automatic summary requests while a response is in progress, preventing context-menu or shortcut triggers from stopping an active summary. Preserve the existing automatic-summary settings.
+
 ## [0.8.1] - 2026-10-15
 
 - feat: rename Limits and Pricing to Price and add a try fetch button to fill USD input/output token prices from models.dev, with provider-aware matching and success/error notifications.
