@@ -54,8 +54,8 @@
 
 ## 1. Features
 
-- **Core Focus**: The BEST web summarizer in your browser. Fast. Simple. No bloated AI garbage. Believe me.
-- ⚪ **Simple & Pure**: No telemetry, no backend service, privacy first. No bloated agent loops. 
+- **Core Focus**: Focused on AI summarization of page.
+- ⚪ **Simple & Pure**: No telemetry, no backend service, privacy first.
 - ⚙ **Configs**:
   - 🔧 Custom AI providers (BYOK)
   - 📝 Custom prompt templates
@@ -83,7 +83,7 @@ or download from [Github Releases](https://github.com/ctxinf/webpage-summary/rel
 
 - The most convenient web page summarization tool in the browser.
 - A pure and lightweight alternative to built-in AI tools.
-- We will NOT implement bloated agent loops. We keep it simple and pure. We don't compete with complex products like sider.ai or monica.ai.
+- Keep it simple, pure, and effective: no complex interconnections, no Tools, MCP, or Skills integrations, and no memory system.
 
 *Inspiration: [chatGPTBox](https://github.com/josStorer/chatGPTBox)* 
 
