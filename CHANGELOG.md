@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.8.3] - 2026-10-16
+
+- ui: keep the popup compact with a single-line title, full title on hover, and the version beside the title. Prefer the manifest short title when available.
+- ui: improve model/prompt label and selector contrast while keeping labels and selects on the same row at their original size.
+- ui: reduce footer button sizes and keep summary, copy, and settings controls on one row.
+- docs: update the README.
+
 ## [0.8.2] - 2026-10-16
 
 - fix: pass summary requests to the main content panel through React state instead of a delayed window event, so requests survive panel mounting and do not trigger copied panels.

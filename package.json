@@ -2,7 +2,7 @@
   "name": "webpage-summary",
   "description": "summarize text content with LLM Api, customized api/prompts, lightweight, no sub/service,  pure extension, no privacy worries",
   "private": false,
-  "version": "0.8.2",
+  "version": "0.8.3",
   "type": "module",
   "scripts": {
     "dev": "wxt",

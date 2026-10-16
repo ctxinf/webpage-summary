@@ -150,29 +150,19 @@ function App() {
   const currentModel = models.find((m) => m.id === currentModelId);
 
   return (
-    <main className="grid max-w-3xl gap-1 px-2 py-1">
-      <header className="flex items-center gap-1">
+    <main className="grid gap-1.5 px-2 py-1.5">
+      <header className="flex min-w-0 items-center gap-2 pb-1">
         <img
           src={browser.runtime.getURL('/icon/32.png')}
-          alt="icon"
-          className="aspect-square size-5 shrink-0 rounded-lg object-contain"
+          alt=""
+          className="aspect-square size-5 shrink-0 rounded-md object-contain"
         />
-        <div className="flex min-w-0 max-w-64 flex-1 items-baseline gap-2">
-          <h1 className="truncate  font-semibold leading-tight">
-            {manifest.name}
-          </h1>
-          <span className="shrink-0 rounded-full bg-muted px-1 py-0.5 font-mono font-medium text-muted-foreground">
-            v{manifest.version}
-          </span>
-        </div>
-        <button
-          type="button"
-          onClick={() => browser.runtime.openOptionsPage()}
-          title={messages.popup.openOptions}
-          className="flex size-9 shrink-0 items-center justify-center rounded-md border border-border bg-background text-muted-foreground shadow-sm transition-colors hover:bg-muted hover:text-foreground"
-        >
-          <Settings size={18} />
-        </button>
+        <h1 title={manifest.name} className="min-w-0 flex-1 truncate text-sm font-semibold leading-tight">
+          {manifest.short_name?.trim() || manifest.name}
+        </h1>
+        <span className="shrink-0 rounded-md bg-muted px-1.5 py-1 font-mono text-[11px] text-muted-foreground">
+          v{manifest.version}
+        </span>
       </header>
 
       <section className="grid gap-1.5">
@@ -191,33 +181,44 @@ function App() {
         />
       </section>
 
-      <section className="flex items-center justify-between gap-2">
+      <section className="flex items-center justify-between gap-2 pt-0.5">
         <div className="flex items-center">
           {isContentPage && (
             <button
               type="button"
               onClick={handleSummarize}
               title={messages.popup.openPanelAndStartSummary}
-              className="flex items-center gap-1.5 rounded-md border border-emerald-300 dark:border-emerald-800 bg-emerald-50 dark:bg-emerald-950 px-3 py-1.5 text-sm font-medium text-emerald-800 dark:text-emerald-300 shadow-sm transition-colors hover:bg-emerald-100 dark:hover:bg-emerald-900"
+              className="flex items-center gap-1.5 rounded-md border border-emerald-300 dark:border-emerald-800 bg-emerald-50 dark:bg-emerald-950 px-2 py-1 text-xs font-medium text-emerald-800 dark:text-emerald-300 shadow-sm transition-colors hover:bg-emerald-100 dark:hover:bg-emerald-900"
             >
               <Play size={13} className="fill-emerald-700 text-emerald-700 dark:fill-emerald-400 dark:text-emerald-400" />
               <span>{messages.popup.summary}</span>
             </button>
           )}
         </div>
-        <button
-          type="button"
-          onClick={handleCopyPage}
-          disabled={copying || !isContentPage}
-          title={messages.popup.copyPageContentToClipboard}
-          className={cn(
-            'flex items-center gap-1.5 rounded-md border border-border bg-background px-3 py-1.5 text-sm font-medium text-muted-foreground shadow-sm transition-colors hover:bg-muted',
-            (copying || !isContentPage) && 'cursor-not-allowed opacity-60',
-          )}
-        >
-          <Copy size={14} />
-          <span>{messages.popup.page}</span>
-        </button>
+        <div className="ml-auto flex shrink-0 items-center gap-1.5">
+          <button
+            type="button"
+            onClick={handleCopyPage}
+            disabled={copying || !isContentPage}
+            title={messages.popup.copyPageContentToClipboard}
+            className={cn(
+              'flex items-center gap-1.5 rounded-md border border-border bg-background px-2 py-1 text-xs font-medium text-muted-foreground shadow-sm transition-colors hover:bg-muted',
+              (copying || !isContentPage) && 'cursor-not-allowed opacity-60',
+            )}
+          >
+            <Copy size={14} />
+            <span>{messages.popup.page}</span>
+          </button>
+          <button
+            type="button"
+            onClick={() => browser.runtime.openOptionsPage()}
+            title={messages.popup.openOptions}
+            aria-label={messages.popup.openOptions}
+            className="flex size-7 shrink-0 items-center justify-center rounded-md border border-border bg-background text-muted-foreground shadow-sm transition-colors hover:bg-muted hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+          >
+            <Settings size={16} />
+          </button>
+        </div>
       </section>
     </main>
   );
@@ -249,8 +250,8 @@ interface SelectRowProps {
 
 function SelectRow({ label, value, onChange, options, icon }: SelectRowProps) {
   return (
-    <label className="grid grid-cols-[56px_1fr] items-center gap-2">
-      <span className="text-xs text-muted-foreground">{label}</span>
+    <label className="grid grid-cols-[56px_minmax(0,1fr)] items-center gap-2">
+      <span className="text-xs font-semibold text-foreground">{label}</span>
       <div className="relative flex items-center">
         {icon && (
           <span className="pointer-events-none absolute left-2 z-10 flex items-center">
@@ -259,7 +260,7 @@ function SelectRow({ label, value, onChange, options, icon }: SelectRowProps) {
         )}
         <select
           className={cn(
-            'w-full  appearance-none truncate rounded-md border border-border bg-background py-1.5 pr-7 text-sm text-muted-foreground shadow-sm outline-none transition-colors hover:bg-muted focus:border-primary',
+            'w-full cursor-pointer appearance-none truncate rounded-md border border-input bg-muted/40 py-1.5 pr-7 text-sm font-medium text-foreground shadow-sm outline-none transition-colors hover:border-muted-foreground/60 hover:bg-muted/70 focus-visible:border-primary focus-visible:ring-2 focus-visible:ring-ring/20',
             icon ? 'pl-7' : 'pl-2.5',
           )}
           value={value}
@@ -274,7 +275,7 @@ function SelectRow({ label, value, onChange, options, icon }: SelectRowProps) {
         </select>
         <ChevronDown
           size={14}
-          className="pointer-events-none absolute right-2 text-zinc-400"
+          className="pointer-events-none absolute right-2 text-foreground/60"
         />
       </div>
     </label>
