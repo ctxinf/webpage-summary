@@ -48,6 +48,7 @@ import {
 import { TokenViewerModal } from '@/components/TokenViewerModal';
 import { useContentApp } from './useContentApp';
 import { UsageDisplay } from './UsageDisplay';
+import { ChatMessageActions } from './ChatMessageActions';
 import { ModelPromptSelector } from './ModelPromptSelector';
 import { getUiMessages } from '@/lib/i18n';
 
@@ -95,6 +96,7 @@ export function ContentAppFrame({ onClose, isMain = true, onAdd, summaryRequest 
     handleStop,
     handleMessageSubmit,
     handleCopyMessages,
+    handleRetryMessage,
   } = useContentApp(summaryRequest);
 
   const isBusy = status === 'streaming' || status === 'submitted';
@@ -276,7 +278,11 @@ export function ContentAppFrame({ onClose, isMain = true, onAdd, summaryRequest 
                 isLastMessage && status === 'streaming' && lastPart?.type === 'reasoning';
 
               return (
-                <Message from={message.role} key={message.id}>
+                <Message
+                  from={message.role}
+                  key={message.id}
+                  className={message.role === 'user' ? 'gap-0.5' : undefined}
+                >
                   <MessageContent>
                     {hasReasoning && (
                       <Reasoning className="w-full" isStreaming={isReasoningStreaming}>
@@ -295,6 +301,14 @@ export function ContentAppFrame({ onClose, isMain = true, onAdd, summaryRequest 
                       return null;
                     })}
                   </MessageContent>
+                  {(message.role === 'user' ||
+                    (message.role === 'assistant' && !(isLastMessage && isBusy))) && (
+                    <ChatMessageActions
+                      message={message}
+                      isBusy={isBusy}
+                      onRetry={handleRetryMessage}
+                    />
+                  )}
                 </Message>
               );
             })}

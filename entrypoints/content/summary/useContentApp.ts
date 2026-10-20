@@ -45,7 +45,7 @@ export function useContentApp(summaryRequest = 0) {
     [],
   );
 
-  const { error, messages, sendMessage, setMessages, status, stop } = useChat({
+  const { error, messages, sendMessage, regenerate, setMessages, status, stop } = useChat({
     transport,
   });
 
@@ -202,6 +202,12 @@ export function useContentApp(summaryRequest = 0) {
     void stop();
   };
 
+  const handleRetryMessage = async (messageId: string) => {
+    if (status === 'streaming' || status === 'submitted') return;
+    if (!messages.some((message) => message.id === messageId && message.role === 'assistant')) return;
+    await regenerate({ messageId });
+  };
+
   const handleSummarize = async () => {
     if (status === 'streaming' || status === 'submitted') {
       handleStop();
@@ -316,5 +322,6 @@ export function useContentApp(summaryRequest = 0) {
     handleStop,
     handleMessageSubmit,
     handleCopyMessages,
+    handleRetryMessage,
   };
 }

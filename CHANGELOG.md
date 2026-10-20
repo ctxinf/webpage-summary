@@ -1,5 +1,11 @@
 # Changelog
 
+## [0.8.4] - 2026-10-20
+
+- feat: add per-message copy buttons for user and assistant messages, preserving Markdown and showing copy confirmation.
+- feat: retry an assistant reply from its message, replacing that reply and subsequent conversation.
+- ui: hide actions on streaming replies until generation ends; tighten user-message action spacing and reveal the copy button on hover or keyboard focus.
+
 ## [0.8.3] - 2026-10-16
 
 - ui: keep the popup compact with a single-line title, full title on hover, and the version beside the title. Prefer the manifest short title when available.
