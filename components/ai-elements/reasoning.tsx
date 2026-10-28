@@ -78,6 +78,7 @@ export const Reasoning = memo(
     const hasEverStreamedRef = useRef(isStreaming);
     const [hasAutoClosed, setHasAutoClosed] = useState(false);
     const startTimeRef = useRef<number | null>(null);
+    const wasStreamingRef = useRef(false);
 
     // Track when streaming starts and compute duration
     useEffect(() => {
@@ -94,9 +95,10 @@ export const Reasoning = memo(
 
     // Auto-open when streaming starts (unless explicitly closed)
     useEffect(() => {
-      if (isStreaming && !isOpen && !isExplicitlyClosed) {
+      if (isStreaming && !wasStreamingRef.current && !isExplicitlyClosed) {
         setIsOpen(true);
       }
+      wasStreamingRef.current = isStreaming;
     }, [isStreaming, isOpen, setIsOpen, isExplicitlyClosed]);
 
     // Auto-close when streaming ends (once only, and only if it ever streamed)

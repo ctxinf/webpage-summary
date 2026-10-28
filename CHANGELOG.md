@@ -1,5 +1,10 @@
 # Changelog
 
+## [0.8.5] - 2026-10-28
+
+- feat: add an option to keep reasoning collapsed while thinking, disabled by default. Reasoning still automatically collapses when the answer starts.
+- fix: allow manually collapsing reasoning during streaming and restore the thinking label visibility.
+
 ## [0.8.4] - 2026-10-20
 
 - feat: add per-message copy buttons for user and assistant messages, preserving Markdown and showing copy confirmation.

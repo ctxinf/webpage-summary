@@ -51,6 +51,7 @@ import { UsageDisplay } from './UsageDisplay';
 import { ChatMessageActions } from './ChatMessageActions';
 import { ModelPromptSelector } from './ModelPromptSelector';
 import { getUiMessages } from '@/lib/i18n';
+import { GENERAL_SETTING_DEFINITIONS } from '@/constants/general-settings';
 
 const formatTokens = (val: number) => {
   if (val >= 10000) {
@@ -73,6 +74,11 @@ export function ContentAppFrame({ onClose, isMain = true, onAdd, summaryRequest 
   const [enableCreateNewPanelButton] = useWxtStorage<boolean>(
     'local:enable-create-new-panel-button',
     false
+  );
+
+  const [collapseReasoningWhileThinking] = useWxtStorage<boolean>(
+    GENERAL_SETTING_DEFINITIONS.collapseReasoningWhileThinking.storageKey,
+    GENERAL_SETTING_DEFINITIONS.collapseReasoningWhileThinking.defaultValue as boolean,
   );
 
   const {
@@ -285,7 +291,11 @@ export function ContentAppFrame({ onClose, isMain = true, onAdd, summaryRequest 
                 >
                   <MessageContent>
                     {hasReasoning && (
-                      <Reasoning className="w-full" isStreaming={isReasoningStreaming}>
+                      <Reasoning
+                        className="w-full"
+                        isStreaming={isReasoningStreaming}
+                        defaultOpen={!collapseReasoningWhileThinking && isReasoningStreaming}
+                      >
                         <ReasoningTrigger />
                         <ReasoningContent>{reasoningText}</ReasoningContent>
                       </Reasoning>

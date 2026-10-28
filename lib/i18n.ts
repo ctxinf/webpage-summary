@@ -24,6 +24,7 @@ type GeneralBooleanSettingMessageKey =
   | 'enableAutoBeginSummary'
   | 'enableAutoBeginSummaryByActionOrContextTrigger'
   | 'enableAutoBeginChatForAddSelectionToChat'
+  | 'collapseReasoningWhileThinking'
   | 'enableTokenUsageView'
   | 'enableCreateNewPanelButton'
   | 'enableContextMenuSummarizeThisPage'
@@ -383,6 +384,7 @@ const UI_MESSAGES: Record<UiLocale, UiMessages> = {
           description: '',
           label: 'Auto-open panel on new pages',
         },
+        collapseReasoningWhileThinking: { label: "Collapse reasoning while thinking", description: "Keep reasoning collapsed by default while thinking. It always collapses automatically when the answer starts." },
         enableTokenUsageView: {
           description: 'Show token usage in the panel.',
           label: 'Token usage',
@@ -715,6 +717,7 @@ const UI_MESSAGES: Record<UiLocale, UiMessages> = {
           description: '',
           label: '新页面自动打开面板',
         },
+        collapseReasoningWhileThinking: { label: "思考时默认折叠", description: "思考阶段默认折叠思考过程。开始输出正文后始终自动折叠。" },
         enableTokenUsageView: {
           description: '显示 token 用量。',
           label: 'Token 用量',
@@ -1004,6 +1007,7 @@ const UI_MESSAGES: Record<UiLocale, UiMessages> = {
         enableCreateNewPanelButton: { description: '顯示建立額外的另一個總結面板的按鈕。', label: '允許建立新面板' },
         enableFloatingBall: { description: '在右下角顯示用於開啟總結面板的懸浮按鈕。', label: '懸浮按鈕' },
         enableSummaryWindowDefault: { caution: '這會改變每個匹配頁面的預設行為。', description: '', label: '新頁面自動開啟面板' },
+        collapseReasoningWhileThinking: { label: "思考時預設摺疊", description: "思考階段預設摺疊思考過程。開始輸出正文後一律自動摺疊。" },
         enableTokenUsageView: { description: '顯示 token 用量。', label: 'Token 用量' },
       },
       summaryLanguage: { description: '總結輸出的語言', label: '總結語言' },
@@ -1127,6 +1131,7 @@ const UI_MESSAGES: Record<UiLocale, UiMessages> = {
         enableCreateNewPanelButton: { description: '新しい要約パネルを作成するボタンを表示します。', label: '新規パネルの作成を許可' },
         enableFloatingBall: { description: 'パネルを開くためのフローティングボタンを表示します。', label: 'フローティングボタン' },
         enableSummaryWindowDefault: { caution: '全ての一致するページで動作が変わります。', description: '', label: '新しいページでパネルを自動で開く' },
+        collapseReasoningWhileThinking: { label: "思考中は折りたたむ", description: "思考中は推論を既定で折りたたみます。回答開始後は常に自動で折りたたみます。" },
         enableTokenUsageView: { description: 'トークン使用量を表示します。', label: 'トークン使用量' },
       },
       summaryLanguage: { description: '出力言語', label: '要約の言語' }, title: '一般設定',
@@ -1196,6 +1201,7 @@ const UI_MESSAGES: Record<UiLocale, UiMessages> = {
         enableCreateNewPanelButton: { description: '새 요약 패널 생성 버튼을 표시합니다.', label: '새 패널 생성 허용' },
         enableFloatingBall: { description: '패널 열기를 위한 플로팅 버튼을 표시합니다.', label: '플로팅 버튼' },
         enableSummaryWindowDefault: { caution: '일치하는 모든 페이지에서 동작이 변경됩니다.', description: '', label: '새 페이지에서 패널 자동 열기' },
+        collapseReasoningWhileThinking: { label: "생각 중 추론 접기", description: "생각 중에는 추론을 기본으로 접습니다. 답변이 시작되면 항상 자동으로 접습니다." },
         enableTokenUsageView: { description: '토큰 사용량을 표시합니다.', label: '토큰 사용량' },
       },
       summaryLanguage: { description: '출력 언어', label: '요약 언어' }, title: '일반 설정',
@@ -1265,6 +1271,7 @@ const UI_MESSAGES: Record<UiLocale, UiMessages> = {
         enableCreateNewPanelButton: { description: 'Exibe o botão para criar um painel de resumo adicional.', label: 'Permitir criar novo painel' },
         enableFloatingBall: { description: 'Exibe um botão flutuante no canto inferior direito para abrir o painel.', label: 'Botão flutuante' },
         enableSummaryWindowDefault: { caution: 'Isso altera o comportamento padrão em todas as páginas correspondentes.', description: '', label: 'Abrir painel automaticamente em novas páginas' },
+        collapseReasoningWhileThinking: { label: "Recolher raciocínio durante o pensamento", description: "Mantém o raciocínio recolhido por padrão durante o pensamento. Recolhe automaticamente quando a resposta começa." },
         enableTokenUsageView: { description: 'Exibe o uso de tokens.', label: 'Uso de tokens' },
       },
       summaryLanguage: { description: 'Idioma do resumo.', label: 'Idioma' }, title: 'Geral',
@@ -1334,6 +1341,7 @@ const UI_MESSAGES: Record<UiLocale, UiMessages> = {
         enableCreateNewPanelButton: { description: 'Muestra el botón para crear un panel de resumen adicional.', label: 'Permitir crear nuevo panel' },
         enableFloatingBall: { description: 'Muestra un botón flotante en la esquina inferior derecha para abrir el panel.', label: 'Botón flotante' },
         enableSummaryWindowDefault: { caution: 'Esto cambia el comportamiento predeterminado en todas las páginas coincidentes.', description: '', label: 'Abrir panel automáticamente en páginas nuevas' },
+        collapseReasoningWhileThinking: { label: "Contraer razonamiento mientras piensa", description: "Mantiene el razonamiento contraído de forma predeterminada. Se contrae automáticamente cuando empieza la respuesta." },
         enableTokenUsageView: { description: 'Muestra el uso de tokens.', label: 'Uso de tokens' },
       },
       summaryLanguage: { description: 'Idioma del resumen.', label: 'Idioma' }, title: 'General',
@@ -1403,6 +1411,7 @@ const UI_MESSAGES: Record<UiLocale, UiMessages> = {
         enableCreateNewPanelButton: { description: 'Affiche le bouton pour créer un panneau de résumé supplémentaire.', label: 'Autoriser la création d\'un nouveau panneau' },
         enableFloatingBall: { description: 'Affiche un bouton flottant en bas à droite pour ouvrir le panneau.', label: 'Bouton flottant' },
         enableSummaryWindowDefault: { caution: 'Cela modifie le comportement par défaut sur toutes les pages correspondantes.', description: '', label: 'Ouvrir automatiquement le panneau sur les nouvelles pages' },
+        collapseReasoningWhileThinking: { label: "Replier le raisonnement pendant la réflexion", description: "Replie le raisonnement par défaut pendant la réflexion. Il se replie automatiquement au début de la réponse." },
         enableTokenUsageView: { description: 'Affiche l\'utilisation des tokens.', label: 'Utilisation des tokens' },
       },
       summaryLanguage: { description: 'Langue du résumé.', label: 'Langue' }, title: 'Général',
@@ -1472,6 +1481,7 @@ const UI_MESSAGES: Record<UiLocale, UiMessages> = {
         enableCreateNewPanelButton: { description: 'Zeigt die Schaltfläche zum Erstellen eines weiteren Zusammenfassungspanels.', label: 'Neues Panel erstellen erlauben' },
         enableFloatingBall: { description: 'Zeigt eine schwebende Schaltfläche in der unteren rechten Ecke zum Öffnen des Panels.', label: 'Schwebende Schaltfläche' },
         enableSummaryWindowDefault: { caution: 'Dies ändert das Standardverhalten auf allen übereinstimmenden Seiten.', description: '', label: 'Panel auf neuen Seiten automatisch öffnen' },
+        collapseReasoningWhileThinking: { label: "Gedankengang während des Denkens einklappen", description: "Klappt den Gedankengang während des Denkens standardmäßig ein. Beim Antwortbeginn wird er immer automatisch eingeklappt." },
         enableTokenUsageView: { description: 'Zeigt den Token-Verbrauch an.', label: 'Token-Verbrauch' },
       },
       summaryLanguage: { description: 'Sprache.', label: 'Sprache' }, title: 'Allgemein',

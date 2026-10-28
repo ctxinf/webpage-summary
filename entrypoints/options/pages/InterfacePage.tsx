@@ -1,4 +1,4 @@
-import { ChevronRight, ExternalLink } from 'lucide-react';
+import { Brain, ChevronRight, ExternalLink, Zap } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router';
 import { toast } from 'sonner';
@@ -33,7 +33,7 @@ import { useTheme } from '@/components/theme-provider';
 
 function PanelPreview({ mode }: { mode: 'dialog' | 'sidebar' }) {
   return (
-    <div className="relative h-32 w-48 rounded-md border-0 bg-gray-100 p-2 shadow-sm flex overflow-hidden">
+    <div className="relative h-32 w-48 max-w-full rounded-md border-0 bg-gray-100 p-2 shadow-sm flex overflow-hidden">
       {/* Browser chrome simulation */}
       <div className="absolute top-0 left-0 right-0 h-4 bg-gray-300 flex items-center px-1 space-x-1">
         <div className="size-1.5 rounded-full bg-gray-500" />
@@ -66,7 +66,7 @@ function PanelPreview({ mode }: { mode: 'dialog' | 'sidebar' }) {
 
 function FloatingBallPreview() {
   return (
-    <div className="relative h-32 w-48 rounded-md border-0 bg-gray-100 p-2 shadow-sm flex overflow-hidden">
+    <div className="relative h-32 w-48 max-w-full rounded-md border-0 bg-gray-100 p-2 shadow-sm flex overflow-hidden">
       {/* Browser chrome simulation */}
       <div className="absolute top-0 left-0 right-0 h-4 bg-gray-300 flex items-center px-1 space-x-1">
         <div className="size-1.5 rounded-full bg-gray-500" />
@@ -91,7 +91,7 @@ function FloatingBallPreview() {
 
 function ChatInputPreview() {
   return (
-    <div className="relative h-32 w-48 rounded-md border-0 bg-gray-100 p-2 shadow-sm flex overflow-hidden">
+    <div className="relative h-32 w-48 max-w-full rounded-md border-0 bg-gray-100 p-2 shadow-sm flex overflow-hidden">
       {/* Browser chrome simulation */}
       <div className="absolute top-0 left-0 right-0 h-4 bg-gray-300 flex items-center px-1 space-x-1">
         <div className="size-1.5 rounded-full bg-gray-500" />
@@ -131,9 +131,45 @@ function ChatInputPreview() {
   );
 }
 
+function SummaryBehaviorPreview({ thinking = false }: { thinking?: boolean }) {
+  return (
+    <div aria-hidden="true" className="relative flex h-32 w-48 max-w-full overflow-hidden rounded-md bg-gray-100 p-2 shadow-sm">
+      <div className="absolute inset-x-0 top-0 flex h-4 items-center gap-1 bg-gray-300 px-1">
+        {[0, 1, 2].map((dot) => <div key={dot} className="size-1.5 rounded-full bg-gray-500" />)}
+      </div>
+      <div className="mt-4 flex-1 rounded-sm border border-gray-200 bg-white p-2">
+        <div className="mb-2 h-2 w-full rounded bg-gray-300" />
+        <div className="h-2 w-4/5 rounded bg-gray-300" />
+      </div>
+      <div className="absolute left-1/2 top-1/2 z-10 flex h-20 w-28 -translate-x-1/2 -translate-y-1/2 flex-col overflow-hidden rounded-md border border-gray-300 bg-white shadow-lg">
+        <div className="flex h-4 shrink-0 items-center justify-between border-b border-gray-200 bg-gray-100 px-1.5">
+          <div className="h-1 w-8 rounded bg-gray-300" />
+          {!thinking && <Zap className="size-2.5 fill-green-500 text-green-600" />}
+        </div>
+        <div className="flex flex-1 flex-col gap-1.5 p-1.5">
+          {thinking ? (
+            <div className="flex items-center gap-1 rounded border border-green-200 bg-green-50 px-1 py-1 text-green-700">
+              <Brain className="size-2.5 shrink-0" />
+              <div className="h-1 w-12 rounded bg-green-400" />
+              <ChevronRight className="ml-auto size-2.5 shrink-0" />
+            </div>
+          ) : (
+            <div className="flex items-center gap-1 text-green-700">
+              <Zap className="size-2.5 shrink-0" />
+              <div className="h-1 w-14 rounded bg-green-300" />
+            </div>
+          )}
+          <div className="h-1 w-full rounded bg-gray-200" />
+          <div className="h-1 w-3/4 rounded bg-gray-200" />
+        </div>
+      </div>
+    </div>
+  );
+}
+
 function TokenUsagePreview() {
   return (
-    <div className="relative h-32 w-48 rounded-md border-0 bg-gray-100 p-2 shadow-sm flex overflow-hidden">
+    <div className="relative h-32 w-48 max-w-full rounded-md border-0 bg-gray-100 p-2 shadow-sm flex overflow-hidden">
       {/* Browser chrome simulation */}
       <div className="absolute top-0 left-0 right-0 h-4 bg-gray-300 flex items-center px-1 space-x-1">
         <div className="size-1.5 rounded-full bg-gray-500" />
@@ -257,14 +293,14 @@ export function InterfacePage() {
     <div className="pb-24">
       <OptionsPageTitle>{messages.interface.title}</OptionsPageTitle>
 
-      <div className="grid gap-8 lg:grid-cols-[minmax(0,1fr)_1px_300px] lg:gap-10">
+      <div className="grid min-w-0 gap-6 xl:grid-cols-[minmax(0,1.3fr)_minmax(0,1fr)] xl:gap-8">
         {/* Left: Main Settings */}
-        <div className="space-y-8">
+        <div className="min-w-0 space-y-8">
           
           <div className="flex flex-col gap-6">
 
             {/* Panel Layout Mode */}
-            <section className="rounded-xl border bg-card p-6 shadow-sm">
+            <section className="rounded-xl border bg-card p-4 shadow-sm sm:p-6">
               <header className="mb-6">
                 <h2 className="text-base font-semibold text-foreground w-fit flex items-center gap-2" title={GENERAL_SETTING_DEFINITIONS.panelLayoutMode.storageKey}>
                   {messages.interface.panelLayout.title}
@@ -321,12 +357,12 @@ export function InterfacePage() {
           </section>
 
           {/* Floating Ball */}
-            <section className="rounded-xl border bg-card p-6 shadow-sm">
+            <section className="rounded-xl border bg-card p-4 shadow-sm sm:p-6">
               <div className="mb-6 flex justify-center">
                 <FloatingBallPreview />
               </div>
-              <div className="flex items-center justify-between gap-4">
-                <div>
+              <div className="flex flex-wrap items-center justify-between gap-4">
+                <div className="min-w-0 flex-[1_1_12rem]">
                   <h2 className="text-base font-semibold text-foreground w-fit" title={GENERAL_SETTING_DEFINITIONS.enableFloatingBall.storageKey}>
                     {messages.interface.floatingBall.title}
                   </h2>
@@ -349,12 +385,12 @@ export function InterfacePage() {
             </section>
 
             {/* Chat Input Box */}
-            <section className="rounded-xl border bg-card p-6 shadow-sm">
+            <section className="rounded-xl border bg-card p-4 shadow-sm sm:p-6">
               <div className="mb-6 flex justify-center">
                 <ChatInputPreview />
               </div>
-              <div className="flex items-center justify-between gap-4">
-                <div>
+              <div className="flex flex-wrap items-center justify-between gap-4">
+                <div className="min-w-0 flex-[1_1_12rem]">
                   <h2 className="text-base font-semibold text-foreground w-fit" title={GENERAL_SETTING_DEFINITIONS.enableChatInputBox.storageKey}>
                     {messages.interface.chatInputBox.title}
                   </h2>
@@ -377,9 +413,9 @@ export function InterfacePage() {
             </section>
 
             {/* Create New Panel Button */}
-            <section className="rounded-xl border bg-card p-6 shadow-sm">
-              <div className="flex items-center justify-between gap-4">
-                <div>
+            <section className="rounded-xl border bg-card p-4 shadow-sm sm:p-6">
+              <div className="flex flex-wrap items-center justify-between gap-4">
+                <div className="min-w-0 flex-[1_1_12rem]">
                   <h2 className="text-base font-semibold text-foreground w-fit" title={GENERAL_SETTING_DEFINITIONS.enableCreateNewPanelButton.storageKey}>
                     {messages.general.settings.enableCreateNewPanelButton.label}
                   </h2>
@@ -405,157 +441,134 @@ export function InterfacePage() {
 
         </div>
 
-        {/* Vertical Divider */}
-        <div className="hidden lg:block w-px bg-border" />
-
         {/* Right: Sidebar Shortcuts */}
-        <aside className="space-y-6 pt-2">
+        <aside className="min-w-0 space-y-6 xl:border-l xl:border-border xl:pl-6">
           
-          {/* Theme Selection */}
-          <div className="flex flex-col gap-3">
-            <span className="text-sm font-medium text-foreground">
-              Theme Appearance:
-            </span>
-            <RadioGroup
-              className="flex gap-2"
-              onValueChange={(value) => setTheme(value as any)}
-              value={theme}
-            >
-              <label className={cn('cursor-pointer flex-1 flex items-center justify-center rounded-md border p-1.5 transition-colors', theme === 'light' ? 'border-green-500 bg-green-500/10 text-green-700 dark:text-green-400' : 'border-border bg-muted/30 hover:bg-muted text-muted-foreground hover:text-foreground')}>
-                <RadioGroupItem value="light" id="theme-light" className="sr-only" />
-                <span className="text-xs font-medium">Light</span>
-              </label>
-              <label className={cn('cursor-pointer flex-1 flex items-center justify-center rounded-md border p-1.5 transition-colors', theme === 'dark' ? 'border-green-500 bg-green-500/10 text-green-700 dark:text-green-400' : 'border-border bg-muted/30 hover:bg-muted text-muted-foreground hover:text-foreground')}>
-                <RadioGroupItem value="dark" id="theme-dark" className="sr-only" />
-                <span className="text-xs font-medium">Dark</span>
-              </label>
-              <label className={cn('cursor-pointer flex-1 flex items-center justify-center rounded-md border p-1.5 transition-colors', theme === 'system' ? 'border-green-500 bg-green-500/10 text-green-700 dark:text-green-400' : 'border-border bg-muted/30 hover:bg-muted text-muted-foreground hover:text-foreground')}>
-                <RadioGroupItem value="system" id="theme-system" className="sr-only" />
-                <span className="text-xs font-medium">System</span>
-              </label>
-            </RadioGroup>
-          </div>
-          
-          <hr className="border-border my-2" />
-          
-          {/* Model Shortcut */}
-          <div className="flex items-center justify-between gap-2">
-            <span className="text-sm font-medium text-foreground shrink-0">
-              {messages.interface.shortcuts.model}:
-            </span>
-            <div className="flex items-center gap-2">
-              {modelSettings ? (
-                <Select
-                  value={modelSettings.defaultModelId ?? undefined}
-                  onValueChange={async (value) => {
-                    if (value) {
-                      await setDefaultModelConfig(value);
-                      setModelSettings(await loadModelSettings());
-                    }
-                  }}
-                >
-                  <SelectTrigger className="w-[180px] h-8 text-xs bg-transparent shadow-sm">
-                    <SelectValue placeholder={`-- ${messages.options.header.defaultModel} --`} />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {modelSettings.models.map((m) => (
-                      <SelectItem key={m.id} value={m.id}>
-                        <div className="flex items-center gap-2">
-                          <img
-                            alt=""
-                            className="size-4 shrink-0 object-contain"
-                            src={getModelDisplayIcon(m)}
-                          />
-                          <span className="truncate">{m.name}</span>
-                        </div>
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              ) : (
-                <div className="h-8 w-[180px] rounded-md bg-muted animate-pulse" />
-              )}
-              <Link
-                to="/models"
-                title={messages.interface.shortcuts.model}
-                className="shrink-0 text-muted-foreground hover:text-primary transition-colors"
-              >
-                <ExternalLink className="size-4" />
-              </Link>
-            </div>
-          </div>
-          
-          <hr className="border-border my-2" />
-          
-          {/* Prompt Shortcut */}
-          <div className="flex items-center justify-between gap-2">
-            <span className="text-sm font-medium text-foreground shrink-0">
-              {messages.interface.shortcuts.prompt}:
-            </span>
-            <div className="flex items-center gap-2">
-              {promptSettings ? (
-                <Select
-                  value={promptSettings.defaultPromptId ?? undefined}
-                  onValueChange={async (value) => {
-                    if (value) {
-                      await setDefaultPrompt(value);
-                      setPromptSettings(await loadPromptSettings());
-                    }
-                  }}
-                >
-                  <SelectTrigger className="w-[180px] h-8 text-xs bg-transparent shadow-sm">
-                    <SelectValue placeholder={`-- ${messages.options.header.defaultPrompt} --`} />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {promptSettings.prompts.map((p) => (
-                      <SelectItem key={p.id} value={p.id}>
-                        <span className="truncate">{p.name}</span>
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              ) : (
-                <div className="h-8 w-[180px] rounded-md bg-muted animate-pulse" />
-              )}
-              <Link
-                to="/prompts"
-                title={messages.interface.shortcuts.prompt}
-                className="shrink-0 text-muted-foreground hover:text-primary transition-colors"
-              >
-                <ExternalLink className="size-4" />
-              </Link>
-            </div>
-          </div>
-          
-          <hr className="border-border my-2" />
-
-          {/* Auto Begin Summary */}
-          <div className="flex items-center justify-between gap-4">
-            <span className="text-sm font-medium text-foreground w-fit" title={GENERAL_SETTING_DEFINITIONS.enableAutoBeginSummary.storageKey}>
-              {messages.general.settings.enableAutoBeginSummary.label}
-            </span>
-            <div className="flex items-center gap-3">
-              <span className="flex items-center gap-1 text-xs text-muted-foreground font-medium">
-                (Default: <input type="checkbox" checked={GENERAL_SETTING_DEFINITIONS.enableAutoBeginSummary.defaultValue as boolean} disabled readOnly className="size-3.5 cursor-not-allowed ml-0.5" />)
+          <div className="w-full max-w-[300px] space-y-4">
+            {/* Theme Selection */}
+            <div className="flex flex-col gap-3">
+              <span className="text-sm font-medium text-foreground">
+                Theme Appearance:
               </span>
-              <Switch
-                checked={settings.enableAutoBeginSummary}
-                onCheckedChange={(checked) =>
-                  updateSetting('enableAutoBeginSummary', checked)
-                }
-              />
+              <RadioGroup
+                className="flex gap-2"
+                onValueChange={(value) => setTheme(value as any)}
+                value={theme}
+              >
+                <label className={cn('cursor-pointer flex-1 flex items-center justify-center rounded-md border p-1.5 transition-colors', theme === 'light' ? 'border-green-500 bg-green-500/10 text-green-700 dark:text-green-400' : 'border-border bg-muted/30 hover:bg-muted text-muted-foreground hover:text-foreground')}>
+                  <RadioGroupItem value="light" id="theme-light" className="sr-only" />
+                  <span className="text-xs font-medium">Light</span>
+                </label>
+                <label className={cn('cursor-pointer flex-1 flex items-center justify-center rounded-md border p-1.5 transition-colors', theme === 'dark' ? 'border-green-500 bg-green-500/10 text-green-700 dark:text-green-400' : 'border-border bg-muted/30 hover:bg-muted text-muted-foreground hover:text-foreground')}>
+                  <RadioGroupItem value="dark" id="theme-dark" className="sr-only" />
+                  <span className="text-xs font-medium">Dark</span>
+                </label>
+                <label className={cn('cursor-pointer flex-1 flex items-center justify-center rounded-md border p-1.5 transition-colors', theme === 'system' ? 'border-green-500 bg-green-500/10 text-green-700 dark:text-green-400' : 'border-border bg-muted/30 hover:bg-muted text-muted-foreground hover:text-foreground')}>
+                  <RadioGroupItem value="system" id="theme-system" className="sr-only" />
+                  <span className="text-xs font-medium">System</span>
+                </label>
+              </RadioGroup>
+            </div>
+
+            <hr className="border-border" />
+
+            {/* Model Shortcut */}
+            <div className="flex items-center justify-between gap-2">
+              <span className="text-sm font-medium text-foreground shrink-0">
+                {messages.interface.shortcuts.model}:
+              </span>
+              <div className="flex min-w-0 flex-1 items-center justify-end gap-2">
+                {modelSettings ? (
+                  <Select
+                    value={modelSettings.defaultModelId ?? undefined}
+                    onValueChange={async (value) => {
+                      if (value) {
+                        await setDefaultModelConfig(value);
+                        setModelSettings(await loadModelSettings());
+                      }
+                    }}
+                  >
+                    <SelectTrigger className="w-full max-w-[180px] min-w-0 h-8 text-xs bg-transparent shadow-sm">
+                      <SelectValue placeholder={`-- ${messages.options.header.defaultModel} --`} />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {modelSettings.models.map((m) => (
+                        <SelectItem key={m.id} value={m.id}>
+                          <div className="flex min-w-0 flex-1 items-center justify-end gap-2">
+                            <img
+                              alt=""
+                              className="size-4 shrink-0 object-contain"
+                              src={getModelDisplayIcon(m)}
+                            />
+                            <span className="truncate">{m.name}</span>
+                          </div>
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                ) : (
+                  <div className="h-8 w-full max-w-[180px] min-w-0 rounded-md bg-muted animate-pulse" />
+                )}
+                <Link
+                  to="/models"
+                  title={messages.interface.shortcuts.model}
+                  className="shrink-0 text-muted-foreground hover:text-primary transition-colors"
+                >
+                  <ExternalLink className="size-4" />
+                </Link>
+              </div>
+            </div>
+
+            <hr className="border-border" />
+
+            {/* Prompt Shortcut */}
+            <div className="flex items-center justify-between gap-2">
+              <span className="text-sm font-medium text-foreground shrink-0">
+                {messages.interface.shortcuts.prompt}:
+              </span>
+              <div className="flex min-w-0 flex-1 items-center justify-end gap-2">
+                {promptSettings ? (
+                  <Select
+                    value={promptSettings.defaultPromptId ?? undefined}
+                    onValueChange={async (value) => {
+                      if (value) {
+                        await setDefaultPrompt(value);
+                        setPromptSettings(await loadPromptSettings());
+                      }
+                    }}
+                  >
+                    <SelectTrigger className="w-full max-w-[180px] min-w-0 h-8 text-xs bg-transparent shadow-sm">
+                      <SelectValue placeholder={`-- ${messages.options.header.defaultPrompt} --`} />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {promptSettings.prompts.map((p) => (
+                        <SelectItem key={p.id} value={p.id}>
+                          <span className="truncate">{p.name}</span>
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                ) : (
+                  <div className="h-8 w-full max-w-[180px] min-w-0 rounded-md bg-muted animate-pulse" />
+                )}
+                <Link
+                  to="/prompts"
+                  title={messages.interface.shortcuts.prompt}
+                  className="shrink-0 text-muted-foreground hover:text-primary transition-colors"
+                >
+                  <ExternalLink className="size-4" />
+                </Link>
+              </div>
             </div>
           </div>
-
-          <hr className="border-border my-2" />
 
           {/* Token Usage View */}
-          <section className="rounded-xl border bg-card p-6 shadow-sm">
+          <section className="rounded-xl border bg-card p-4 shadow-sm sm:p-6">
             <div className="mb-6 flex justify-center">
               <TokenUsagePreview />
             </div>
-            <div className="flex items-center justify-between gap-4">
-              <div>
+            <div className="flex flex-wrap items-center justify-between gap-4">
+              <div className="min-w-0 flex-[1_1_12rem]">
                 <h2 className="text-base font-semibold text-foreground w-fit" title={GENERAL_SETTING_DEFINITIONS.enableTokenUsageView.storageKey}>
                   {messages.general.settings.enableTokenUsageView.label}
                 </h2>
@@ -576,6 +589,63 @@ export function InterfacePage() {
               </div>
             </div>
           </section>
+
+          {/* Auto Begin Summary */}
+          <section className="rounded-xl border bg-card p-4 shadow-sm sm:p-6">
+            <div className="mb-6 flex justify-center">
+              <SummaryBehaviorPreview />
+            </div>
+            <div className="flex flex-wrap items-start justify-between gap-4">
+              <div className="min-w-0 flex-[1_1_12rem]">
+                <h2 id="auto-summary-label" className="text-base font-semibold text-foreground" title={GENERAL_SETTING_DEFINITIONS.enableAutoBeginSummary.storageKey}>
+                  {messages.general.settings.enableAutoBeginSummary.label}
+                </h2>
+                {messages.general.settings.enableAutoBeginSummary.description && (
+                  <p className="mt-1 text-sm text-muted-foreground">
+                    {messages.general.settings.enableAutoBeginSummary.description}
+                  </p>
+                )}
+              </div>
+              <div className="flex shrink-0 items-center gap-3 pt-1">
+                <span className="flex items-center gap-1 whitespace-nowrap text-xs font-medium text-muted-foreground">
+                  (Default: <input type="checkbox" checked={GENERAL_SETTING_DEFINITIONS.enableAutoBeginSummary.defaultValue as boolean} disabled readOnly className="ml-0.5 size-3.5 cursor-not-allowed" />)
+                </span>
+                <Switch
+                  aria-labelledby="auto-summary-label"
+                  checked={settings.enableAutoBeginSummary}
+                  onCheckedChange={(checked) => updateSetting('enableAutoBeginSummary', checked)}
+                />
+              </div>
+            </div>
+          </section>
+
+          <section className="rounded-xl border bg-card p-4 shadow-sm sm:p-6">
+            <div className="mb-6 flex justify-center">
+              <SummaryBehaviorPreview thinking />
+            </div>
+            <div className="flex flex-wrap items-start justify-between gap-4">
+              <div className="min-w-0 flex-[1_1_12rem]">
+                <h2 id="collapse-reasoning-label" className="text-base font-semibold text-foreground" title={GENERAL_SETTING_DEFINITIONS.collapseReasoningWhileThinking.storageKey}>
+                  {messages.general.settings.collapseReasoningWhileThinking.label}
+                </h2>
+                <p id="collapse-reasoning-description" className="mt-1 text-sm text-muted-foreground">
+                  {messages.general.settings.collapseReasoningWhileThinking.description}
+                </p>
+              </div>
+              <div className="flex shrink-0 items-center gap-3 pt-1">
+                <span className="flex items-center gap-1 whitespace-nowrap text-xs text-muted-foreground font-medium">
+                  (Default: <input type="checkbox" checked={GENERAL_SETTING_DEFINITIONS.collapseReasoningWhileThinking.defaultValue as boolean} disabled readOnly className="size-3.5 cursor-not-allowed ml-0.5" />)
+                </span>
+                <Switch
+                  aria-labelledby="collapse-reasoning-label"
+                  aria-describedby="collapse-reasoning-description"
+                  checked={settings.collapseReasoningWhileThinking}
+                  onCheckedChange={(checked) => updateSetting('collapseReasoningWhileThinking', checked)}
+                />
+              </div>
+            </div>
+          </section>
+
 
         </aside>
       </div>

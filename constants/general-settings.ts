@@ -89,6 +89,10 @@ export const GENERAL_SETTING_DEFINITIONS = {
     'local:enable-auto-begin-chat-for-add-selection-to-chat',
     false,
   ),
+  collapseReasoningWhileThinking: booleanSetting(
+    'local:collapse-reasoning-while-thinking',
+    false,
+  ),
   enableTokenUsageView: booleanSetting(
     // Keep the reference project's storage key spelling for migration compatibility.
     'local:enable-tokan-usage-view',
